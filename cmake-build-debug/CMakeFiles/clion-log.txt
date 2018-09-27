@@ -1,0 +1,5 @@
+"/Users/maks/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/182.4505.18/CLion.app/Contents/bin/cmake/mac/bin/cmake" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/maks/Projects/Saxion/Y2Q1/Cpp/Saxion_Y2Q1_Cpp
+-- Found SFML 2.5.0 in /Library/Frameworks/SFML.framework/Resources/CMake
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/maks/Projects/Saxion/Y2Q1/Cpp/Saxion_Y2Q1_Cpp/cmake-build-debug
