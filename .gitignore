@@ -1,3 +1,5 @@
+# Debug builds
+.cmake-build-debug
 
 # IDE Stuff
 .idea
@@ -35,3 +37,5 @@
 *.exe
 *.out
 *.app
+
+cmake-build-debug/

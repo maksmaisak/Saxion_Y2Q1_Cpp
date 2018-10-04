@@ -6,25 +6,32 @@
 #define SAXION_Y2Q1_CPP_ENGINE_H
 
 #include <SFML/Graphics.hpp>
+#include <vector>
 #include "Player.h"
+#include "Entity.h"
 
 class Engine {
 
 public:
-    static Engine getInstance();
+    static Engine& getInstance();
     Engine();
     void run();
+    Entity& makeEntity();
 
 private:
 
     static Engine _instance;
 
     sf::RenderWindow _window;
+    std::vector<std::unique_ptr<Entity>> _entities;
 
     Player _player;
 
     void render();
     void update(float dt);
+
+    void remove(Entity* pEntity);
+    friend void Entity::destroy();
 };
 
 
