@@ -16,14 +16,14 @@ public:
     static Engine& getInstance();
     Engine();
     void run();
-    Entity& makeEntity();
+    std::shared_ptr<Entity> makeEntity();
 
 private:
 
     static Engine _instance;
 
     sf::RenderWindow _window;
-    std::vector<std::unique_ptr<Entity>> _entities;
+    std::vector<std::shared_ptr<Entity>> _entities;
 
     Player _player;
 

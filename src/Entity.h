@@ -12,10 +12,11 @@ class Entity {
     public:
         ~Entity();
         void destroy();
+        bool isDestroyed();
 
     private:
         bool _isDestroyed;
-        std::vector<Entity*> _children;
+        std::vector<std::shared_ptr<Entity>> _children;
 };
 
 

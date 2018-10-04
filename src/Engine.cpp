@@ -54,10 +54,14 @@ void Engine::update(float dt) {
     _player.update(dt);
 }
 
-Entity& Engine::makeEntity() {
+std::shared_ptr<Entity> Engine::makeEntity() {
 
-    std::unique_ptr<Entity>& pEntity = _entities.emplace_back(new Entity);
-    return *pEntity;
+    std::shared_ptr<Entity> pEntity = std::make_shared<Entity>();
+    _entities.push_back(pEntity);
+    return pEntity;
+
+    //std::unique_ptr<Entity>& pEntity = _entities.emplace_back(new Entity);
+    //return *pEntity;
 }
 
 void Engine::remove(Entity* pEntity) {

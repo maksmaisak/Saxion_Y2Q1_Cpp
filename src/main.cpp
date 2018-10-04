@@ -5,8 +5,8 @@ int main() {
 
     Engine& engine = Engine::getInstance();
 
-    Entity& entity = engine.makeEntity();
-    entity.destroy();
+    std::shared_ptr<Entity> entity = engine.makeEntity();
+    entity->destroy();
 
     engine.makeEntity();
     engine.makeEntity();

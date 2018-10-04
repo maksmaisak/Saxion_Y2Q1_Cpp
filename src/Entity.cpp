@@ -17,3 +17,8 @@ void Entity::destroy() {
 
     Engine::getInstance().remove(this);
 }
+
+bool Entity::isDestroyed() {
+
+    return _isDestroyed;
+}
