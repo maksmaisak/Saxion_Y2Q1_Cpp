@@ -4,9 +4,12 @@
 
 #include "Player.h"
 #include "InputHelper.h"
+#include <iostream>
 
 Player::Player() {
-    
+
+    std::cout << "Player()" << std::endl;
+
     _texture.loadFromFile("assets/player.png");
     _sprite.setTexture(_texture);
     _sprite.setScale(0.125f, 0.125f);

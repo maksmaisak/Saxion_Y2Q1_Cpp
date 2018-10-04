@@ -55,21 +55,28 @@ void Engine::update(float dt) {
 //    view.setSize(size);
 //    _window.setView(view);
 
-    for (const std::shared_ptr<Entity>& pEntity : _entities)
+    for (const std::shared_ptr<Entity>& pEntity : _update)
     {
         assert(!pEntity->isDestroyed());
-        pEntity->update(dt);
+        dynamic_cast<Update*>(pEntity.get())->update(dt);
     }
+}
+
+template<typename T>
+void remove_from_vector(std::vector<std::shared_ptr<T>>& vec, T* item) {
+
+    vec.erase(
+        std::remove_if(
+            vec.begin(),
+            vec.end(),
+            [&](const auto& p) { return p.get() == item; }
+        ),
+        vec.end()
+    );
 }
 
 void Engine::remove(Entity* pEntity) {
 
-    _entities.erase(
-        std::remove_if(
-            _entities.begin(),
-            _entities.end(),
-            [&](const auto& p) { return p.get() == pEntity; }
-        ),
-        _entities.end()
-    );
+    remove_from_vector(_entities, pEntity);
+    remove_from_vector(_update, pEntity);
 }

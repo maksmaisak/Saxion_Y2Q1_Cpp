@@ -10,24 +10,27 @@
 
 class Entity : public sf::Transformable {
 
-    public:
-        ~Entity();
-        void destroy();
-        bool isDestroyed() const;
-        void addChild(std::shared_ptr<Entity>& pEntity);
-        bool removeChild(const std::shared_ptr<Entity>& pEntity);
+public:
+    ~Entity();
 
-        void draw(sf::RenderTarget& renderTarget) const;
-        virtual void update(float dt) {}
+    void destroy();
 
-    protected:
-        virtual void draw_self(sf::RenderTarget& renderTarget, const sf::Transform& transform) const {}
+    bool isDestroyed() const;
 
-    private:
-        void draw(sf::RenderTarget& renderTarget, const sf::Transform& parentTransform) const;
+    void addChild(std::shared_ptr<Entity>& pEntity);
 
-        bool _isDestroyed;
-        std::vector<std::shared_ptr<Entity>> _children;
+    bool removeChild(const std::shared_ptr<Entity>& pEntity);
+
+    void draw(sf::RenderTarget& renderTarget) const;
+
+protected:
+    virtual void draw_self(sf::RenderTarget& renderTarget, const sf::Transform& transform) const {}
+
+private:
+    void draw(sf::RenderTarget& renderTarget, const sf::Transform& parentTransform) const;
+
+    bool _isDestroyed = false;
+    std::vector<std::shared_ptr<Entity>> _children;
 };
 
 

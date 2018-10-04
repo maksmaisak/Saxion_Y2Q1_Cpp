@@ -7,8 +7,9 @@
 
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
+#include "Update.h"
 
-class Player : public Entity {
+class Player : public Entity, public Update {
 
 public:
     Player();
