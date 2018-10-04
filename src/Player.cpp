@@ -12,8 +12,9 @@ Player::Player() {
     _sprite.setScale(0.125f, 0.125f);
 }
 
-const sf::Drawable& Player::getDrawable() const {
-    return _sprite;
+void Player::draw_self(sf::RenderTarget& renderTarget, const sf::Transform& transform) const {
+
+    renderTarget.draw(_sprite, transform);
 }
 
 void Player::update(float dt) {

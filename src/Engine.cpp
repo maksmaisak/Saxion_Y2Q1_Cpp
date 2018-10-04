@@ -38,7 +38,11 @@ void Engine::render() {
 
     _window.clear();
 
-    _window.draw(_player.getDrawable());
+    for (const std::shared_ptr<Entity>& pEntity : _entities)
+    {
+        assert(!pEntity->isDestroyed());
+        pEntity->draw(_window);
+    }
 
     _window.display();
 }
@@ -51,17 +55,11 @@ void Engine::update(float dt) {
 //    view.setSize(size);
 //    _window.setView(view);
 
-    _player.update(dt);
-}
-
-std::shared_ptr<Entity> Engine::makeEntity() {
-
-    std::shared_ptr<Entity> pEntity = std::make_shared<Entity>();
-    _entities.push_back(pEntity);
-    return pEntity;
-
-    //std::unique_ptr<Entity>& pEntity = _entities.emplace_back(new Entity);
-    //return *pEntity;
+    for (const std::shared_ptr<Entity>& pEntity : _entities)
+    {
+        assert(!pEntity->isDestroyed());
+        pEntity->update(dt);
+    }
 }
 
 void Engine::remove(Entity* pEntity) {

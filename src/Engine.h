@@ -13,10 +13,21 @@
 class Engine {
 
 public:
-    static Engine& getInstance();
     Engine();
+
+    static Engine& getInstance();
     void run();
-    std::shared_ptr<Entity> makeEntity();
+
+    // This has to be defined in the header file to make sure all needed specializations are made during compilation and before linking
+    template<class T = Entity>
+    std::shared_ptr<T> makeEntity() {
+
+        static_assert(std::is_base_of<Entity, T>::value, "T in makeEntity<T> must derive from Entity");
+
+        std::shared_ptr<T> pEntity = std::make_shared<T>();
+        _entities.push_back(pEntity);
+        return pEntity;
+    }
 
 private:
 
@@ -25,14 +36,11 @@ private:
     sf::RenderWindow _window;
     std::vector<std::shared_ptr<Entity>> _entities;
 
-    Player _player;
-
     void render();
     void update(float dt);
 
     void remove(Entity* pEntity);
     friend void Entity::destroy();
 };
-
 
 #endif //SAXION_Y2Q1_CPP_ENGINE_H

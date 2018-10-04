@@ -6,13 +6,16 @@
 #define SAXION_Y2Q1_CPP_PLAYER_H
 
 #include <SFML/Graphics.hpp>
+#include "Entity.h"
 
-class Player {
+class Player : public Entity {
 
 public:
     Player();
-    const sf::Drawable& getDrawable() const;
     void update(float dt);
+
+protected:
+    virtual void draw_self(sf::RenderTarget& renderTarget, const sf::Transform& transform) const;
 
 private:
 

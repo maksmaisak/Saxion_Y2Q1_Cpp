@@ -5,12 +5,14 @@ int main() {
 
     Engine& engine = Engine::getInstance();
 
-    std::shared_ptr<Entity> entity = engine.makeEntity();
-    entity->destroy();
+    std::shared_ptr<Entity> pEntity = engine.makeEntity();
+    pEntity->destroy();
 
-    engine.makeEntity();
-    engine.makeEntity();
-    engine.makeEntity();
+    engine.makeEntity<Player>();
+
+    engine.makeEntity<>();
+    engine.makeEntity<>();
+    engine.makeEntity<>();
 
     engine.run();
 
