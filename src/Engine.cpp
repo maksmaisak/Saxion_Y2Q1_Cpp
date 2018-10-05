@@ -6,16 +6,22 @@
 #include <algorithm>
 #include "Engine.h"
 
-Engine Engine::_instance = Engine();
+Engine* Engine::_instance = nullptr;
 
-Engine::Engine() {
+Engine::Engine(unsigned int width, unsigned int height) {
 
-    _window.create(sf::VideoMode(1280, 1024), "Example");
+    assert(!_instance);
+
+    _instance = this;
+
+    _window.create(sf::VideoMode(width, height), "Example");
 }
 
 Engine& Engine::getInstance() {
 
-    return _instance;
+    assert(_instance);
+
+    return *_instance;
 }
 
 void Engine::run() {
@@ -34,32 +40,26 @@ void Engine::run() {
     }
 }
 
-void Engine::render() {
-
-    _window.clear();
-
-    for (const std::shared_ptr<Entity>& pEntity : _entities)
-    {
-        assert(!pEntity->isDestroyed());
-        pEntity->draw(_window);
-    }
-
-    _window.display();
-}
-
 void Engine::update(float dt) {
-
-//    sf::View view = _window.getView();
-//    sf::Vector2f size = view.getSize();
-//    size -= sf::Vector2f(20.0f, 10.0f) * dt;
-//    view.setSize(size);
-//    _window.setView(view);
 
     for (const std::shared_ptr<Entity>& pEntity : _update)
     {
         assert(!pEntity->isDestroyed());
         dynamic_cast<Update*>(pEntity.get())->update(dt);
     }
+}
+
+void Engine::render() {
+
+    _window.clear();
+
+    for (const std::shared_ptr<Entity>& pEntity : _draw)
+    {
+        assert(!pEntity->isDestroyed());
+        dynamic_cast<Draw*>(pEntity.get())->draw(_window);
+    }
+
+    _window.display();
 }
 
 template<typename T>
@@ -75,8 +75,13 @@ void remove_from_vector(std::vector<std::shared_ptr<T>>& vec, T* item) {
     );
 }
 
-void Engine::remove(Entity* pEntity) {
+void Engine::destroy(Entity* pEntity) {
+
+    pEntity->destroy();
 
     remove_from_vector(_entities, pEntity);
     remove_from_vector(_update, pEntity);
+    remove_from_vector(_draw, pEntity);
 }
+
+sf::RenderWindow& Engine::getWindow() {return _window; }

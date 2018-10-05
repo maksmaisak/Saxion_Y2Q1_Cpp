@@ -16,19 +16,18 @@ void Entity::destroy() {
 
     assert(!_isDestroyed);
 
-    Engine::getInstance().remove(this);
+    _isDestroyed = true;
 }
 
-bool Entity::isDestroyed() const {
-
-    return _isDestroyed;
-}
+bool Entity::isDestroyed() const {return _isDestroyed; }
+Entity* Entity::get_parent() const {return _parent; }
 
 void Entity::addChild(std::shared_ptr<Entity>& pEntity) {
 
     assert(std::find(_children.cbegin(), _children.cend(), pEntity) == _children.cend());
 
     _children.push_back(pEntity);
+    pEntity->_parent = this;
 }
 
 bool Entity::removeChild(const std::shared_ptr<Entity>& pEntity) {
@@ -43,24 +42,14 @@ bool Entity::removeChild(const std::shared_ptr<Entity>& pEntity) {
     if (it == end) return false;
 
     _children.erase(it, end);
+    pEntity->_parent = nullptr;
     return true;
 }
 
-void Entity::draw(sf::RenderTarget& renderTarget) const {
+sf::Transform Entity::getGlobalTransform() {
 
-    draw(renderTarget, sf::Transform::Identity);
-}
+    if (!_parent) return getTransform();
 
-void Entity::draw(sf::RenderTarget& renderTarget, const sf::Transform& parentTransform) const {
-
-    sf::Transform combinedTransform = parentTransform * getTransform();
-
-    draw_self(renderTarget, combinedTransform);
-
-    for (const std::shared_ptr<Entity>& pChild : _children) {
-
-        assert(!pChild->isDestroyed());
-
-        pChild->draw(renderTarget, combinedTransform);
-    }
+    // TODO Cache this and keep track of invalidations.
+    return _parent->getTransform() * getTransform();
 }

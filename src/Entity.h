@@ -13,24 +13,24 @@ class Entity : public sf::Transformable {
 public:
     ~Entity();
 
-    void destroy();
-
     bool isDestroyed() const;
+    Entity* get_parent() const;
+
+    // TODO Make "addChild<T>(args...)" in place, similar to makeEntity, to avoid godawful pointer casting.
 
     void addChild(std::shared_ptr<Entity>& pEntity);
-
     bool removeChild(const std::shared_ptr<Entity>& pEntity);
 
-    void draw(sf::RenderTarget& renderTarget) const;
-
-protected:
-    virtual void draw_self(sf::RenderTarget& renderTarget, const sf::Transform& transform) const {}
+    sf::Transform getGlobalTransform();
 
 private:
-    void draw(sf::RenderTarget& renderTarget, const sf::Transform& parentTransform) const;
 
-    bool _isDestroyed = false;
+    Entity* _parent;
     std::vector<std::shared_ptr<Entity>> _children;
+    bool _isDestroyed = false;
+
+    void destroy();
+    friend class Engine;
 };
 
 
