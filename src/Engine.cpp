@@ -6,44 +6,53 @@
 #include <algorithm>
 #include "Engine.h"
 
-Engine* Engine::_instance = nullptr;
+const sf::Time TIMESTEP = sf::seconds(0.01f);
+const float TIMESTEP_SECONDS = TIMESTEP.asSeconds();
+
+Engine* Engine::m_instance = nullptr;
 
 Engine::Engine(unsigned int width, unsigned int height) {
 
-    assert(!_instance);
+    assert(!m_instance);
 
-    _instance = this;
+    m_instance = this;
 
-    _window.create(sf::VideoMode(width, height), "Example");
+    m_window.create(sf::VideoMode(width, height), "Example");
 }
 
 Engine& Engine::getInstance() {
 
-    assert(_instance);
+    assert(m_instance);
 
-    return *_instance;
+    return *m_instance;
 }
 
 void Engine::run() {
 
     sf::Clock clock;
+    sf::Time lag = sf::Time::Zero;
 
-    while (_window.isOpen()) {
+    while (m_window.isOpen()) {
+
+        lag += clock.restart();
 
         sf::Event event;
-        while (_window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) _window.close();
+        while (m_window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) m_window.close();
         }
 
-        update(0.01f);
+        while (lag >= TIMESTEP) {
+            update(TIMESTEP_SECONDS);
+            lag -= TIMESTEP;
+        }
+
         render();
     }
 }
 
 void Engine::update(float dt) {
 
-    for (const std::shared_ptr<Entity>& pEntity : _update)
-    {
+    for (const std::shared_ptr<Entity>& pEntity : m_update) {
         assert(!pEntity->isDestroyed());
         dynamic_cast<Update*>(pEntity.get())->update(dt);
     }
@@ -51,19 +60,18 @@ void Engine::update(float dt) {
 
 void Engine::render() {
 
-    _window.clear();
+    m_window.clear();
 
-    for (const std::shared_ptr<Entity>& pEntity : _draw)
-    {
+    for (const std::shared_ptr<Entity>& pEntity : m_draw) {
         assert(!pEntity->isDestroyed());
-        dynamic_cast<Draw*>(pEntity.get())->draw(_window);
+        dynamic_cast<Draw*>(pEntity.get())->draw(m_window);
     }
 
-    _window.display();
+    m_window.display();
 }
 
 template<typename T>
-void remove_from_vector(std::vector<std::shared_ptr<T>>& vec, T* item) {
+void remove_from_vector(std::vector<std::shared_ptr<T>>& vec, const T* const item) {
 
     vec.erase(
         std::remove_if(
@@ -75,13 +83,14 @@ void remove_from_vector(std::vector<std::shared_ptr<T>>& vec, T* item) {
     );
 }
 
-void Engine::destroy(Entity* pEntity) {
+void Engine::destroy(Entity& entity) {
 
-    pEntity->destroy();
+    entity.destroy();
 
-    remove_from_vector(_entities, pEntity);
-    remove_from_vector(_update, pEntity);
-    remove_from_vector(_draw, pEntity);
+    Entity* const ptr = &entity;
+    remove_from_vector(m_entities, ptr);
+    remove_from_vector(m_update, ptr);
+    remove_from_vector(m_draw, ptr);
 }
 
-sf::RenderWindow& Engine::getWindow() {return _window; }
+sf::RenderWindow& Engine::getWindow() { return m_window; }

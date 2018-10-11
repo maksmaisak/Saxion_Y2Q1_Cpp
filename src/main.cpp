@@ -15,10 +15,9 @@ std::shared_ptr<Entity> makePlayer(Engine& engine) {
     pPlayer->setPosition(width / 2, height * 3 / 4);
 
     auto pRenderer = engine.makeEntity<SpriteRenderer>("assets/player.png");
-    pRenderer->setRotation(45);
+    pRenderer->setScale(0.1f, 0.1f);
 
-    auto p = std::static_pointer_cast<Entity>(pRenderer);
-    pPlayer->addChild(p);
+    engine.addChild(pPlayer, pRenderer);
 
     return pPlayer;
 }
@@ -28,13 +27,9 @@ int main() {
     Engine engine(width, height);
 
     std::shared_ptr<Entity> pEntity = engine.makeEntity();
-    engine.destroy(pEntity.get());
+    engine.destroy(*pEntity);
 
     auto pPlayer = makePlayer(engine);
-
-    //engine.makeEntity<>();
-    //engine.makeEntity<>();
-    //engine.makeEntity<>();
 
     engine.run();
 

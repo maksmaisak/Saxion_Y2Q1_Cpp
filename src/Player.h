@@ -16,7 +16,10 @@ public:
     void update(float dt);
 
 private:
-    float _movementSpeed = 20.0f;
+    float m_acceleration  = 800.f;
+    float m_drag          = 50.f;
+    float m_rotationSpeed = 360.f;
+    sf::Vector2f m_velocity = {0, 0};
 };
 
 #endif //SAXION_Y2Q1_CPP_PLAYER_H

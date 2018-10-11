@@ -7,10 +7,11 @@
 
 #include <SFML/Graphics.hpp>
 
-class InputHelper {
+namespace en {
 
-public:
-    static sf::Vector2f getMoveInput();
+    sf::Vector2f getMoveInput();
+    float getAxisHorizontal();
+    float getAxisVertical();
 };
 
 

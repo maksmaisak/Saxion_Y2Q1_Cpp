@@ -14,20 +14,20 @@ public:
     ~Entity();
 
     bool isDestroyed() const;
-    Entity* get_parent() const;
-
-    // TODO Make "addChild<T>(args...)" in place, similar to makeEntity, to avoid godawful pointer casting.
-
-    void addChild(std::shared_ptr<Entity>& pEntity);
-    bool removeChild(const std::shared_ptr<Entity>& pEntity);
-
-    sf::Transform getGlobalTransform();
+    sf::Transform getGlobalTransform() const;
+    std::weak_ptr<Entity> getParent() const;
 
 private:
 
-    Entity* _parent;
-    std::vector<std::shared_ptr<Entity>> _children;
-    bool _isDestroyed = false;
+    std::weak_ptr<Entity> m_parent;
+    std::vector<std::shared_ptr<Entity>> m_children;
+    bool m_isDestroyed = false;
+
+    void addChild(const std::shared_ptr<Entity>& pEntity);
+    bool removeChild(const std::shared_ptr<Entity>& pEntity);
+
+    void setParent(const std::shared_ptr<Entity>& pEntity);
+    void removeParent();
 
     void destroy();
     friend class Engine;

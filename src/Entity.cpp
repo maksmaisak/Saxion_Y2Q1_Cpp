@@ -12,44 +12,54 @@ Entity::~Entity() {
     std::cout << "~Entity" << std::endl;
 }
 
-void Entity::destroy() {
+sf::Transform Entity::getGlobalTransform() const {
 
-    assert(!_isDestroyed);
+    auto pParent = m_parent.lock();
+    if (!pParent) return getTransform();
 
-    _isDestroyed = true;
+    // TODO Cache this and keep track of invalidations.
+    return pParent->getTransform() * getTransform();
 }
 
-bool Entity::isDestroyed() const {return _isDestroyed; }
-Entity* Entity::get_parent() const {return _parent; }
+std::weak_ptr<Entity> Entity::getParent() const {
+    return m_parent;
+}
 
-void Entity::addChild(std::shared_ptr<Entity>& pEntity) {
+bool Entity::isDestroyed() const {return m_isDestroyed; }
 
-    assert(std::find(_children.cbegin(), _children.cend(), pEntity) == _children.cend());
+void Entity::destroy() {
 
-    _children.push_back(pEntity);
-    pEntity->_parent = this;
+    assert(!m_isDestroyed);
+
+    m_isDestroyed = true;
+}
+
+void Entity::addChild(const std::shared_ptr<Entity>& pEntity) {
+
+    assert(std::find(m_children.cbegin(), m_children.cend(), pEntity) == m_children.cend());
+
+    m_children.push_back(pEntity);
 }
 
 bool Entity::removeChild(const std::shared_ptr<Entity>& pEntity) {
 
     auto it = std::remove(
-        _children.begin(),
-        _children.end(),
+        m_children.begin(),
+        m_children.end(),
         pEntity
     );
 
-    auto end = _children.end();
+    auto end = m_children.end();
     if (it == end) return false;
 
-    _children.erase(it, end);
-    pEntity->_parent = nullptr;
+    m_children.erase(it, end);
     return true;
 }
 
-sf::Transform Entity::getGlobalTransform() {
+void Entity::setParent(const std::shared_ptr<Entity>& pEntity) {
+    m_parent = pEntity;
+}
 
-    if (!_parent) return getTransform();
-
-    // TODO Cache this and keep track of invalidations.
-    return _parent->getTransform() * getTransform();
+void Entity::removeParent() {
+    m_parent = {};
 }

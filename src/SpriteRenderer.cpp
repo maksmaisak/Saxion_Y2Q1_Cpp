@@ -9,7 +9,8 @@ SpriteRenderer::SpriteRenderer(const std::string& filePath) {
     _texture.loadFromFile(filePath);
     _sprite.setTexture(_texture);
 
-    _sprite.setOrigin(0.5, 0.5);
+    sf::FloatRect bounds = _sprite.getLocalBounds();
+    _sprite.setOrigin(bounds.width * 0.5f, bounds.width * 0.5f);
 }
 
 void SpriteRenderer::draw(sf::RenderTarget& renderTarget) {
