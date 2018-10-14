@@ -34,26 +34,30 @@ std::shared_ptr<Entity> makePlayer(Engine& engine) {
     auto pPlayer = engine.makeEntity<Player>();
     pPlayer->setPosition(width / 2, height * 3 / 4);
 
-    auto pRenderer = engine.makeEntity<DrawableRenderer>(makePlayerShape());
-    engine.addChild(pPlayer, pRenderer);
+    {
+        auto pRenderer = engine.makeEntity<DrawableRenderer>(makePlayerShape());
+        engine.addChild(pPlayer, pRenderer);
 
-    auto pParticles = engine.makeEntity<ParticleSystem>();
-    engine.addChild(pPlayer, pParticles);
-    pParticles->move(-40.f, 0);
+        auto pParticles = engine.makeEntity<ParticleSystem>();
+        engine.addChild(pPlayer, pParticles);
+        pParticles->move(-40.f, 0);
 
-    auto particle = std::make_shared<sf::CircleShape>(1.f, 3);
-    particle->setOrigin(0.5f, 0.5f);
-    pParticles->setDrawable(particle);
+        {
+            auto particle = std::make_shared<sf::CircleShape>(1.f, 3);
+            particle->setOrigin(0.5f, 0.5f);
+            pParticles->setDrawable(particle);
 
-    auto settings = pParticles->getSettings();
-    settings.emissionInterval = sf::microseconds(100);
-    settings.emissionRadius = 10.f;
-    settings.startVelocity.x = -1000.f;
-    settings.startVelocityRandomness = 200.f;
-    settings.particleLifetime = sf::seconds(2);
-    pParticles->setSettings(settings);
+            auto settings = pParticles->getSettings();
+            settings.emissionInterval = sf::microseconds(100);
+            settings.emissionRadius = 10.f;
+            settings.startVelocity.x = -1000.f;
+            settings.startVelocityRandomness = 200.f;
+            settings.particleLifetime = sf::seconds(2);
+            pParticles->setSettings(settings);
+        }
 
-    pPlayer->setEngineExhaustParticles(pParticles);
+        pPlayer->setEngineExhaustParticles(pParticles);
+    }
 
     return pPlayer;
 }

@@ -22,6 +22,8 @@ void ParticleSystem::draw(sf::RenderTarget& renderTarget) {
 
 void ParticleSystem::update(float dt) {
 
+    std::cout << m_numActiveParticles << std::endl;
+
     if (m_isEmissionActive) {
         sf::Time timeSinceEmission = m_emissionTimer.getElapsedTime();
 
