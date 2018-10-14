@@ -17,7 +17,9 @@ Engine::Engine(unsigned int width, unsigned int height) {
 
     m_instance = this;
 
-    m_window.create(sf::VideoMode(width, height), "Example");
+    sf::ContextSettings contextSettings;
+    contextSettings.antialiasingLevel = 8;
+    m_window.create(sf::VideoMode(width, height), "Example", sf::Style::Default, contextSettings);
 }
 
 Engine& Engine::getInstance() {

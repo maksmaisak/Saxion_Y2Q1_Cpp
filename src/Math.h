@@ -23,6 +23,8 @@ namespace en {
 
     bool isZero(float value);
     bool isZero(const sf::Vector2f& vec);
+
+    sf::Vector2f randomInCircle(float radius = 1.f);
 }
 
 

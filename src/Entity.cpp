@@ -7,6 +7,11 @@
 #include "Entity.h"
 #include "Engine.h"
 
+Entity::Entity() {
+
+    setOrigin(0.5f, 0.5f);
+}
+
 Entity::~Entity() {
 
     std::cout << "~Entity" << std::endl;
@@ -18,7 +23,7 @@ sf::Transform Entity::getGlobalTransform() const {
     if (!pParent) return getTransform();
 
     // TODO Cache this and keep track of invalidations.
-    return pParent->getTransform() * getTransform();
+    return pParent->getGlobalTransform() * getTransform();
 }
 
 std::weak_ptr<Entity> Entity::getParent() const {

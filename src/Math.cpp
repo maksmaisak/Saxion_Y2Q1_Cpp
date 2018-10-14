@@ -4,6 +4,7 @@
 
 #include "Math.h"
 #include <cmath>
+#include <random>
 
 namespace en {
 
@@ -20,6 +21,14 @@ namespace en {
     bool isZero(const sf::Vector2f& vec) {
 
         return isZero(vec.x) && isZero(vec.y);
+    }
+
+    sf::Vector2f polar2Cartesian(float angle, float radius) {
+
+        return sf::Vector2f(
+            cosf(angle) * radius,
+            sinf(angle) * radius
+        );
     }
 
     sf::Vector2f& normalize(sf::Vector2f& vec) {
@@ -44,5 +53,14 @@ namespace en {
     float sqrMagnitude(const sf::Vector2f& vec) {
 
         return vec.x * vec.x + vec.y * vec.y;
+    }
+
+    std::default_random_engine randomEngine;
+    std::uniform_real_distribution<float> distribution;
+    auto random = std::bind(distribution, randomEngine);
+
+    sf::Vector2f randomInCircle(float radius) {
+
+        return polar2Cartesian(random() * 2.f * PI, random() * radius);
     }
 }

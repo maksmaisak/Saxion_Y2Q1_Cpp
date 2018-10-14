@@ -11,6 +11,7 @@
 class Entity : public sf::Transformable {
 
 public:
+    Entity();
     ~Entity();
 
     bool isDestroyed() const;
