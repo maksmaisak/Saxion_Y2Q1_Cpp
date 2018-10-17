@@ -43,16 +43,16 @@ std::shared_ptr<Entity> makePlayer(Engine& engine) {
         pParticles->move(-40.f, 0);
 
         {
-            auto particle = std::make_shared<sf::CircleShape>(1.f, 3);
+            auto particle = std::make_shared<sf::CircleShape>(4.f, 3);
             particle->setOrigin(0.5f, 0.5f);
             pParticles->setDrawable(particle);
 
             auto settings = pParticles->getSettings();
-            settings.emissionInterval = sf::microseconds(100);
+            settings.emissionInterval = sf::microseconds(200);
             settings.emissionRadius = 10.f;
             settings.startVelocity.x = -1000.f;
             settings.startVelocityRandomness = 200.f;
-            settings.particleLifetime = sf::seconds(2);
+            settings.particleLifetime = sf::seconds(1);
             pParticles->setSettings(settings);
         }
 
