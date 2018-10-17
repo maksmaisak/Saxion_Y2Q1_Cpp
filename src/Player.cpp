@@ -5,8 +5,8 @@
 #include <iostream>
 #include <cmath>
 #include "Player.h"
-#include "Input.h"
-#include "Math.h"
+#include "engine/Input.h"
+#include "engine/Math.h"
 
 Player::Player() {
 

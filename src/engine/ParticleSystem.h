@@ -9,6 +9,9 @@
 
 class ParticleSystem : public Entity, public Draw, public Update {
 
+    using ParticleIndex = std::size_t;
+    static const ParticleIndex DEFAULT_MAX_PARTICLES = 1024 * 32;
+
 public:
     struct Settings {
 
@@ -18,6 +21,10 @@ public:
         sf::Vector2f startVelocity = {-100, 0};
         float startVelocityRandomness = 10.f;
     };
+
+    explicit ParticleSystem(ParticleIndex maxNumParticles = DEFAULT_MAX_PARTICLES) :
+        m_maxNumParticles(maxNumParticles),
+        m_particles(maxNumParticles) {}
 
     virtual void draw(sf::RenderTarget& renderTarget);
     virtual void update(float dt);
@@ -37,11 +44,10 @@ private:
         sf::Time timeToDestroy;
         sf::Vector2f velocity;
     };
-    using ParticleIndex = std::size_t;
 
-    const ParticleIndex DEFAULT_PARTICLES_CAPACITY = 2048;
-    std::vector<Particle> m_particles {DEFAULT_PARTICLES_CAPACITY};
+    std::vector<Particle> m_particles;
     ParticleIndex m_numActiveParticles = 0;
+    ParticleIndex m_maxNumParticles;
 
     bool m_isEmissionActive = true;
     sf::Clock m_emissionTimer;
@@ -52,6 +58,8 @@ private:
     ParticleIndex emitParticle();
     void updateParticle(ParticleIndex particleIndex, float dt);
     void destroyParticle(ParticleIndex particleIndex);
+
+    void destroyOldestParticle();
 };
 
 

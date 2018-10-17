@@ -6,9 +6,9 @@
 #define SAXION_Y2Q1_CPP_PLAYER_H
 
 #include <SFML/Graphics.hpp>
-#include "Entity.h"
-#include "EngineCallbacks.h"
-#include "ParticleSystem.h"
+#include "engine/Entity.h"
+#include "engine/EngineCallbacks.h"
+#include "engine/ParticleSystem.h"
 
 class Player : public Entity, public Update {
 

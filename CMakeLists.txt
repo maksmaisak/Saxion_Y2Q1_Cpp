@@ -3,7 +3,7 @@ project(Saxion_Y2Q1_Cpp)
 
 set(CMAKE_CXX_STANDARD 17)
 
-file(GLOB SOURCES "src/*.cpp")
+file(GLOB_RECURSE SOURCES "src/*.cpp")
 add_executable(Saxion_Y2Q1_Cpp ${SOURCES})
 
 ## If you want to link SFML statically

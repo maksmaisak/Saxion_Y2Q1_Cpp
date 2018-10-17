@@ -1,11 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Shape.hpp>
 #include <memory>
-#include "Engine.h"
-#include "SpriteRenderer.h"
-#include "DrawableRenderer.h"
+#include "engine/Engine.h"
+#include "engine/SpriteRenderer.h"
+#include "engine/DrawableRenderer.h"
 #include "Player.h"
-#include "ParticleSystem.h"
+#include "engine/ParticleSystem.h"
 
 using uint = unsigned int;
 
@@ -32,7 +32,7 @@ int main() {
 std::shared_ptr<Entity> makePlayer(Engine& engine) {
 
     auto pPlayer = engine.makeEntity<Player>();
-    pPlayer->setPosition(width / 2, height * 3 / 4);
+    pPlayer->setPosition(width / 2.f, height * 3.f / 4);
 
     {
         auto pRenderer = engine.makeEntity<DrawableRenderer>(makePlayerShape());

@@ -5,8 +5,8 @@
 #ifndef SAXION_Y2Q1_CPP_ENEMY_H
 #define SAXION_Y2Q1_CPP_ENEMY_H
 
-#include "Entity.h"
-#include "EngineCallbacks.h"
+#include "engine/Entity.h"
+#include "engine/EngineCallbacks.h"
 
 class Enemy : public Entity, public Update {
 

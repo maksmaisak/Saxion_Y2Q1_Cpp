@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 #include "ParticleSystem.h"
 #include "Math.h"
 #include "Time.h"
@@ -69,16 +70,16 @@ void ParticleSystem::setIsEmissionActive(bool isEmissionActive) {
 
 ParticleSystem::ParticleIndex ParticleSystem::emitParticle() {
 
-    if (m_particles.size() <= m_numActiveParticles) {
+    if (m_numActiveParticles >= m_maxNumParticles) {
+        destroyOldestParticle();
+    } else if (m_particles.size() <= m_numActiveParticles) {
         m_particles.emplace_back();
     }
 
     Particle& particle = m_particles.at(m_numActiveParticles);
 
-    particle.transform
-        .combine(getGlobalTransform())
-        .translate(en::randomInCircle(m_settings.emissionRadius));
-
+    particle.transform = getGlobalTransform();
+    particle.transform.translate(en::randomInCircle(m_settings.emissionRadius));
     particle.timeToDestroy = Time::now() + m_settings.particleLifetime;
     particle.velocity = m_settings.startVelocity + en::randomInCircle(m_settings.startVelocityRandomness);
 
@@ -97,8 +98,19 @@ void ParticleSystem::updateParticle(ParticleIndex i, float dt) {
 
 void ParticleSystem::destroyParticle(ParticleIndex i) {
 
+    assert(m_numActiveParticles > 0);
     m_numActiveParticles -= 1;
 
     std::swap(m_particles.at(i), m_particles.at(m_numActiveParticles));
+
+    // For safety. Can just remove to improve performance, as long as everything gets reinitialized when emitting.
     m_particles.at(m_numActiveParticles) = {};
 }
+
+void ParticleSystem::destroyOldestParticle() {
+
+    auto it = std::min_element(m_particles.begin(), m_particles.end(), [](Particle& a, Particle& b){return a.timeToDestroy < b.timeToDestroy;});
+    auto index = static_cast<ParticleIndex>(std::distance(m_particles.begin(), it));
+    destroyParticle(index);
+}
+
