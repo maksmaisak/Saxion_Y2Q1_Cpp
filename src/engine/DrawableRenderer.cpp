@@ -8,9 +8,15 @@
 
 DrawableRenderer::DrawableRenderer(Entity* pEntity, std::shared_ptr<sf::Drawable> drawable) :
     Component(pEntity),
-    m_drawable(std::move(drawable)) {}
+    m_drawable(std::move(drawable))
+    {}
 
 void DrawableRenderer::draw(sf::RenderTarget& renderTarget) {
 
     renderTarget.draw(*m_drawable, getEntity()->getGlobalTransform());
+}
+
+const std::shared_ptr<sf::Drawable>& DrawableRenderer::getDrawable() const {
+
+    return m_drawable;
 }

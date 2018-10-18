@@ -15,9 +15,10 @@ void ParticleSystem::draw(sf::RenderTarget& renderTarget) {
 
     for (std::size_t i = 0; i < m_numActiveParticles; ++i) {
 
-        sf::RenderStates renderStates = m_particles.at(i).transform;
-        renderStates.blendMode = sf::BlendNone;
-        renderTarget.draw(*m_pDrawable, renderStates);
+        renderTarget.draw(
+            *m_pDrawable,
+            sf::RenderStates(sf::BlendAlpha, m_particles.at(i).transform, nullptr, nullptr)
+        );
     }
 }
 

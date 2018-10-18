@@ -15,6 +15,7 @@ class DrawableRenderer : public Component, public Draw {
 public:
     DrawableRenderer(Entity* pEntity, std::shared_ptr<sf::Drawable> drawable);
     void draw(sf::RenderTarget& renderTarget) final;
+    const std::shared_ptr<sf::Drawable>& getDrawable() const;
 
 private:
     std::shared_ptr<sf::Drawable> m_drawable;

@@ -57,10 +57,15 @@ namespace en {
 
     std::default_random_engine randomEngine;
     std::uniform_real_distribution<float> distribution;
-    auto random = std::bind(distribution, randomEngine);
+    auto randomSample = std::bind(distribution, randomEngine);
 
     sf::Vector2f randomInCircle(float radius) {
 
-        return polar2Cartesian(random() * 2.f * PI, random() * radius);
+        return polar2Cartesian(randomSample() * 2.f * PI, randomSample() * radius);
+    }
+
+    float random(float min, float max) {
+
+        return min + (max - min) * randomSample();
     }
 }

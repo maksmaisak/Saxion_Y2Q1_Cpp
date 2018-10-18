@@ -11,6 +11,7 @@
 
 class Rigidbody : public Component, public Update {
 
+    using Component::Component;
 public:
     void update(float dt) final;
 

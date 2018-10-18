@@ -28,6 +28,7 @@ public:
 
     /// Returns the shared_ptr to the child to allow call chaining.
     std::shared_ptr<Entity>& addChild(std::shared_ptr<Entity>& pParent, std::shared_ptr<Entity>& pChild);
+
     void removeChild(std::shared_ptr<Entity>& pParent, std::shared_ptr<Entity>& pChild);
 
     template<typename T>

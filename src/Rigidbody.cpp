@@ -3,3 +3,7 @@
 //
 
 #include "Rigidbody.h"
+
+void Rigidbody::update(float dt) {
+
+}
