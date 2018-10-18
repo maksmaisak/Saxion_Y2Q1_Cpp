@@ -78,7 +78,7 @@ ParticleSystem::ParticleIndex ParticleSystem::emitParticle() {
 
     Particle& particle = m_particles.at(m_numActiveParticles);
 
-    particle.transform = getGlobalTransform();
+    particle.transform = getEntity()->getGlobalTransform();
     particle.transform.translate(en::randomInCircle(m_settings.emissionRadius));
     particle.timeToDestroy = GameTime::now() + m_settings.particleLifetime;
     particle.velocity = m_settings.startVelocity + en::randomInCircle(m_settings.startVelocityRandomness);

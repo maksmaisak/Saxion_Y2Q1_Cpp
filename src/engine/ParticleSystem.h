@@ -7,7 +7,7 @@
 
 #include "Engine.h"
 
-class ParticleSystem : public Entity, public Draw, public Update {
+class ParticleSystem : public Component, public Draw, public Update {
 
     using ParticleIndex = std::size_t;
     static const ParticleIndex DEFAULT_MAX_PARTICLES = 1024 * 8;
@@ -22,7 +22,8 @@ public:
         float startVelocityRandomness = 10.f;
     };
 
-    explicit ParticleSystem(ParticleIndex maxNumParticles = DEFAULT_MAX_PARTICLES) :
+    ParticleSystem(Entity* pEntity, ParticleIndex maxNumParticles = DEFAULT_MAX_PARTICLES) :
+        Component(pEntity),
         m_maxNumParticles(maxNumParticles),
         m_particles(maxNumParticles) {}
 
