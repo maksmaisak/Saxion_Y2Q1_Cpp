@@ -6,14 +6,14 @@
 #define SAXION_Y2Q1_CPP_RIGIDBODY_H
 
 #include <SFML/Graphics.hpp>
-#include "EngineCallbacks.h"
 #include "Component.h"
 
-class Rigidbody : public Component, public Update {
+class Rigidbody : public Component {
 
     using Component::Component;
+
 public:
-    void update(float dt) final;
+    void update(float dt) override;
 
 private:
     sf::Vector2f m_velocity;

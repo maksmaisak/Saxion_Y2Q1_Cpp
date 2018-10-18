@@ -10,7 +10,6 @@
 #include <vector>
 #include <typeindex>
 #include <iostream>
-#include "EngineCallbacks.h"
 #include "Component.h"
 
 class Entity;
@@ -31,8 +30,8 @@ public:
 
     void removeChild(std::shared_ptr<Entity>& pParent, std::shared_ptr<Entity>& pChild);
 
-    template<typename T>
-    void registerUpdateFunctions(const T* objPtr);
+    void registerComponent(std::shared_ptr<Component> pComponent);
+    void unregisterComponent(std::shared_ptr<Component> component);
 
     void destroy(Entity& entity);
     sf::RenderWindow& getWindow();
@@ -43,8 +42,7 @@ private:
 
     sf::RenderWindow m_window;
     std::vector<std::shared_ptr<Entity>> m_entities;
-    std::vector<Update*> m_update;
-    std::vector<Draw*> m_draw;
+    std::vector<std::shared_ptr<Component>> m_components;
 
     void render();
     void update(float dt);
@@ -55,6 +53,8 @@ class Entity final : public sf::Transformable {
 public:
     explicit Entity(Engine* pEngine);
     ~Entity() final;
+
+    Engine* getEngine() const;
 
     bool isDestroyed() const;
     sf::Transform getGlobalTransform() const;
@@ -84,25 +84,18 @@ private:
     friend class Engine;
 };
 
-template<class Derived, class Base>
-inline constexpr bool inherits = std::is_base_of<Base, Derived>::value;
-
-template<typename T>
-void Engine::registerUpdateFunctions(const T* objPtr) {
-
-    if (inherits<T, Update>) m_update.push_back((Update*)objPtr);
-    if (inherits<T, Draw>  ) m_draw  .push_back((Draw*  )objPtr);
-}
-
 template<class T>
 inline std::type_index getTypeIndex() {
     return std::type_index(typeid(T));
 }
 
+template<typename T, typename Base>
+inline constexpr bool inherits = std::is_base_of<Base, T>::value;
+
 template<class T>
 std::shared_ptr<T> Entity::get() {
 
-    static_assert(std::is_base_of<Component, T>::value);
+    static_assert(inherits<T, Component>);
 
     auto it = m_components.find(getTypeIndex<T>());
     if (it == m_components.end()) return std::shared_ptr<T>();
@@ -113,14 +106,14 @@ std::shared_ptr<T> Entity::get() {
 template<class T, typename... Args>
 std::shared_ptr<T> Entity::add(Args&&... args) {
 
-    static_assert(std::is_base_of<Component, T>::value);
+    static_assert(inherits<T, Component>);
 
     const std::type_index index = getTypeIndex<T>();
     assert(m_components.count(index) == 0);
 
     std::shared_ptr<T> pComponent = std::make_shared<T>(this, std::forward<Args>(args)...);
     m_components.emplace(index, pComponent);
-    m_pEngine->registerUpdateFunctions(pComponent.get());
+    m_pEngine->registerComponent(pComponent);
 
     return pComponent;
 }

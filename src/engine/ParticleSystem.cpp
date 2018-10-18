@@ -25,6 +25,7 @@ void ParticleSystem::draw(sf::RenderTarget& renderTarget) {
 void ParticleSystem::update(float dt) {
 
     if (m_isEmissionActive) {
+
         sf::Time timeSinceEmission = m_emissionTimer.getElapsedTime();
 
         if (timeSinceEmission > m_settings.emissionInterval) {
@@ -82,6 +83,7 @@ ParticleSystem::ParticleIndex ParticleSystem::emitParticle() {
     particle.transform = getEntity()->getGlobalTransform();
     particle.transform.translate(en::randomInCircle(m_settings.emissionRadius));
     particle.timeToDestroy = GameTime::now() + m_settings.particleLifetime;
+
     particle.velocity = m_settings.startVelocity + en::randomInCircle(m_settings.startVelocityRandomness);
 
     return m_numActiveParticles++;
@@ -90,11 +92,23 @@ ParticleSystem::ParticleIndex ParticleSystem::emitParticle() {
 void ParticleSystem::updateParticle(ParticleIndex i, float dt) {
 
     Particle& particle = m_particles.at(i);
-    particle.transform.translate(particle.velocity * dt);
 
     if (GameTime::now() >= particle.timeToDestroy) {
         destroyParticle(i);
+        return;
     }
+
+    sf::Transform& transform = particle.transform;
+    transform.translate(particle.velocity * dt);
+
+    sf::Vector2f viewSize = getEntity()->getEngine()->getWindow().getView().getSize();
+    sf::Vector2f position = transform.transformPoint(0, 0);
+
+    /*if (position.y < 0) transform.translate(0, viewSize.y);
+    else if (position.y > viewSize.y) transform.translate(0, -viewSize.y);
+
+    if (position.x < 0) transform.translate(viewSize.x, 0);
+    else if (position.x > viewSize.x) transform.translate(-viewSize.x, 0);*/
 }
 
 void ParticleSystem::destroyParticle(ParticleIndex i) {

@@ -33,7 +33,7 @@ namespace game {
         sf::Vector2f size = engine.getWindow().getView().getSize();
         pPlayer->setPosition(size.x / 2.f, size.y * 3.f / 4.f);
         {
-            pPlayer->add<DrawableRenderer>(makePlayerShape());
+            auto r = pPlayer->add<DrawableRenderer>(makePlayerShape());
 
             auto pExhaust = engine.makeEntity();
             engine.addChild(pPlayer, pExhaust);

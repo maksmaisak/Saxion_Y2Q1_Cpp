@@ -16,6 +16,10 @@ Entity::~Entity() {
     std::cout << "~Entity" << std::endl;
 }
 
+Engine* Entity::getEngine() const {
+    return m_pEngine;
+}
+
 sf::Transform Entity::getGlobalTransform() const {
 
     auto pParent = m_parent.lock();
@@ -38,6 +42,10 @@ bool Entity::isDestroyed() const {
 void Entity::destroy() {
 
     assert(!m_isDestroyed);
+
+    for (auto& kvp : m_components) {
+        m_pEngine->unregisterComponent(kvp.second);
+    }
 
     m_isDestroyed = true;
 }

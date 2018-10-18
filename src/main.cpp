@@ -2,6 +2,7 @@
 #include <SFML/Graphics/Shape.hpp>
 #include <memory>
 #include "Engine.h"
+#include "Engine.h"
 
 #include "Factory.h"
 
@@ -16,10 +17,12 @@ int main() {
 
     Engine engine(WIDTH, HEIGHT);
 
-    std::shared_ptr<Entity> pEntity = engine.makeEntity();
-    engine.destroy(*pEntity);
+    {
+        std::shared_ptr<Entity> pEntity = engine.makeEntity();
+        engine.destroy(*pEntity);
+    }
 
-    game::makePlayer(engine);
+    auto pPlayer = game::makePlayer(engine);
 
     for (int i = 0; i < NUM_ASTEROIDS; ++i) {
         game::makeAsteroid(engine);

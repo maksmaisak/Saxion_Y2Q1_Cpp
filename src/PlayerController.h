@@ -7,10 +7,9 @@
 
 #include <SFML/Graphics.hpp>
 #include "Engine.h"
-#include "EngineCallbacks.h"
 #include "ParticleSystem.h"
 
-class PlayerController : public Component, public Update {
+class PlayerController : public Component {
 
 public:
     explicit PlayerController(Entity* pEntity);

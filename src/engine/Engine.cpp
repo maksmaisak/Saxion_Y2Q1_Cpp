@@ -54,8 +54,8 @@ void Engine::run() {
 
 void Engine::update(float dt) {
 
-    for (Update* pUpdate : m_update) {
-        pUpdate->update(dt);
+    for (auto& pComponent : m_components) {
+        pComponent->update(dt);
     }
 }
 
@@ -63,8 +63,8 @@ void Engine::render() {
 
     m_window.clear();
 
-    for (Draw* pDraw : m_draw) {
-        pDraw->draw(m_window);
+    for (auto& pComponent : m_components) {
+        pComponent->draw(m_window);
     }
 
     m_window.display();
@@ -102,14 +102,14 @@ void Engine::destroy(Entity& entity) {
 
     Entity* const ptr = &entity;
     remove_from_vector(m_entities, ptr);
+}
 
-    if (auto* update = dynamic_cast<Update*>(ptr)) {
-        remove_from_vector(m_update, update);
-    }
+void Engine::registerComponent(std::shared_ptr<Component> pComponent) {
+    m_components.push_back(pComponent);
+}
 
-    if (auto* draw = dynamic_cast<Draw*>(ptr)) {
-        remove_from_vector(m_draw, draw);
-    }
+void Engine::unregisterComponent(std::shared_ptr<Component> pComponent) {
+    remove_from_vector(m_components, pComponent);
 }
 
 sf::RenderWindow& Engine::getWindow() { return m_window; }
