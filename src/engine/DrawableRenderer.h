@@ -6,14 +6,15 @@
 #define SAXION_Y2Q1_CPP_DRAWABLERENDERER_H
 
 #include <SFML/Graphics.hpp>
-#include "Entity.h"
+#include "Engine.h"
+#include "Component.h"
 #include "EngineCallbacks.h"
 
-class DrawableRenderer : public Entity, public Draw {
+class DrawableRenderer : public Component, public Draw {
 
 public:
-    DrawableRenderer(std::shared_ptr<sf::Drawable> drawable);
-    void draw(sf::RenderTarget& renderTarget);
+    DrawableRenderer(Entity* pEntity, std::shared_ptr<sf::Drawable> drawable);
+    void draw(sf::RenderTarget& renderTarget) final;
 
 private:
     std::shared_ptr<sf::Drawable> m_drawable;

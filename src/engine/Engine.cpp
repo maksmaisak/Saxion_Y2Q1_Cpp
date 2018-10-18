@@ -38,7 +38,7 @@ void Engine::run() {
 
         lag += clock.restart();
 
-        sf::Event event;
+        sf::Event event {};
         while (m_window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) m_window.close();
         }
@@ -54,9 +54,8 @@ void Engine::run() {
 
 void Engine::update(float dt) {
 
-    for (const std::shared_ptr<Entity>& pEntity : m_update) {
-        assert(!pEntity->isDestroyed());
-        dynamic_cast<Update*>(pEntity.get())->update(dt);
+    for (Update* pUpdate : m_update) {
+        pUpdate->update(dt);
     }
 }
 
@@ -64,16 +63,15 @@ void Engine::render() {
 
     m_window.clear();
 
-    for (const std::shared_ptr<Entity>& pEntity : m_draw) {
-        assert(!pEntity->isDestroyed());
-        dynamic_cast<Draw*>(pEntity.get())->draw(m_window);
+    for (Draw* pDraw : m_draw) {
+        pDraw->draw(m_window);
     }
 
     m_window.display();
 }
 
 template<typename T>
-void remove_from_vector(std::vector<std::shared_ptr<T>>& vec, const T* const item) {
+inline void remove_from_vector(std::vector<std::shared_ptr<T>>& vec, const T* const item) {
 
     vec.erase(
         std::remove_if(
@@ -85,14 +83,59 @@ void remove_from_vector(std::vector<std::shared_ptr<T>>& vec, const T* const ite
     );
 }
 
+template<typename T>
+inline void remove_from_vector(std::vector<T>& vec, const T& item) {
+
+    vec.erase(
+        std::remove(
+            vec.begin(),
+            vec.end(),
+            item
+        ),
+        vec.end()
+    );
+}
+
 void Engine::destroy(Entity& entity) {
 
     entity.destroy();
 
     Entity* const ptr = &entity;
     remove_from_vector(m_entities, ptr);
-    remove_from_vector(m_update, ptr);
-    remove_from_vector(m_draw, ptr);
+
+    if (auto* update = dynamic_cast<Update*>(ptr)) {
+        remove_from_vector(m_update, update);
+    }
+
+    if (auto* draw = dynamic_cast<Draw*>(ptr)) {
+        remove_from_vector(m_draw, draw);
+    }
 }
 
 sf::RenderWindow& Engine::getWindow() { return m_window; }
+
+std::shared_ptr<Entity> Engine::makeEntity() {
+
+    auto pEntity = std::make_shared<Entity>(this);
+    m_entities.push_back(pEntity);
+    return pEntity;
+}
+
+std::shared_ptr<Entity> Engine::makeEntity(std::shared_ptr<Entity>& pParent) {
+
+    auto pChild = makeEntity();
+    return addChild(pParent, pChild);
+}
+
+std::shared_ptr<Entity>& Engine::addChild(std::shared_ptr<Entity>& pParent, std::shared_ptr<Entity>& pChild) {
+
+    pParent->addChild(pChild);
+    pChild->setParent(pParent);
+    return pChild;
+}
+
+void Engine::removeChild(std::shared_ptr<Entity>& pParent, std::shared_ptr<Entity>& pChild) {
+
+    pParent->removeChild(pChild);
+    pChild->setParent({});
+}

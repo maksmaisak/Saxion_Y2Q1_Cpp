@@ -4,10 +4,9 @@
 
 #include <iostream>
 #include <algorithm>
-#include "Entity.h"
 #include "Engine.h"
 
-Entity::Entity() {
+Entity::Entity(Engine* pEngine) : m_pEngine(pEngine) {
 
     setOrigin(0.5f, 0.5f);
 }
@@ -27,10 +26,14 @@ sf::Transform Entity::getGlobalTransform() const {
 }
 
 std::weak_ptr<Entity> Entity::getParent() const {
+
     return m_parent;
 }
 
-bool Entity::isDestroyed() const {return m_isDestroyed; }
+bool Entity::isDestroyed() const {
+
+    return m_isDestroyed;
+}
 
 void Entity::destroy() {
 
@@ -61,10 +64,6 @@ bool Entity::removeChild(const std::shared_ptr<Entity>& pEntity) {
     return true;
 }
 
-void Entity::setParent(const std::shared_ptr<Entity>& pEntity) {
+void Entity::setParent(const std::weak_ptr<Entity>& pEntity) {
     m_parent = pEntity;
-}
-
-void Entity::removeParent() {
-    m_parent = {};
 }

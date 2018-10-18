@@ -2,7 +2,7 @@
 // Created by Maksym Maisak on 11/10/18.
 //
 
-#include "Math.h"
+#include "MyMath.h"
 #include <cmath>
 #include <random>
 

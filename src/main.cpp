@@ -1,11 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Shape.hpp>
 #include <memory>
-#include "engine/Engine.h"
-#include "engine/SpriteRenderer.h"
-#include "engine/DrawableRenderer.h"
-#include "Player.h"
-#include "engine/ParticleSystem.h"
+#include "Engine.h"
+#include "DrawableRenderer.h"
+#include "PlayerController.h"
+#include "ParticleSystem.h"
 
 using uint = unsigned int;
 
@@ -31,32 +30,30 @@ int main() {
 
 std::shared_ptr<Entity> makePlayer(Engine& engine) {
 
-    auto pPlayer = engine.makeEntity<Player>();
+    auto pPlayer = engine.makeEntity();
     pPlayer->setPosition(width / 2.f, height * 3.f / 4);
-
     {
-        auto pRenderer = engine.makeEntity<DrawableRenderer>(makePlayerShape());
-        engine.addChild(pPlayer, pRenderer);
+        pPlayer->add<DrawableRenderer>(makePlayerShape());
 
-        auto pParticles = engine.makeEntity<ParticleSystem>();
-        engine.addChild(pPlayer, pParticles);
-        pParticles->move(-40.f, 0);
-
+        auto pExhaust = engine.makeEntity();
+        engine.addChild(pPlayer, pExhaust);
+        pExhaust->move(-40.f, 0);
+        auto pExhaustParticleSystem = pExhaust->add<ParticleSystem>();
         {
-            auto particle = std::make_shared<sf::CircleShape>(4.f, 3);
-            particle->setOrigin(0.5f, 0.5f);
-            pParticles->setDrawable(particle);
+            auto pParticleDrawable = std::make_shared<sf::CircleShape>(4.f, 3);
+            pParticleDrawable->setOrigin(0.5f, 0.5f);
+            pExhaustParticleSystem->setDrawable(pParticleDrawable);
 
-            auto settings = pParticles->getSettings();
+            auto settings = pExhaustParticleSystem->getSettings();
             settings.emissionInterval = sf::microseconds(200);
             settings.emissionRadius = 10.f;
             settings.startVelocity.x = -1000.f;
             settings.startVelocityRandomness = 200.f;
             settings.particleLifetime = sf::seconds(1);
-            pParticles->setSettings(settings);
+            pExhaustParticleSystem->setSettings(settings);
         }
 
-        pPlayer->setEngineExhaustParticles(pParticles);
+        pPlayer->add<PlayerController>()->setEngineExhaustParticles(pExhaustParticleSystem);
     }
 
     return pPlayer;

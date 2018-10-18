@@ -6,8 +6,8 @@
 #include <iostream>
 #include <algorithm>
 #include "ParticleSystem.h"
-#include "Math.h"
-#include "Time.h"
+#include "MyMath.h"
+#include "GameTime.h"
 
 void ParticleSystem::draw(sf::RenderTarget& renderTarget) {
 
@@ -80,7 +80,7 @@ ParticleSystem::ParticleIndex ParticleSystem::emitParticle() {
 
     particle.transform = getGlobalTransform();
     particle.transform.translate(en::randomInCircle(m_settings.emissionRadius));
-    particle.timeToDestroy = Time::now() + m_settings.particleLifetime;
+    particle.timeToDestroy = GameTime::now() + m_settings.particleLifetime;
     particle.velocity = m_settings.startVelocity + en::randomInCircle(m_settings.startVelocityRandomness);
 
     return m_numActiveParticles++;
@@ -91,7 +91,7 @@ void ParticleSystem::updateParticle(ParticleIndex i, float dt) {
     Particle& particle = m_particles.at(i);
     particle.transform.translate(particle.velocity * dt);
 
-    if (Time::now() >= particle.timeToDestroy) {
+    if (GameTime::now() >= particle.timeToDestroy) {
         destroyParticle(i);
     }
 }

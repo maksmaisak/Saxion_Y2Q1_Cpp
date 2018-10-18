@@ -4,28 +4,29 @@
 
 #include <iostream>
 #include <cmath>
-#include "Player.h"
-#include "engine/Input.h"
-#include "engine/Math.h"
+#include "PlayerController.h"
+#include "Input.h"
+#include "MyMath.h"
 
-Player::Player() {
+PlayerController::PlayerController(Entity* pEntity) : Component(pEntity) {
 
     std::cout << "Player()" << std::endl;
-
-    setRotation(-90.f);
+    getEntity()->setRotation(-90.f);
 }
 
 bool shouldAccelerate();
 sf::Vector2f getDirection(float angle);
 
-void Player::update(float dt) {
+void PlayerController::update(float dt) {
 
-    float currentRotation = getRotation();
+    Entity& entity = *getEntity();
+
+    float currentRotation = entity.getRotation();
 
     float input = en::getAxisHorizontal();
     if (!en::isZero(input)) {
         currentRotation += input * m_rotationSpeed * dt;
-        setRotation(currentRotation);
+        entity.setRotation(currentRotation);
     }
 
     bool accelerating = shouldAccelerate();
@@ -40,10 +41,10 @@ void Player::update(float dt) {
         m_pEngineExhaustParticles->setIsEmissionActive(accelerating);
     }
 
-    move(m_velocity * dt);
+    entity.move(m_velocity * dt);
 }
 
-void Player::setEngineExhaustParticles(std::shared_ptr<ParticleSystem> pEngineExhaustParticles) {
+void PlayerController::setEngineExhaustParticles(std::shared_ptr<ParticleSystem> pEngineExhaustParticles) {
     m_pEngineExhaustParticles = pEngineExhaustParticles;
 }
 

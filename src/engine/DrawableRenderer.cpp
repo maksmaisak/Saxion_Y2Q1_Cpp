@@ -1,13 +1,16 @@
+#include <utility>
+
 //
 // Created by Maksym Maisak on 14/10/18.
 //
 
 #include "DrawableRenderer.h"
 
-DrawableRenderer::DrawableRenderer(std::shared_ptr<sf::Drawable> drawable) :
-    m_drawable(drawable) {}
+DrawableRenderer::DrawableRenderer(Entity* pEntity, std::shared_ptr<sf::Drawable> drawable) :
+    Component(pEntity),
+    m_drawable(std::move(drawable)) {}
 
 void DrawableRenderer::draw(sf::RenderTarget& renderTarget) {
 
-    renderTarget.draw(*m_drawable, getGlobalTransform());
+    renderTarget.draw(*m_drawable, getEntity()->getGlobalTransform());
 }

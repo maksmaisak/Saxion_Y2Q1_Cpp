@@ -22,11 +22,12 @@ public:
     template<class T = Entity, typename... Args>
     std::shared_ptr<T> makeEntity(Args&&... args);
 
+    /// Returns the shared_ptr to the child to allow call chaining.
     template<class TParent = Entity, class TChild = Entity>
-    void addChild(std::shared_ptr<TParent>& parent, std::shared_ptr<TChild>& child);
+    std::shared_ptr<TChild>& addChild(std::shared_ptr<TParent>& pParent, std::shared_ptr<TChild>& pChild);
 
     template<class TParent = Entity, class TChild = Entity>
-    void removeChild(std::shared_ptr<TParent>& parent, std::shared_ptr<TChild>& child);
+    void removeChild(std::shared_ptr<TParent>& pParent, std::shared_ptr<TChild>& pChild);
 
     void destroy(Entity& entity);
 
@@ -65,17 +66,17 @@ std::shared_ptr<T> Engine::makeEntity(Args&&... args) {
 }
 
 template<class TParent, class TChild>
-void Engine::addChild(std::shared_ptr<TParent>& parent, std::shared_ptr<TChild>& child) {
+std::shared_ptr<TChild>& Engine::addChild(std::shared_ptr<TParent>& pParent, std::shared_ptr<TChild>& pChild) {
 
-    parent->addChild(child);
-    child->setParent(parent);
+    pParent->addChild(pChild);
+    pChild->setParent(pParent);
+    return pChild;
 }
 
 template<class TParent, class TChild>
-void Engine::removeChild(std::shared_ptr<TParent>& parent, std::shared_ptr<TChild>& child) {
+void Engine::removeChild(std::shared_ptr<TParent>& pParent, std::shared_ptr<TChild>& pChild) {
 
-    parent->removeChild(child);
-    child->removeParent();
+    pParent->removeChild(pChild);
+    pChild->removeParent();
 }
-
 #endif //SAXION_Y2Q1_CPP_ENGINE_H

@@ -6,15 +6,15 @@
 #define SAXION_Y2Q1_CPP_PLAYER_H
 
 #include <SFML/Graphics.hpp>
-#include "engine/Entity.h"
-#include "engine/EngineCallbacks.h"
-#include "engine/ParticleSystem.h"
+#include "Engine.h"
+#include "EngineCallbacks.h"
+#include "ParticleSystem.h"
 
-class Player : public Entity, public Update {
+class PlayerController : public Component, public Update {
 
 public:
-    Player();
-    void update(float dt);
+    explicit PlayerController(Entity* pEntity);
+    void update(float dt) final;
 
     void setEngineExhaustParticles(std::shared_ptr<ParticleSystem> pEngineExhaustParticles);
 

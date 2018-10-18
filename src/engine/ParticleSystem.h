@@ -10,7 +10,7 @@
 class ParticleSystem : public Entity, public Draw, public Update {
 
     using ParticleIndex = std::size_t;
-    static const ParticleIndex DEFAULT_MAX_PARTICLES = 1024 * 32;
+    static const ParticleIndex DEFAULT_MAX_PARTICLES = 1024 * 8;
 
 public:
     struct Settings {

@@ -7,7 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 
-class Time {
+class GameTime {
 
 public:
     static sf::Time now();

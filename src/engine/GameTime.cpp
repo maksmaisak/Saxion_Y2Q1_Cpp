@@ -2,10 +2,10 @@
 // Created by Maksym Maisak on 14/10/18.
 //
 
-#include "Time.h"
+#include "GameTime.h"
 
-const sf::Clock Time::m_clock;
+const sf::Clock GameTime::m_clock;
 
-sf::Time Time::now() {
+sf::Time GameTime::now() {
     return m_clock.getElapsedTime();
 }
