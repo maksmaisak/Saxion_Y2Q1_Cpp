@@ -16,6 +16,8 @@ public:
 
 private:
     sf::Vector2f m_velocity;
+
+    void flicker();
 };
 
 

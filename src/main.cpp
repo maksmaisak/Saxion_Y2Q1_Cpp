@@ -2,7 +2,6 @@
 #include <SFML/Graphics/Shape.hpp>
 #include <memory>
 #include "Engine.h"
-#include "Engine.h"
 
 #include "Factory.h"
 

@@ -11,6 +11,11 @@ void Asteroid::update(float dt) {
     m_velocity += en::randomInCircle(32.f) * dt;
     getEntity()->move(m_velocity * dt);
 
+    //flicker();
+}
+
+void Asteroid::flicker() {
+
     auto pRenderer = getEntity()->get<DrawableRenderer>();
     if (!pRenderer) return;
 

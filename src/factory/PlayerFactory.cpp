@@ -45,11 +45,11 @@ namespace game {
                 pExhaustParticleSystem->setDrawable(pParticleDrawable);
 
                 auto settings = pExhaustParticleSystem->getSettings();
-                settings.emissionInterval = sf::microseconds(200);
+                settings.emissionInterval = sf::microseconds(400);
                 settings.emissionRadius = 10.f;
                 settings.startVelocity.x = -1000.f;
-                settings.startVelocityRandomness = 200.f;
-                settings.particleLifetime = sf::seconds(1);
+                settings.startVelocityRandomness = 100.f;
+                settings.particleLifetime = sf::seconds(0.5f);
                 pExhaustParticleSystem->setSettings(settings);
             }
 

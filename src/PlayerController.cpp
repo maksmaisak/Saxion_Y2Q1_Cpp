@@ -31,15 +31,17 @@ void PlayerController::update(float dt) {
     }
 
     bool accelerating = shouldAccelerate();
-
     if (accelerating) {
         m_velocity += getDirection(currentRotation) * m_acceleration * dt;
     } else if(!en::isZero(m_velocity)) {
         m_velocity -= en::normalized(m_velocity) * std::min(m_drag * dt, en::magnitude(m_velocity));
     }
 
-    entity.move(m_velocity * dt);
+    if (en::magnitude(m_velocity) > m_maxSpeed) {
+        en::normalize(m_velocity) *= m_maxSpeed;
+    }
 
+    entity.move(m_velocity * dt);
     {
         sf::Vector2f viewSize = getEntity()->getEngine()->getWindow().getView().getSize();
         sf::Vector2f position = getEntity()->getPosition();

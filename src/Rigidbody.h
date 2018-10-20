@@ -8,14 +8,8 @@
 #include <SFML/Graphics.hpp>
 #include "Component.h"
 
-class Rigidbody : public Component {
+struct Rigidbody : Component {
 
-    using Component::Component;
-
-public:
-    void update(float dt) override;
-
-private:
     sf::Vector2f m_velocity;
     float m_invMass = 1.f;
 };
