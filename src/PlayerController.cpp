@@ -11,7 +11,7 @@
 PlayerController::PlayerController(Entity* pEntity) : Component(pEntity) {
 
     std::cout << "PlayerController()" << std::endl;
-    getEntity()->setRotation(-90.f);
+    m_Entity.setRotation(-90.f);
 }
 
 bool shouldAccelerate();
@@ -19,14 +19,12 @@ sf::Vector2f getDirection(float angle);
 
 void PlayerController::update(float dt) {
 
-    Entity& entity = *getEntity();
-
-    float currentRotation = entity.getRotation();
+    float currentRotation = m_Entity.getRotation();
     {
         float input = en::getAxisHorizontal();
         if (!en::isZero(input)) {
             currentRotation += input * m_rotationSpeed * dt;
-            entity.setRotation(currentRotation);
+            m_Entity.setRotation(currentRotation);
         }
     }
 
@@ -41,15 +39,15 @@ void PlayerController::update(float dt) {
         en::normalize(m_velocity) *= m_maxSpeed;
     }
 
-    entity.move(m_velocity * dt);
+    m_Entity.move(m_velocity * dt);
     {
-        sf::Vector2f viewSize = getEntity()->getEngine()->getWindow().getView().getSize();
-        sf::Vector2f position = getEntity()->getPosition();
+        sf::Vector2f viewSize = m_Engine.getWindow().getView().getSize();
+        sf::Vector2f position = m_Entity.getPosition();
         while (position.x < 0) position.x += viewSize.x;
         while (position.y < 0) position.y += viewSize.y;
         while (position.x > viewSize.x) position.x -= viewSize.x;
         while (position.y > viewSize.y) position.y -= viewSize.y;
-        getEntity()->setPosition(position);
+        m_Entity.setPosition(position);
     }
 
     if (m_pEngineExhaustParticles) {

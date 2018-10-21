@@ -13,7 +13,7 @@ DrawableRenderer::DrawableRenderer(Entity* pEntity, std::shared_ptr<sf::Drawable
 
 void DrawableRenderer::draw(sf::RenderTarget& renderTarget) {
 
-    renderTarget.draw(*m_drawable, getEntity()->getGlobalTransform());
+    renderTarget.draw(*m_drawable, m_Entity.getGlobalTransform());
 }
 
 const std::shared_ptr<sf::Drawable>& DrawableRenderer::getDrawable() const {

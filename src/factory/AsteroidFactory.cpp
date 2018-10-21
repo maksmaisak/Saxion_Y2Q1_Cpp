@@ -28,8 +28,8 @@ namespace game {
     std::shared_ptr<Entity> makeAsteroid(Engine& engine) {
 
          auto pEntity = engine.makeEntity();
-         pEntity->add<DrawableRenderer>(makeAsteroidShape());
-         pEntity->add<Asteroid>();
+         engine.add<DrawableRenderer>(*pEntity, makeAsteroidShape());
+         engine.add<Asteroid>(*pEntity);
 
          sf::Vector2f position = engine.getWindow().getView().getSize();
          position.x *= en::random();

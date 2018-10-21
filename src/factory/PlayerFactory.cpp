@@ -33,12 +33,12 @@ namespace game {
         sf::Vector2f size = engine.getWindow().getView().getSize();
         pPlayer->setPosition(size.x / 2.f, size.y * 3.f / 4.f);
         {
-            auto r = pPlayer->add<DrawableRenderer>(makePlayerShape());
+            auto r = engine.add<DrawableRenderer>(*pPlayer, makePlayerShape());
 
             auto pExhaust = engine.makeEntity();
             engine.addChild(pPlayer, pExhaust);
             pExhaust->move(-20.f, 0);
-            auto pExhaustParticleSystem = pExhaust->add<ParticleSystem>(10000);
+            auto pExhaustParticleSystem = engine.add<ParticleSystem>(*pExhaust, 10000);
             {
                 auto pParticleDrawable = std::make_shared<sf::CircleShape>(4.f, 3);
                 pParticleDrawable->setOrigin(0.5f, 0.5f);
@@ -53,7 +53,7 @@ namespace game {
                 pExhaustParticleSystem->setSettings(settings);
             }
 
-            pPlayer->add<PlayerController>()->setEngineExhaustParticles(pExhaustParticleSystem);
+            engine.add<PlayerController>(*pPlayer)->setEngineExhaustParticles(pExhaustParticleSystem);
         }
 
         return pPlayer;

@@ -10,10 +10,11 @@
 class PhysicsSystem {
 
 public:
+    PhysicsSystem(Engine& engine) : m_engine(engine) {}
     void update(float dt);
 
 private:
-    Engine* m_engine;
+    Engine& m_engine;
 };
 
 
