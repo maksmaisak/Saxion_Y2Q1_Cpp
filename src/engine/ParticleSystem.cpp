@@ -9,6 +9,8 @@
 #include "MyMath.h"
 #include "GameTime.h"
 
+/*
+
 void ParticleSystem::draw(sf::RenderTarget& renderTarget) {
 
     if (!m_pDrawable) return;
@@ -101,14 +103,14 @@ void ParticleSystem::updateParticle(ParticleIndex i, float dt) {
     sf::Transform& transform = particle.transform;
     transform.translate(particle.velocity * dt);
 
-    /*sf::Vector2f viewSize = getEntity()->getEngine()->getWindow().getView().getSize();
-    sf::Vector2f position = transform.transformPoint(0, 0);
-
-    if (position.y < 0) transform.translate(0, viewSize.y);
-    else if (position.y > viewSize.y) transform.translate(0, -viewSize.y);
-
-    if (position.x < 0) transform.translate(viewSize.x, 0);
-    else if (position.x > viewSize.x) transform.translate(-viewSize.x, 0);*/
+//    sf::Vector2f viewSize = getEntity()->getEngine()->getWindow().getView().getSize();
+//    sf::Vector2f position = transform.transformPoint(0, 0);
+//
+//    if (position.y < 0) transform.translate(0, viewSize.y);
+//    else if (position.y > viewSize.y) transform.translate(0, -viewSize.y);
+//
+//    if (position.x < 0) transform.translate(viewSize.x, 0);
+//    else if (position.x > viewSize.x) transform.translate(-viewSize.x, 0);
 }
 
 void ParticleSystem::destroyParticle(ParticleIndex i) {
@@ -128,4 +130,4 @@ void ParticleSystem::destroyOldestParticle() {
     auto index = static_cast<ParticleIndex>(std::distance(m_particles.begin(), it));
     destroyParticle(index);
 }
-
+*/

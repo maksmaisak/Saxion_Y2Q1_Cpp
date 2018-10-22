@@ -10,22 +10,21 @@
 #include "Entity.h"
 
 class Engine;
-class Entity;
 
-class Component {
+class Behavior {
 
 public:
-    explicit Component(Entity* pEntity) : m_Entity(*pEntity), m_Engine(*(pEntity->getEngine())) {}
-    virtual ~Component() = default;
+    explicit Behavior(Engine& engine, Entity entity) : m_Engine(engine), m_Entity(entity) {}
+    virtual ~Behavior() = default;
 
-    inline Entity& getEntity() const {return m_Entity;}
+    inline Entity  getEntity() const {return m_Entity;}
     inline Engine& getEngine() const {return m_Engine;}
 
     virtual void update(float dt) {};
     virtual void draw(sf::RenderTarget& renderTarget) {};
 
 protected:
-    Entity& m_Entity;
+    const Entity m_Entity;
     Engine& m_Engine;
 };
 

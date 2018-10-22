@@ -25,17 +25,19 @@ std::shared_ptr<sf::Drawable> makeAsteroidShape() {
 
 namespace game {
 
-    std::shared_ptr<Entity> makeAsteroid(Engine& engine) {
+    Entity makeAsteroid(Engine& engine) {
 
-         auto pEntity = engine.makeEntity();
-         engine.add<DrawableRenderer>(*pEntity, makeAsteroidShape());
-         engine.add<Asteroid>(*pEntity);
+        EntityRegistry& registry = engine.getRegistry();
 
-         sf::Vector2f position = engine.getWindow().getView().getSize();
-         position.x *= en::random();
-         position.y *= en::random();
-         pEntity->setPosition(position);
+        auto entity = registry.makeEntity();
+        //engine.add<DrawableRenderer>(*pEntity, makeAsteroidShape());
+        //engine.add<Asteroid>(*pEntity);
 
-        return pEntity;
+        sf::Vector2f position = engine.getWindow().getView().getSize();
+        position.x *= en::random();
+        position.y *= en::random();
+        registry.add<sf::Transformable>(entity).setPosition(position);
+
+        return entity;
     }
 }

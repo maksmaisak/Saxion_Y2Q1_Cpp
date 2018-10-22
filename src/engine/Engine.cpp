@@ -5,6 +5,7 @@
 #include <cmath>
 #include <algorithm>
 #include "Engine.h"
+#include "Behavior.h"
 
 const sf::Time TIMESTEP = sf::seconds(0.01f);
 const float TIMESTEP_SECONDS = TIMESTEP.asSeconds();
@@ -25,7 +26,6 @@ Engine::Engine(unsigned int width, unsigned int height) {
 Engine& Engine::getInstance() {
 
     assert(m_instance);
-
     return *m_instance;
 }
 
@@ -96,37 +96,7 @@ inline void remove_from_vector(std::vector<T>& vec, const T& item) {
     );
 }
 
-void Engine::destroy(Entity& entity) {
-
-    entity.destroy();
-
-    Entity* const ptr = &entity;
-    remove_from_vector(m_entities, ptr);
-}
-
-void Engine::registerComponent(std::shared_ptr<Component> pComponent) {
-    m_components.push_back(pComponent);
-}
-
-void Engine::unregisterComponent(std::shared_ptr<Component> pComponent) {
-    remove_from_vector(m_components, pComponent);
-}
-
-sf::RenderWindow& Engine::getWindow() { return m_window; }
-
-std::shared_ptr<Entity> Engine::makeEntity() {
-
-    auto pEntity = std::make_shared<Entity>(this);
-    m_entities.push_back(pEntity);
-    return pEntity;
-}
-
-std::shared_ptr<Entity> Engine::makeEntity(std::shared_ptr<Entity>& pParent) {
-
-    auto pChild = makeEntity();
-    return addChild(pParent, pChild);
-}
-
+/*
 std::shared_ptr<Entity>& Engine::addChild(std::shared_ptr<Entity>& pParent, std::shared_ptr<Entity>& pChild) {
 
     pParent->addChild(pChild);
@@ -138,4 +108,4 @@ void Engine::removeChild(std::shared_ptr<Entity>& pParent, std::shared_ptr<Entit
 
     pParent->removeChild(pChild);
     pChild->setParent({});
-}
+}*/

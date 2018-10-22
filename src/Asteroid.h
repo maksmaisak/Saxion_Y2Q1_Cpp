@@ -6,10 +6,11 @@
 #define SAXION_Y2Q1_CPP_ASTEROID_H
 
 #include "Engine.h"
+#include "Behavior.h"
 
-class Asteroid : public Component {
+class Asteroid : public Behavior {
 
-    using Component::Component;
+    using Behavior::Behavior;
 
 public:
     void update(float dt) override;

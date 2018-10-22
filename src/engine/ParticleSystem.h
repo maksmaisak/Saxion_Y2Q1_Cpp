@@ -6,8 +6,10 @@
 #define SAXION_Y2Q1_CPP_PARTICLESYSTEM_H
 
 #include "Engine.h"
+#include "Behavior.h"
 
-class ParticleSystem : public Component {
+/*
+class ParticleSystem : public Behavior {
 
     using ParticleIndex = std::size_t;
     static const ParticleIndex DEFAULT_MAX_PARTICLES = 1024 * 8;
@@ -23,7 +25,7 @@ public:
     };
 
     explicit ParticleSystem(Entity* pEntity, ParticleIndex maxNumParticles = DEFAULT_MAX_PARTICLES) :
-        Component(pEntity),
+        Behavior(pEntity),
         m_maxNumParticles(maxNumParticles),
         m_particles(maxNumParticles) {}
 
@@ -62,7 +64,7 @@ private:
 
     void destroyOldestParticle();
 };
-
+*/
 
 
 #endif //SAXION_Y2Q1_CPP_PARTICLESYSTEM_H

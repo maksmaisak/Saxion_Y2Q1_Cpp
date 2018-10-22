@@ -18,23 +18,26 @@ const uint NUM_ASTEROIDS = 10;
 int main() {
 
     Engine engine(WIDTH, HEIGHT);
+    EntityRegistry& registry = engine.getRegistry();
 
     {
-        std::shared_ptr<Entity> pEntity = engine.makeEntity();
-        engine.destroy(*pEntity);
+        Entity entity = registry.makeEntity();
+        registry.destroy(entity);
     }
 
-    auto pPlayer = game::makePlayer(engine);
+    Entity player = game::makePlayer(engine);
 
+    /*
     for (int i = 0; i < NUM_ASTEROIDS; ++i) {
         game::makeAsteroid(engine);
     }
 
     std::size_t count = 0;
-    for (auto& pEntity : engine.with<Asteroid, DrawableRenderer>()) {
+    for (auto& pEntity : registry.with<Asteroid, DrawableRenderer>()) {
         ++count;
     }
     std::cout << count << " entities with Asteroid and DrawableRenderer" << std::endl;
+    */
 
     engine.run();
 

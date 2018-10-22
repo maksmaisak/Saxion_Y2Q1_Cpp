@@ -15,10 +15,10 @@ project(Saxion_Y2Q1_Cpp)
 set(CMAKE_CXX_STANDARD 17)
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
-add_executable(Saxion_Y2Q1_Cpp ${SOURCES})
-
 header_directories(INCLUDES)
+
 include_directories(${INCLUDES})
+add_executable(Saxion_Y2Q1_Cpp ${SOURCES} ${INCLUDES})
 
 ## If you want to link SFML statically
 #set(SFML_STATIC_LIBRARIES TRUE)

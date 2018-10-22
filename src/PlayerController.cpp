@@ -8,7 +8,8 @@
 #include "Input.h"
 #include "MyMath.h"
 
-PlayerController::PlayerController(Entity* pEntity) : Component(pEntity) {
+/*
+PlayerController::PlayerController(Entity* pEntity) : Behavior(pEntity) {
 
     std::cout << "PlayerController()" << std::endl;
     m_Entity.setRotation(-90.f);
@@ -70,4 +71,4 @@ inline sf::Vector2f getDirection(float angle) {
         std::cos(angle * en::DEG2RAD),
         std::sin(angle * en::DEG2RAD)
     };
-}
+}*/

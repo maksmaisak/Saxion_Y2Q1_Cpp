@@ -7,17 +7,18 @@
 
 #include <SFML/Graphics.hpp>
 #include "Engine.h"
-#include "Component.h"
+#include "Behavior.h"
 
-class DrawableRenderer : public Component {
+/*
+class DrawableRenderer : public Behavior {
 
 public:
-    DrawableRenderer(Entity* pEntity, std::shared_ptr<sf::Drawable> drawable);
+    DrawableRenderer(Engine& engine, Entity entity, std::shared_ptr<sf::Drawable> drawable);
     void draw(sf::RenderTarget& renderTarget) override;
     const std::shared_ptr<sf::Drawable>& getDrawable() const;
 
 private:
     std::shared_ptr<sf::Drawable> m_drawable;
 };
-
+*/
 #endif //SAXION_Y2Q1_CPP_DRAWABLERENDERER_H

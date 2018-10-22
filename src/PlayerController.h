@@ -9,7 +9,8 @@
 #include "Engine.h"
 #include "ParticleSystem.h"
 
-class PlayerController : public Component {
+/*
+class PlayerController : public Behavior {
 
 public:
     explicit PlayerController(Entity* pEntity);
@@ -25,5 +26,5 @@ private:
     sf::Vector2f m_velocity = {0, 0};
     std::shared_ptr<ParticleSystem> m_pEngineExhaustParticles;
 };
-
+*/
 #endif //SAXION_Y2Q1_CPP_PLAYER_H
