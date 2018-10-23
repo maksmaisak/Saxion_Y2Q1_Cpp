@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <vector>
+#include <unordered_set>
 #include <type_traits>
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
@@ -45,6 +46,12 @@ public:
     template<typename TComponent, typename... Args>
     std::enable_if_t<!isBehavior<TComponent>, TComponent&>
     add(Args&&... args);
+
+    template<typename TComponent>
+    inline TComponent& get() {return m_registry.get<TComponent>(m_entity);}
+
+    template<typename TComponent>
+    inline TComponent* tryGet() {return m_registry.tryGet<TComponent>(m_entity);}
 
     inline Engine& getEngine() {return m_engine;}
     inline operator Entity() {return m_entity;}

@@ -6,7 +6,7 @@
 
 #include <cmath>
 #include <algorithm>
-#include "engine/core/EntityRegistry.h"
+#include "EntityRegistry.h"
 
 using sf::Vector2f;
 using sf::Transform;

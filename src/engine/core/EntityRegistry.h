@@ -40,7 +40,7 @@ public:
 
 private:
 
-    Entity m_nextId = {};
+    Entity m_nextId = 1;
     std::set<Entity> m_entities;
     mutable std::map<std::type_index, std::unique_ptr<ComponentPoolBase>> m_componentPools;
 

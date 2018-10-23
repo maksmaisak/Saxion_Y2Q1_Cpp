@@ -8,7 +8,7 @@
 #include <vector>
 #include <optional>
 #include <SFML/Graphics.hpp>
-#include "engine/core/Entity.h"
+#include "Entity.h"
 
 class Engine;
 class EntityRegistry;

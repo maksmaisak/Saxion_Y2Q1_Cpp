@@ -3,7 +3,8 @@
 #include <memory>
 #include <algorithm>
 #include <optional>
-#include <systems/WrapAroundScreenSystem.h>
+#include "WrapAroundScreenSystem.h"
+#include "PlayerControlsSystem.h"
 #include "Engine.h"
 #include "Actor.h"
 #include "Transformable.h"
@@ -12,6 +13,7 @@
 #include "PhysicsSystem.h"
 #include "WrapAroundScreenSystem.h"
 #include "FlickerSystem.h"
+#include "PlayerControlsSystem.h"
 
 #include "Factory.h"
 #include "Rigidbody.h"
@@ -26,10 +28,16 @@ const uint NUM_ASTEROIDS = 10;
 int main() {
 
     Engine engine(WIDTH, HEIGHT);
-    engine.addSystem<RenderSystem>();
-    engine.addSystem<PhysicsSystem>();
-    engine.addSystem<WrapAroundScreenSystem>();
-    //engine.addSystem<FlickerSystem>();
+
+    {
+        engine.addSystem<RenderSystem>();
+        engine.addSystem<PhysicsSystem>();
+
+        engine.addSystem<PlayerControlsSystem>();
+
+        engine.addSystem<WrapAroundScreenSystem>();
+        //engine.addSystem<FlickerSystem>();
+    }
 
     EntityRegistry& registry = engine.getRegistry();
 
