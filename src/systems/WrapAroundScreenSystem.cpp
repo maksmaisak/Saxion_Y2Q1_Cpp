@@ -9,12 +9,13 @@
 
 void WrapAroundScreenSystem::update(float dt) {
 
+    sf::Vector2f viewSize = m_engine.getWindow().getView().getSize();
+
     for (Entity e : m_registry.with<en::Transformable>()) {
 
         auto& tf = m_registry.get<en::Transformable>(e);
         if (tf.getParent().has_value()) continue;
 
-        sf::Vector2f viewSize = m_engine.getWindow().getView().getSize();
         sf::Vector2f position = tf.getPosition();
         while (position.x < 0) position.x += viewSize.x;
         while (position.y < 0) position.y += viewSize.y;

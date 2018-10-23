@@ -6,13 +6,12 @@
 #include <systems/WrapAroundScreenSystem.h>
 #include "Engine.h"
 #include "Actor.h"
-#include "Asteroid.h"
-#include "DrawableRenderer.h"
 #include "Transformable.h"
 
 #include "RenderSystem.h"
 #include "PhysicsSystem.h"
 #include "WrapAroundScreenSystem.h"
+#include "FlickerSystem.h"
 
 #include "Factory.h"
 #include "Rigidbody.h"
@@ -30,6 +29,7 @@ int main() {
     engine.addSystem<RenderSystem>();
     engine.addSystem<PhysicsSystem>();
     engine.addSystem<WrapAroundScreenSystem>();
+    //engine.addSystem<FlickerSystem>();
 
     EntityRegistry& registry = engine.getRegistry();
 
@@ -37,7 +37,9 @@ int main() {
         Entity entity = registry.makeEntity();
         registry.add<en::Transformable>(entity);
         registry.add<std::shared_ptr<sf::Drawable>>(entity, std::make_shared<sf::CircleShape>(10.f, 20));
-        registry.add<Rigidbody>(entity).m_velocity = {100.f, 800.f};
+        auto& rb = registry.add<Rigidbody>(entity);
+        rb.velocity = {100.f, 800.f};
+        rb.radius = 10.f;
         //registry.destroy(entity);
     }
 

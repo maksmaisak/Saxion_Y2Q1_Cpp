@@ -4,7 +4,6 @@
 
 #include "Factory.h"
 #include "PlayerController.h"
-#include "DrawableRenderer.h"
 #include "ParticleSystem.h"
 #include "Transformable.h"
 
@@ -67,7 +66,7 @@ namespace game {
 
             Actor& exhaust = engine.makeActor();
             auto& tf = registry.add<en::Transformable>(exhaust, &registry);
-            tf.move(-20.f, 0);
+            tf.move(-30.f, 0);
             engine.setParent(exhaust, player);
 
             auto& exhaustParticleSystem = exhaust.add<ParticleSystem>(10000);

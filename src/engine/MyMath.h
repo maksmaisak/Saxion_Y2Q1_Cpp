@@ -25,6 +25,8 @@ namespace en {
     bool isZero(const sf::Vector2f& vec);
     sf::Vector2f polar2Cartesian(float angle, float radius);
 
+    inline float dot(const sf::Vector2f& a, const sf::Vector2f& b) {return a.x * b.x + a.y * b.y;}
+
     float random(float min = 0.f, float max = 1.f);
     sf::Vector2f randomInCircle(float radius = 1.f);
 }
