@@ -4,16 +4,15 @@
 
 #include <SFML/Graphics.hpp>
 #include "PhysicsSystem.h"
+#include "Transformable.h"
 #include "Rigidbody.h"
 
 void PhysicsSystem::update(float dt) {
 
-    auto& registry = m_engine.getRegistry();
+    for (Entity entity : m_registry.with<Rigidbody, en::Transformable>()) {
 
-    for (Entity entity : m_engine.getRegistry().with<Rigidbody, sf::Transformable>()) {
-
-        auto& rb = registry.get<Rigidbody>(entity);
-        auto& transformable = registry.get<sf::Transformable>(entity);
+        auto& rb = m_registry.get<Rigidbody>(entity);
+        auto& transformable = m_registry.get<en::Transformable>(entity);
 
         transformable.move(rb.m_velocity * dt);
     }

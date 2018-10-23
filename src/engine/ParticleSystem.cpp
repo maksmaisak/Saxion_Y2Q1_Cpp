@@ -9,8 +9,6 @@
 #include "MyMath.h"
 #include "GameTime.h"
 
-/*
-
 void ParticleSystem::draw(sf::RenderTarget& renderTarget) {
 
     if (!m_pDrawable) return;
@@ -82,7 +80,7 @@ ParticleSystem::ParticleIndex ParticleSystem::emitParticle() {
 
     Particle& particle = m_particles.at(m_numActiveParticles);
 
-    particle.transform = m_Entity.getGlobalTransform();
+    particle.transform = m_registry.get<en::Transformable>(m_actor).getGlobalTransform();
     particle.transform.translate(en::randomInCircle(m_settings.emissionRadius));
     particle.timeToDestroy = GameTime::now() + m_settings.particleLifetime;
 
@@ -130,4 +128,3 @@ void ParticleSystem::destroyOldestParticle() {
     auto index = static_cast<ParticleIndex>(std::distance(m_particles.begin(), it));
     destroyParticle(index);
 }
-*/

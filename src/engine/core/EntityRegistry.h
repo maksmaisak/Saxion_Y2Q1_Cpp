@@ -5,13 +5,16 @@
 #ifndef SAXION_Y2Q1_CPP_ENTITYREGISTRY_H
 #define SAXION_Y2Q1_CPP_ENTITYREGISTRY_H
 
-#include <set>
+#include <memory>
 #include <utility>
+#include <set>
 #include <typeindex>
 #include <iostream>
 #include "Entity.h"
-#include "ComponentPool.h"
-#include "EntitiesView.h"
+#include "engine/ecs/ComponentPool.h"
+#include "engine/core/EntitiesView.h"
+
+#include "Transformable.h"
 
 class EntityRegistry {
 
@@ -21,7 +24,10 @@ public:
     void destroy(Entity entity);
 
     template<class TComponent>
-    TComponent& get(const Entity entity) const;
+    TComponent& get(Entity entity) const;
+
+    template<class TComponent>
+    TComponent* tryGet(Entity entity) const;
 
     template<class TComponent>
     TComponent& add(Entity entity, TComponent component);
@@ -60,6 +66,17 @@ TComponent& EntityRegistry::get(const Entity entity) const {
 }
 
 template<class TComponent>
+TComponent* EntityRegistry::tryGet(Entity entity) const {
+
+    ComponentPool<TComponent>& pool = getPool<TComponent>();
+
+    auto it = pool.find(entity);
+    if (it == pool.end()) return nullptr;
+
+    return *it;
+}
+
+template<class TComponent>
 TComponent& EntityRegistry::add(Entity entity, TComponent component) {
 
     ComponentPool<TComponent>& pool = getPool<TComponent>();
@@ -74,7 +91,26 @@ TComponent& EntityRegistry::add(Entity entity, TComponent component) {
 template<class TComponent, typename... Args>
 TComponent& EntityRegistry::add(Entity entity, Args&&... args) {
 
-    return add(entity, TComponent(std::forward(args)...));
+    ComponentPool<TComponent>& pool = getPool<TComponent>();
+
+    assert(pool.count(entity) == 0);
+    auto [it, didAdd] = pool.try_emplace(entity, std::forward<Args>(args)...);
+    assert(didAdd);
+
+    return it->second;
+}
+
+/// TEMP m_registry is assigned here until it can be done in an event handler (TODO)
+template<>
+inline en::Transformable& EntityRegistry::add<en::Transformable>(Entity entity) {
+
+    ComponentPool<en::Transformable>& pool = getPool<en::Transformable>();
+
+    assert(pool.count(entity) == 0);
+    auto [it, didAdd] = pool.try_emplace(entity, this);
+    assert(didAdd);
+
+    return it->second;
 }
 
 template<typename... TComponent>

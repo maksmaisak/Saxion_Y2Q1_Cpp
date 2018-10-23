@@ -8,7 +8,6 @@
 #include "Engine.h"
 #include "Behavior.h"
 
-/*
 class ParticleSystem : public Behavior {
 
     using ParticleIndex = std::size_t;
@@ -24,8 +23,8 @@ public:
         float startVelocityRandomness = 10.f;
     };
 
-    explicit ParticleSystem(Entity* pEntity, ParticleIndex maxNumParticles = DEFAULT_MAX_PARTICLES) :
-        Behavior(pEntity),
+    explicit ParticleSystem(Actor& actor, ParticleIndex maxNumParticles = DEFAULT_MAX_PARTICLES) :
+        Behavior(actor),
         m_maxNumParticles(maxNumParticles),
         m_particles(maxNumParticles) {}
 
@@ -64,7 +63,6 @@ private:
 
     void destroyOldestParticle();
 };
-*/
 
 
 #endif //SAXION_Y2Q1_CPP_PARTICLESYSTEM_H

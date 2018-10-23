@@ -6,6 +6,7 @@
 #include "PlayerController.h"
 #include "DrawableRenderer.h"
 #include "ParticleSystem.h"
+#include "Transformable.h"
 
 std::shared_ptr<sf::Drawable> makePlayerShape() {
 
@@ -24,38 +25,70 @@ std::shared_ptr<sf::Drawable> makePlayerShape() {
     return pShape;
 }
 
+void setPosition(Engine& engine, Actor& player) {
+
+    sf::Vector2f size = engine.getWindow().getView().getSize();
+    player.add<en::Transformable>().setPosition(size.x / 2.f, size.y * 3.f / 4.f);
+}
+
+void addExhaust(Engine& engine, Actor& player) {
+
+    Actor& exhaust = engine.makeActor();
+    auto& tf = exhaust.add<en::Transformable>();
+    tf.move(-200.f, 0);
+    engine.setParent(exhaust, player);
+
+    auto& exhaustParticleSystem = player.add<ParticleSystem>(10000);
+    {
+        auto pParticleDrawable = std::make_shared<sf::CircleShape>(4.f, 3);
+        pParticleDrawable->setOrigin(0.5f, 0.5f);
+        exhaustParticleSystem.setDrawable(pParticleDrawable);
+
+        auto settings = exhaustParticleSystem.getSettings();
+        settings.emissionInterval = sf::microseconds(400);
+        settings.emissionRadius = 10.f;
+        settings.startVelocity.x = -1000.f;
+        settings.startVelocityRandomness = 100.f;
+        settings.particleLifetime = sf::seconds(0.5f);
+        exhaustParticleSystem.setSettings(settings);
+    }
+}
+
 namespace game {
 
     Entity makePlayer(Engine& engine) {
 
         EntityRegistry& registry = engine.getRegistry();
-        auto player = registry.makeEntity();
 
-        sf::Vector2f size = engine.getWindow().getView().getSize();
+        Actor& player = engine.makeActor();
         {
-            registry.add<sf::Transformable>(player).setPosition(size.x / 2.f, size.y * 3.f / 4.f);
-            auto r = registry.add<std::shared_ptr<sf::Drawable>>(player, std::move(makePlayerShape()));
+            setPosition(engine, player);
+            player.add<std::shared_ptr<sf::Drawable>>(makePlayerShape());
 
-            auto exhaust = registry.makeEntity();
-            //engine.addChild(player, pExhaust); // ?
-            registry.add<sf::Transformable>(exhaust).move(-20.f, 0);
-            /*auto pExhaustParticleSystem = registry.add<ParticleSystem>(exhaust, 10000);
+            Actor& exhaust = engine.makeActor();
+            auto& tf = registry.add<en::Transformable>(exhaust, &registry);
+            tf.move(-20.f, 0);
+            engine.setParent(exhaust, player);
+
+            auto& exhaustParticleSystem = exhaust.add<ParticleSystem>(10000);
             {
                 auto pParticleDrawable = std::make_shared<sf::CircleShape>(4.f, 3);
                 pParticleDrawable->setOrigin(0.5f, 0.5f);
-                pExhaustParticleSystem->setDrawable(pParticleDrawable);
+                exhaustParticleSystem.setDrawable(pParticleDrawable);
 
-                auto settings = pExhaustParticleSystem->getSettings();
+                auto settings = exhaustParticleSystem.getSettings();
                 settings.emissionInterval = sf::microseconds(400);
                 settings.emissionRadius = 10.f;
                 settings.startVelocity.x = -1000.f;
                 settings.startVelocityRandomness = 100.f;
                 settings.particleLifetime = sf::seconds(0.5f);
-                pExhaustParticleSystem->setSettings(settings);
-            }*/
+                exhaustParticleSystem.setSettings(settings);
+            }
 
             //registry.add<PlayerController>(player)->setEngineExhaustParticles(pExhaustParticleSystem);
         }
+
+        player.add<PlayerController>(player);
 
         return player;
     }

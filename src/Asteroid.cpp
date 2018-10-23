@@ -17,7 +17,7 @@ void Asteroid::update(float dt) {
 void Asteroid::flicker() {
 
     /*
-    auto pRenderer = m_Engine.getRegistry().get<DrawableRenderer>(m_Entity);
+    auto pRenderer = m_engine.getRegistry().get<DrawableRenderer>(m_Entity);
     if (!pRenderer) return;
 
     auto pDrawable = pRenderer->getDrawable();

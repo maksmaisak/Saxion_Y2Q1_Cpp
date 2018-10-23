@@ -9,14 +9,12 @@
 #include "Engine.h"
 #include "ParticleSystem.h"
 
-/*
 class PlayerController : public Behavior {
 
 public:
-    explicit PlayerController(Entity* pEntity);
+    explicit PlayerController(Actor& actor);
     void update(float dt) final;
-
-    void setEngineExhaustParticles(std::shared_ptr<ParticleSystem> pEngineExhaustParticles);
+    //void setEngineExhaustParticles(std::shared_ptr<ParticleSystem> pEngineExhaustParticles);
 
 private:
     float m_acceleration  = 800.f;
@@ -24,7 +22,7 @@ private:
     float m_drag          = 50.f;
     float m_rotationSpeed = 360.f;
     sf::Vector2f m_velocity = {0, 0};
-    std::shared_ptr<ParticleSystem> m_pEngineExhaustParticles;
+    //std::shared_ptr<ParticleSystem> m_pEngineExhaustParticles;
 };
-*/
+
 #endif //SAXION_Y2Q1_CPP_PLAYER_H

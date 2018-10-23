@@ -8,24 +8,25 @@
 #include <memory>
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
+#include "EntityRegistry.h"
 
-class Engine;
+class Actor;
 
 class Behavior {
 
 public:
-    explicit Behavior(Engine& engine, Entity entity) : m_Engine(engine), m_Entity(entity) {}
+    explicit Behavior(Actor& actor);
     virtual ~Behavior() = default;
 
-    inline Entity  getEntity() const {return m_Entity;}
-    inline Engine& getEngine() const {return m_Engine;}
+    inline Actor& getActor() const {return m_actor;}
 
     virtual void update(float dt) {};
     virtual void draw(sf::RenderTarget& renderTarget) {};
 
 protected:
-    const Entity m_Entity;
-    Engine& m_Engine;
+    Actor& m_actor;
+    Engine& m_engine;
+    EntityRegistry& m_registry;
 };
 
 #endif //SAXION_Y2Q1_CPP_COMPONENT_H

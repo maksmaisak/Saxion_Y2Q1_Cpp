@@ -5,7 +5,9 @@
 #include <cmath>
 #include <algorithm>
 #include "Engine.h"
-#include "Behavior.h"
+#include "Transformable.h"
+
+#include <SFML/Graphics.hpp>
 
 const sf::Time TIMESTEP = sf::seconds(0.01f);
 const float TIMESTEP_SECONDS = TIMESTEP.asSeconds();
@@ -48,64 +50,48 @@ void Engine::run() {
             lag -= TIMESTEP;
         }
 
-        render();
+        draw();
     }
 }
 
 void Engine::update(float dt) {
 
-    for (auto& pComponent : m_components) {
-        pComponent->update(dt);
-    }
+    for (auto& pSystem : m_systems) pSystem->update(dt);
+    for (auto& pActor : m_actors) pActor->update(dt);
 }
 
-void Engine::render() {
+void Engine::draw() {
 
     m_window.clear();
 
-    for (auto& pComponent : m_components) {
-        pComponent->draw(m_window);
-    }
+    for (auto& pSystem : m_systems) pSystem->draw();
+    for (auto& pActor : m_actors) pActor->draw();
 
     m_window.display();
 }
 
-template<typename T>
-inline void remove_from_vector(std::vector<std::shared_ptr<T>>& vec, const T* const item) {
+Actor& Engine::makeActor() {
 
-    vec.erase(
-        std::remove_if(
-            vec.begin(),
-            vec.end(),
-            [&](const auto& p) { return p.get() == item; }
-        ),
-        vec.end()
-    );
+    return *m_actors.emplace_back(new Actor(*this, m_registry.makeEntity()));
 }
 
-template<typename T>
-inline void remove_from_vector(std::vector<T>& vec, const T& item) {
+void Engine::setParent(Entity child, std::optional<Entity> newParent) {
 
-    vec.erase(
-        std::remove(
-            vec.begin(),
-            vec.end(),
-            item
-        ),
-        vec.end()
-    );
+    auto& childTransformable = m_registry.get<en::Transformable>(child);
+
+    if (childTransformable.m_parent.has_value()) {
+
+        Entity oldParent = *childTransformable.m_parent;
+        if (oldParent == newParent) return;
+        m_registry.get<en::Transformable>(oldParent).removeChild(child);
+    }
+
+    if (newParent.has_value()) {
+
+        auto& parentTransformable = m_registry.get<en::Transformable>(*newParent);
+        parentTransformable.addChild(child);
+    }
+
+    childTransformable.m_parent = newParent;
+    childTransformable.m_globalTransformNeedUpdate = true;
 }
-
-/*
-std::shared_ptr<Entity>& Engine::addChild(std::shared_ptr<Entity>& pParent, std::shared_ptr<Entity>& pChild) {
-
-    pParent->addChild(pChild);
-    pChild->setParent(pParent);
-    return pChild;
-}
-
-void Engine::removeChild(std::shared_ptr<Entity>& pParent, std::shared_ptr<Entity>& pChild) {
-
-    pParent->removeChild(pChild);
-    pChild->setParent({});
-}*/

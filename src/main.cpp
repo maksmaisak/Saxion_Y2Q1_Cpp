@@ -2,11 +2,20 @@
 #include <SFML/Graphics/Shape.hpp>
 #include <memory>
 #include <algorithm>
+#include <optional>
+#include <systems/WrapAroundScreenSystem.h>
 #include "Engine.h"
+#include "Actor.h"
 #include "Asteroid.h"
 #include "DrawableRenderer.h"
+#include "Transformable.h"
+
+#include "RenderSystem.h"
+#include "PhysicsSystem.h"
+#include "WrapAroundScreenSystem.h"
 
 #include "Factory.h"
+#include "Rigidbody.h"
 
 using uint = unsigned int;
 
@@ -18,26 +27,24 @@ const uint NUM_ASTEROIDS = 10;
 int main() {
 
     Engine engine(WIDTH, HEIGHT);
+    engine.addSystem<RenderSystem>();
+    engine.addSystem<PhysicsSystem>();
+    engine.addSystem<WrapAroundScreenSystem>();
+
     EntityRegistry& registry = engine.getRegistry();
 
     {
         Entity entity = registry.makeEntity();
-        registry.destroy(entity);
+        registry.add<en::Transformable>(entity);
+        registry.add<std::shared_ptr<sf::Drawable>>(entity, std::make_shared<sf::CircleShape>(10.f, 20));
+        registry.add<Rigidbody>(entity).m_velocity = {100.f, 800.f};
+        //registry.destroy(entity);
     }
 
-    Entity player = game::makePlayer(engine);
-
-    /*
+    game::makePlayer(engine);
     for (int i = 0; i < NUM_ASTEROIDS; ++i) {
         game::makeAsteroid(engine);
     }
-
-    std::size_t count = 0;
-    for (auto& pEntity : registry.with<Asteroid, DrawableRenderer>()) {
-        ++count;
-    }
-    std::cout << count << " entities with Asteroid and DrawableRenderer" << std::endl;
-    */
 
     engine.run();
 

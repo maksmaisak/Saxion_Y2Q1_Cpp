@@ -5,11 +5,12 @@
 #include <engine/DrawableRenderer.h>
 #include "Factory.h"
 #include "Asteroid.h"
+#include "Rigidbody.h"
 #include "MyMath.h"
 
 const std::size_t NUM_VERTICES = 10;
 
-std::shared_ptr<sf::Drawable> makeAsteroidShape() {
+std::shared_ptr<sf::Shape> makeAsteroidShape() {
 
     auto pShape = std::make_shared<sf::ConvexShape>(NUM_VERTICES);
 
@@ -29,15 +30,16 @@ namespace game {
 
         EntityRegistry& registry = engine.getRegistry();
 
-        auto entity = registry.makeEntity();
-        //engine.add<DrawableRenderer>(*pEntity, makeAsteroidShape());
-        //engine.add<Asteroid>(*pEntity);
+        Entity e = registry.makeEntity();
+        registry.add<std::shared_ptr<sf::Drawable>>(e, makeAsteroidShape());
+
+        registry.add<Rigidbody>(e).m_velocity = en::randomInCircle(400.f);
 
         sf::Vector2f position = engine.getWindow().getView().getSize();
         position.x *= en::random();
         position.y *= en::random();
-        registry.add<sf::Transformable>(entity).setPosition(position);
+        registry.add<en::Transformable>(e).setPosition(position);
 
-        return entity;
+        return e;
     }
 }

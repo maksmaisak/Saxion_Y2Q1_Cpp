@@ -5,16 +5,14 @@
 #ifndef SAXION_Y2Q1_CPP_PHYSICSSYSTEM_H
 #define SAXION_Y2Q1_CPP_PHYSICSSYSTEM_H
 
+#include "System.h"
 #include "Engine.h"
 
-class PhysicsSystem {
+class PhysicsSystem : public System {
 
 public:
-    PhysicsSystem(Engine& engine) : m_engine(engine) {}
-    void update(float dt);
-
-private:
-    Engine& m_engine;
+    explicit PhysicsSystem(Engine& engine) : System(engine) {}
+    void update(float dt) override;
 };
 
 
