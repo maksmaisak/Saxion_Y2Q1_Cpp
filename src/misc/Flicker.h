@@ -8,7 +8,7 @@
 #include <memory>
 #include <SFML/Graphics.hpp>
 
-struct FlickerTest {
+struct Flicker {
     std::shared_ptr<sf::Shape> m_shape;
 };
 

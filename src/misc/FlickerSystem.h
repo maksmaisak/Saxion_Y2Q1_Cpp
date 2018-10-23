@@ -2,30 +2,27 @@
 // Created by Maksym Maisak on 23/10/18.
 //
 
-#ifndef SAXION_Y2Q1_CPP_FLICKER_H
-#define SAXION_Y2Q1_CPP_FLICKER_H
+#ifndef SAXION_Y2Q1_CPP_FLICKERSYSTEM_H
+#define SAXION_Y2Q1_CPP_FLICKERSYSTEM_H
 
-#include <memory>
-#include <SFML/Graphics.hpp>
 #include "Engine.h"
 #include "MyMath.h"
-
-struct Flicker {
-    std::shared_ptr<sf::Shape> m_shape;
-};
+#include "EntityRegistry.h"
+#include "Flicker.h"
 
 class FlickerSystem : public System {
 
     using System::System;
+
 public:
 
     void update(float dt) override {
 
+        auto view = m_registry.with<Flicker>();
         for (Entity e : m_registry.with<Flicker>()) {
-
-            m_registry.get<Flicker>(e).m_shape->setOutlineThickness(en::random(1.f, 4.f));
+            m_registry.get<Flicker>(e).m_shape->setOutlineThickness(en::random(2.f, 4.f));
         }
     }
-}
+};
 
-#endif //SAXION_Y2Q1_CPP_FLICKER_H
+#endif //SAXION_Y2Q1_CPP_FLICKERSYSTEM_H

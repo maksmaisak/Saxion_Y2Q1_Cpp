@@ -9,8 +9,10 @@
 
 struct Rigidbody {
 
-    sf::Vector2f m_velocity;
-    float m_invMass = 1.f;
+    sf::Vector2f velocity;
+    float radius = 10.f;
+    float invMass = 1.f;
+    float bounciness = 1.f;
 };
 
 
