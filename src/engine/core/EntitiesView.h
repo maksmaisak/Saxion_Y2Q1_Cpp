@@ -9,7 +9,7 @@
 #include <set>
 #include <tuple>
 #include "Entity.h"
-#include "engine/ecs/ComponentPool.h"
+#include "ComponentPool.h"
 
 template<typename... TComponent>
 class EntitiesView {

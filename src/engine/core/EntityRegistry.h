@@ -11,8 +11,8 @@
 #include <typeindex>
 #include <iostream>
 #include "Entity.h"
-#include "engine/ecs/ComponentPool.h"
-#include "engine/core/EntitiesView.h"
+#include "ComponentPool.h"
+#include "EntitiesView.h"
 
 #include "Transformable.h"
 

@@ -14,4 +14,6 @@ Entity EntityRegistry::makeEntity() {
 void EntityRegistry::destroy(Entity entity) {
     
     m_entities.erase(entity);
+
+    throw "not implemented removing components from storage.";
 }
