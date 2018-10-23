@@ -6,9 +6,8 @@
 #define SAXION_Y2Q1_CPP_RIGIDBODY_H
 
 #include <SFML/Graphics.hpp>
-#include "Component.h"
 
-struct Rigidbody : Component {
+struct Rigidbody {
 
     sf::Vector2f m_velocity;
     float m_invMass = 1.f;

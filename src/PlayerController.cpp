@@ -8,10 +8,10 @@
 #include "Input.h"
 #include "MyMath.h"
 
-PlayerController::PlayerController(Entity* pEntity) : Component(pEntity) {
+PlayerController::PlayerController(Actor& actor) : Behavior(actor) {
 
     std::cout << "PlayerController()" << std::endl;
-    m_Entity.setRotation(-90.f);
+    m_registry.get<en::Transformable>(actor).setRotation(-90.f);
 }
 
 bool shouldAccelerate();
@@ -19,19 +19,21 @@ sf::Vector2f getDirection(float angle);
 
 void PlayerController::update(float dt) {
 
-    float currentRotation = m_Entity.getRotation();
+    auto& tf = m_registry.get<en::Transformable>(m_actor);
+
+    float currentRotation = tf.getRotation();
     {
         float input = en::getAxisHorizontal();
         if (!en::isZero(input)) {
             currentRotation += input * m_rotationSpeed * dt;
-            m_Entity.setRotation(currentRotation);
+            tf.setRotation(currentRotation);
         }
     }
 
     bool accelerating = shouldAccelerate();
     if (accelerating) {
         m_velocity += getDirection(currentRotation) * m_acceleration * dt;
-    } else if(!en::isZero(m_velocity)) {
+    } else if (!en::isZero(m_velocity)) {
         m_velocity -= en::normalized(m_velocity) * std::min(m_drag * dt, en::magnitude(m_velocity));
     }
 
@@ -39,25 +41,16 @@ void PlayerController::update(float dt) {
         en::normalize(m_velocity) *= m_maxSpeed;
     }
 
-    m_Entity.move(m_velocity * dt);
-    {
-        sf::Vector2f viewSize = m_Engine.getWindow().getView().getSize();
-        sf::Vector2f position = m_Entity.getPosition();
-        while (position.x < 0) position.x += viewSize.x;
-        while (position.y < 0) position.y += viewSize.y;
-        while (position.x > viewSize.x) position.x -= viewSize.x;
-        while (position.y > viewSize.y) position.y -= viewSize.y;
-        m_Entity.setPosition(position);
-    }
+    tf.move(m_velocity * dt);
 
-    if (m_pEngineExhaustParticles) {
-        m_pEngineExhaustParticles->setIsEmissionActive(accelerating);
-    }
+//    if (m_pEngineExhaustParticles) {
+//        m_pEngineExhaustParticles->setIsEmissionActive(accelerating);
+//    }
 }
 
-void PlayerController::setEngineExhaustParticles(std::shared_ptr<ParticleSystem> pEngineExhaustParticles) {
-    m_pEngineExhaustParticles = std::move(pEngineExhaustParticles);
-}
+//void PlayerController::setEngineExhaustParticles(std::shared_ptr<ParticleSystem> pEngineExhaustParticles) {
+//    m_pEngineExhaustParticles = std::move(pEngineExhaustParticles);
+//}
 
 inline bool shouldAccelerate() {
 

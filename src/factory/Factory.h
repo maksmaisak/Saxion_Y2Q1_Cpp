@@ -9,8 +9,8 @@
 
 namespace game {
 
-    std::shared_ptr<Entity> makePlayer(Engine& engine);
-    std::shared_ptr<Entity> makeAsteroid(Engine& engine);
+    Entity makePlayer(Engine& engine);
+    Entity makeAsteroid(Engine& engine);
 };
 
 

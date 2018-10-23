@@ -6,8 +6,9 @@
 
 #include "DrawableRenderer.h"
 
+/*
 DrawableRenderer::DrawableRenderer(Entity* pEntity, std::shared_ptr<sf::Drawable> drawable) :
-    Component(pEntity),
+    Behavior(pEntity),
     m_drawable(std::move(drawable))
     {}
 
@@ -20,3 +21,4 @@ const std::shared_ptr<sf::Drawable>& DrawableRenderer::getDrawable() const {
 
     return m_drawable;
 }
+*/
