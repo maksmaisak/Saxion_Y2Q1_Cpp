@@ -10,14 +10,15 @@
 #include <vector>
 #include <optional>
 #include <typeindex>
+#include <type_traits>
 #include <iostream>
 #include "EntityRegistry.h"
 #include "Entity.h"
 #include "System.h"
-#include "Actor.h"
+#include "BehaviorSystem.h"
 
-template<typename... TComponent>
-class EntitiesView;
+class Behavior;
+class Actor;
 
 class Engine final {
 
@@ -30,6 +31,8 @@ public:
     inline sf::RenderWindow& getWindow() {return m_window;}
     static Engine& getInstance();
 
+    Actor makeActor();
+
     template<typename TSystem, typename... Args>
     TSystem& addSystem(Engine& engine, Args&&... args);
 
@@ -37,7 +40,9 @@ public:
     template<typename TSystem, typename... Args>
     TSystem& addSystem(Args&&... args);
 
-    Actor& makeActor();
+    /// Makes sure a system to handle a given behavior type is in place.
+    template<typename TBehavior>
+    bool ensureBehaviorSystem();
 
     void setParent(Entity child, std::optional<Entity> newParent);
 
@@ -49,7 +54,7 @@ private:
     sf::RenderWindow m_window;
 
     std::vector<std::unique_ptr<System>> m_systems;
-    std::vector<std::unique_ptr<Actor>>  m_actors;
+    std::set<std::type_index> m_behaviorSystems;
 
     void draw();
     void update(float dt);
@@ -69,6 +74,22 @@ TSystem& Engine::addSystem(Engine& engine, Args&& ... args) {
 template<typename TSystem, typename... Args>
 TSystem& Engine::addSystem(Args&&... args) {
     return addSystem<TSystem>(*this, std::forward(args)...);
+}
+
+template<typename TBehavior>
+bool Engine::ensureBehaviorSystem() {
+
+    static_assert(std::is_base_of_v<Behavior, TBehavior>);
+
+    auto typeIndex = std::type_index(typeid(TBehavior));
+    if (m_behaviorSystems.find(typeIndex) == m_behaviorSystems.end()) {
+
+        addSystem<BehaviorSystem<TBehavior>>();
+        m_behaviorSystems.insert(typeIndex);
+        return true;
+    }
+
+    return false;
 }
 
 #endif //SAXION_Y2Q1_CPP_ENGINE_H

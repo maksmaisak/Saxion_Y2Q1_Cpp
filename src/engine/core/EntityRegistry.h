@@ -13,6 +13,7 @@
 #include "Entity.h"
 #include "ComponentPool.h"
 #include "EntitiesView.h"
+#include "Messaging.h"
 
 #include "Transformable.h"
 
@@ -73,7 +74,7 @@ TComponent* EntityRegistry::tryGet(Entity entity) const {
     auto it = pool.find(entity);
     if (it == pool.end()) return nullptr;
 
-    return *it;
+    return &it->second;
 }
 
 template<class TComponent>

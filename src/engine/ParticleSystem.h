@@ -23,7 +23,7 @@ public:
         float startVelocityRandomness = 10.f;
     };
 
-    explicit ParticleSystem(Actor& actor, ParticleIndex maxNumParticles = DEFAULT_MAX_PARTICLES) :
+    explicit ParticleSystem(Actor actor, ParticleIndex maxNumParticles = DEFAULT_MAX_PARTICLES) :
         Behavior(actor),
         m_maxNumParticles(maxNumParticles),
         m_particles(maxNumParticles) {}

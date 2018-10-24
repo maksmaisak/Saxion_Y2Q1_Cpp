@@ -13,6 +13,7 @@
 #include "WrapAroundScreenSystem.h"
 #include "FlickerSystem.h"
 #include "PlayerControlsSystem.h"
+#include "BreakAsteroidSystem.h"
 
 #include "Collision.h"
 
@@ -25,7 +26,7 @@ const uint HEIGHT = 1200;
 
 const uint NUM_ASTEROIDS = 10;
 
-struct Test : Receiver<en::Collision>, Receiver<int>, Receiver<float> {
+struct Test : Receiver<en::Collision, int, float> {
 
     void receive(const int& num) override {
         std::cout << "received " << num << std::endl;
@@ -42,14 +43,6 @@ struct Test : Receiver<en::Collision>, Receiver<int>, Receiver<float> {
 
 int main() {
 
-    {
-        Test a;
-        Receiver<int>::accept(1);
-        Test b[2];
-        Receiver<int>::accept(2);
-    }
-    Receiver<int>::accept(3);
-
     Engine engine(WIDTH, HEIGHT);
 
     {
@@ -59,10 +52,9 @@ int main() {
         engine.addSystem<PlayerControlsSystem>();
 
         engine.addSystem<WrapAroundScreenSystem>();
+        engine.addSystem<BreakAsteroidSystem>();
         //engine.addSystem<FlickerSystem>();
     }
-
-    Test receiver;
 
     EntityRegistry& registry = engine.getRegistry();
 

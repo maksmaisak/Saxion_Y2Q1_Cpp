@@ -21,6 +21,8 @@ public:
 protected:
     Engine& m_engine;
     class EntityRegistry& m_registry;
+
+    sf::RenderWindow& getWindow();
 };
 
 #endif //SAXION_Y2Q1_CPP_SYSTEM_H

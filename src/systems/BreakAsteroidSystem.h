@@ -11,6 +11,8 @@
 
 class BreakAsteroidSystem : public System, Receiver<en::Collision> {
 
+    using System::System;
+
     void receive(const en::Collision& info) override;
 };
 

@@ -6,6 +6,7 @@
 #include "Rigidbody.h"
 #include "Flicker.h"
 #include "MyMath.h"
+#include "Asteroid.h"
 
 const std::size_t NUM_VERTICES = 10;
 const float AVERAGE_RADIUS = 50.f;
@@ -38,6 +39,8 @@ namespace game {
         EntityRegistry& registry = engine.getRegistry();
 
         Entity e = registry.makeEntity();
+
+        registry.add<Asteroid>(e);
 
         std::shared_ptr<sf::Shape> shape = makeAsteroidShape();
         registry.add<std::shared_ptr<sf::Drawable>>(e, shape);

@@ -2,8 +2,9 @@
 // Created by Maksym Maisak on 18/10/18.
 //
 
-#include "Rigidbody.h"
 #include "Factory.h"
+#include "Actor.h"
+#include "Rigidbody.h"
 #include "ParticleSystem.h"
 #include "Transformable.h"
 #include "Player.h"
@@ -38,7 +39,7 @@ Entity addExhaust(Engine& engine, Entity player) {
 
     EntityRegistry& registry = engine.getRegistry();
 
-    Actor& exhaust = engine.makeActor();
+    Actor exhaust = engine.makeActor();
     auto& tf = registry.add<en::Transformable>(exhaust, &registry);
     tf.move(-30.f, 0);
     engine.setParent(exhaust, player);

@@ -6,7 +6,7 @@
 #include "Actor.h"
 #include "Engine.h"
 
-Behavior::Behavior(Actor& actor) :
+Behavior::Behavior(const Actor& actor) :
     m_actor(actor),
     m_engine(m_actor.getEngine()),
     m_registry(m_engine.getRegistry())

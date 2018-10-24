@@ -8,6 +8,8 @@
 #include "ParticleSystem.h"
 #include "MyMath.h"
 #include "GameTime.h"
+#include "EntityRegistry.h"
+#include "Actor.h"
 
 void ParticleSystem::draw(sf::RenderTarget& renderTarget) {
 

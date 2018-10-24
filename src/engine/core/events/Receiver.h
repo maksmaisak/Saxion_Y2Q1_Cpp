@@ -7,8 +7,11 @@
 
 #include <set>
 
+template<typename... T>
+class Receiver;
+
 template<typename TMessage>
-class Receiver {
+class Receiver<TMessage> {
 
 public:
 
@@ -27,8 +30,11 @@ private:
     static std::set<Receiver*> m_receivers;
 };
 
-template<typename T>
-std::set<Receiver<T>*> Receiver<T>::m_receivers;
+template<typename TMessage, typename... Rest>
+class Receiver<TMessage, Rest...> : Receiver<TMessage>, Receiver<Rest...> {};
+
+template<typename TMessage>
+std::set<Receiver<TMessage>*> Receiver<TMessage>::m_receivers;
 
 
 #endif //SAXION_Y2Q1_CPP_RECEIVER_H

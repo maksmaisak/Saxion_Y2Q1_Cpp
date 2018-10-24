@@ -9,22 +9,22 @@
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
 #include "EntityRegistry.h"
+#include "ActorDecl.h"
 
-class Actor;
-
+// WARNING. Update functions will only be called if this component was added using Actor::add<TBehavior>()
 class Behavior {
 
 public:
-    explicit Behavior(Actor& actor);
+    explicit Behavior(const Actor& actor);
     virtual ~Behavior() = default;
 
-    inline Actor& getActor() const {return m_actor;}
+    inline Actor& actor() {return m_actor;}
 
     virtual void update(float dt) {};
     virtual void draw(sf::RenderTarget& renderTarget) {};
 
 protected:
-    Actor& m_actor;
+    Actor m_actor;
     Engine& m_engine;
     EntityRegistry& m_registry;
 };

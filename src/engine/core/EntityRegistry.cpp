@@ -3,20 +3,26 @@
 //
 
 #include "EntityRegistry.h"
+#include "Messaging.h"
+#include "EntityEvents.h"
 
 Entity EntityRegistry::makeEntity() {
 
     auto [iterator, didInsert] = m_entities.insert(m_nextId++);
     assert(didInsert);
-    return *iterator;
+
+    const Entity entity = *iterator;
+    Receiver<EntityCreated>::accept({entity});
+    return entity;
 }
 
 void EntityRegistry::destroy(Entity entity) {
-    
+
+    Receiver<EntityWillBeDestroyed>::accept({entity});
+
     m_entities.erase(entity);
 
-    /*for (auto& kvp : m_componentPools) {
-        kvp.second->erase(entity);
-    }*/
-    throw "component removal not implemented";
+//    for (auto& kvp : m_componentPools) {
+//        kvp.second->erase(entity);
+//    }
 }

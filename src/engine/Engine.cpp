@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "Engine.h"
 #include "Transformable.h"
+#include "Actor.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -57,7 +58,6 @@ void Engine::run() {
 void Engine::update(float dt) {
 
     for (auto& pSystem : m_systems) pSystem->update(dt);
-    for (auto& pActor : m_actors) pActor->update(dt);
 }
 
 void Engine::draw() {
@@ -65,14 +65,8 @@ void Engine::draw() {
     m_window.clear();
 
     for (auto& pSystem : m_systems) pSystem->draw();
-    for (auto& pActor : m_actors) pActor->draw();
 
     m_window.display();
-}
-
-Actor& Engine::makeActor() {
-
-    return *m_actors.emplace_back(new Actor(*this, m_registry.makeEntity()));
 }
 
 void Engine::setParent(Entity child, std::optional<Entity> newParent) {
@@ -94,4 +88,9 @@ void Engine::setParent(Entity child, std::optional<Entity> newParent) {
 
     childTransformable.m_parent = newParent;
     childTransformable.m_globalTransformNeedUpdate = true;
+}
+
+Actor Engine::makeActor() {
+
+    return Actor(*this, m_registry.makeEntity());
 }
