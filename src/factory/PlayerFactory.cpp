@@ -7,8 +7,9 @@
 #include "ParticleSystem.h"
 #include "Transformable.h"
 #include "Player.h"
+#include "Flicker.h"
 
-std::shared_ptr<sf::Drawable> makePlayerShape() {
+std::shared_ptr<sf::Shape> makePlayerShape() {
 
     auto pShape = std::make_shared<sf::ConvexShape>(4);
 
@@ -70,7 +71,10 @@ namespace game {
         Entity e = registry.makeEntity();
 
         addTransformable(engine, e);
-        registry.add<std::shared_ptr<sf::Drawable>>(e, makePlayerShape());
+
+        std::shared_ptr<sf::Shape> shape = makePlayerShape();
+        registry.add<std::shared_ptr<sf::Drawable>>(e, shape);
+        registry.add<Flicker>(e, {shape});
         registry.add<Player>(e);
 
         {

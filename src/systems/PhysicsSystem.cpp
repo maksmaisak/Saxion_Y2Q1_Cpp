@@ -6,8 +6,9 @@
 #include "PhysicsSystem.h"
 #include "Transformable.h"
 #include "Rigidbody.h"
-
-#include "Physics.h"
+#include "PhysicsUtils.h"
+#include "Messaging.h"
+#include "Collision.h"
 
 void PhysicsSystem::update(float dt) {
 
@@ -20,27 +21,30 @@ void PhysicsSystem::update(float dt) {
         sf::Vector2f movement = rb.velocity * dt;
 
         bool didCollide = false;
-        for (Entity other : m_registry.with<Rigidbody, en::Transformable>()) {
+        for (Entity other : view) {
 
             if (entity == other) continue;
 
             auto& otherRb = m_registry.get<Rigidbody>(other);
             auto& otherTf = m_registry.get<en::Transformable>(other);
 
-            std::optional<en::Collision> collision = en::circleVsCircleContinuous(
+            std::optional<en::Hit> hit = en::circleVsCircleContinuous(
                 tf.getPosition(), rb.radius, movement,
                 otherTf.getPosition(), otherRb.radius
             );
 
-            if (collision.has_value()) {
+            if (hit.has_value()) {
 
                 en::resolve(
                     rb.velocity, rb.invMass,
                     otherRb.velocity, otherRb.invMass,
-                    collision->normal, std::min(rb.bounciness, otherRb.bounciness)
+                    hit->normal, std::min(rb.bounciness, otherRb.bounciness)
                 );
-                tf.move(movement * collision->timeOfImpact);
+                tf.move(movement * hit->timeOfImpact);
                 didCollide = true;
+
+                Receiver<en::Collision>::accept({*hit, entity, other});
+
                 break;
             }
         }

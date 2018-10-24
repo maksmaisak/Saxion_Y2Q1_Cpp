@@ -2,24 +2,23 @@
 // Created by Maksym Maisak on 23/10/18.
 //
 
-#ifndef SAXION_Y2Q1_CPP_PHYSICS_H
-#define SAXION_Y2Q1_CPP_PHYSICS_H
+#ifndef SAXION_Y2Q1_CPP_PHYSICSUTILS_H
+#define SAXION_Y2Q1_CPP_PHYSICSUTILS_H
 
 #include <SFML/Graphics.hpp>
 #include <optional>
-#include <MacTypes.h>
 #include "MyMath.h"
 
 namespace en {
 
-    struct Collision {
+    struct Hit {
 
         sf::Vector2f normal;
         float timeOfImpact;
-        Collision(const sf::Vector2f& normal, float timeOfImpact) : normal(normal), timeOfImpact(timeOfImpact) {}
+        Hit(const sf::Vector2f& normal, float timeOfImpact) : normal(normal), timeOfImpact(timeOfImpact) {}
     };
 
-    std::optional<Collision> circleVsCircleContinuous(
+    inline std::optional<Hit> circleVsCircleContinuous(
         const sf::Vector2f& moverPosition, float moverRadius, const sf::Vector2f& movement,
         const sf::Vector2f& otherPosition, float otherRadius
     ) {
@@ -38,7 +37,7 @@ namespace en {
         if (b >= 0.f) return std::nullopt;
 
         // If already overlapping.
-        if (c < 0.f) return std::make_optional<Collision>(normalized(relativePosition), 0.f);
+        if (c < 0.f) return std::make_optional<Hit>(normalized(relativePosition), 0.f);
 
         float d = b * b - 4.f * a * c;
         if (d < 0.f) return std::nullopt;
@@ -48,13 +47,13 @@ namespace en {
         if (t <  0.f) return std::nullopt;
         if (t >= 1.f) return std::nullopt;
 
-        return std::make_optional<Collision>(normalized(relativePosition + movement * t), t);
+        return std::make_optional<Hit>(normalized(relativePosition + movement * t), t);
     }
 
     /// A helper for resolving collisions between physical bodies
     /// in a way which obeys conservation of momentum.
     /// Assumes `normal` is normalized.
-    void resolve(
+    inline void resolve(
         sf::Vector2f& aVelocity, float aInverseMass,
         sf::Vector2f& bVelocity, float bInverseMass,
         sf::Vector2f normal, float bounciness = 1.f
@@ -76,4 +75,4 @@ namespace en {
     }
 }
 
-#endif //SAXION_Y2Q1_CPP_PHYSICS_H
+#endif //SAXION_Y2Q1_CPP_PHYSICSUTILS_H

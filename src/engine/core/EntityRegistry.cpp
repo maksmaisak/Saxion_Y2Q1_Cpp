@@ -15,5 +15,8 @@ void EntityRegistry::destroy(Entity entity) {
     
     m_entities.erase(entity);
 
-    throw "not implemented removing components from storage.";
+    /*for (auto& kvp : m_componentPools) {
+        kvp.second->erase(entity);
+    }*/
+    throw "component removal not implemented";
 }

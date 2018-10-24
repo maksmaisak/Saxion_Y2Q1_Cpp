@@ -1,13 +1,12 @@
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Shape.hpp>
 #include <memory>
 #include <algorithm>
 #include <optional>
-#include "WrapAroundScreenSystem.h"
-#include "PlayerControlsSystem.h"
+#include "Messaging.h"
 #include "Engine.h"
 #include "Actor.h"
 #include "Transformable.h"
+#include "Rigidbody.h"
 
 #include "RenderSystem.h"
 #include "PhysicsSystem.h"
@@ -15,8 +14,9 @@
 #include "FlickerSystem.h"
 #include "PlayerControlsSystem.h"
 
+#include "Collision.h"
+
 #include "Factory.h"
-#include "Rigidbody.h"
 
 using uint = unsigned int;
 
@@ -25,7 +25,30 @@ const uint HEIGHT = 1200;
 
 const uint NUM_ASTEROIDS = 10;
 
+struct Test : Receiver<en::Collision>, Receiver<int>, Receiver<float> {
+
+    void receive(const int& num) override {
+        std::cout << "received " << num << std::endl;
+    }
+
+    void receive(const float& num) override {
+        std::cout << "received " << num << std::endl;
+    }
+
+    void receive(const en::Collision& info) override {
+        std::cout << "received Collision" << std::endl;
+    }
+};
+
 int main() {
+
+    {
+        Test a;
+        Receiver<int>::accept(1);
+        Test b[2];
+        Receiver<int>::accept(2);
+    }
+    Receiver<int>::accept(3);
 
     Engine engine(WIDTH, HEIGHT);
 
@@ -38,6 +61,8 @@ int main() {
         engine.addSystem<WrapAroundScreenSystem>();
         //engine.addSystem<FlickerSystem>();
     }
+
+    Test receiver;
 
     EntityRegistry& registry = engine.getRegistry();
 

@@ -10,9 +10,9 @@
 
 struct Player {
 
-    float acceleration  = 800.f;
-    float maxSpeed      = 1000.f;
-    float drag          = 50.f;
+    float acceleration = 800.f;
+    float maxSpeed = 1000.f;
+    float drag = 50.f;
     float rotationSpeed = 360.f;
 
     ParticleSystem* exhaustParticleSystem = nullptr;

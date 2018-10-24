@@ -10,8 +10,8 @@
 
 class PhysicsSystem : public System {
 
+    using System::System;
 public:
-    explicit PhysicsSystem(Engine& engine) : System(engine) {}
     void update(float dt) override;
 };
 
