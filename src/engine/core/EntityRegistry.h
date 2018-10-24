@@ -86,6 +86,8 @@ TComponent& EntityRegistry::add(Entity entity, TComponent component) {
     auto [it, didAdd] = pool.emplace(entity, component);
     assert(didAdd);
 
+    Receiver<ComponentAdded<TComponent>>::accept({entity, it->second});
+
     return it->second;
 }
 
@@ -97,6 +99,8 @@ TComponent& EntityRegistry::add(Entity entity, Args&&... args) {
     assert(pool.count(entity) == 0);
     auto [it, didAdd] = pool.try_emplace(entity, std::forward<Args>(args)...);
     assert(didAdd);
+
+    Receiver<ComponentAdded<TComponent>>::accept({entity, it->second});
 
     return it->second;
 }
@@ -111,6 +115,8 @@ inline en::Transformable& EntityRegistry::add<en::Transformable>(Entity entity) 
     auto [it, didAdd] = pool.try_emplace(entity, this);
     assert(didAdd);
 
+    Receiver<ComponentAdded<en::Transformable>>::accept({entity, it->second});
+
     return it->second;
 }
 
@@ -123,6 +129,7 @@ EntitiesView<TComponent...> EntityRegistry::with() {
 template<typename TComponent>
 inline ComponentPool<TComponent>& EntityRegistry::getPool() const {
 
+    // TODO Do something faster than std::set for this.
     const std::type_index key = getTypeIndex<TComponent>();
 
     auto it = m_componentPools.find(key);

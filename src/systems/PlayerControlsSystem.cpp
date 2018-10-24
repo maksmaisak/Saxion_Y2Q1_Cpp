@@ -33,9 +33,8 @@ void PlayerControlsSystem::update(float dt) {
         auto& tf = m_registry.get<en::Transformable>(e);
         auto& rb = m_registry.get<Rigidbody>(e);
 
-        float currentRotation = tf.getRotation();
-
         {
+            float currentRotation = tf.getRotation();
             float input = en::getAxisHorizontal();
             if (!en::isZero(input)) {
                 currentRotation += input * player.rotationSpeed * dt;
@@ -43,14 +42,18 @@ void PlayerControlsSystem::update(float dt) {
             }
         }
 
-        if (accelerate) {
-            rb.velocity += getDirection(currentRotation) * player.acceleration * dt;
-        } else if (!en::isZero(rb.velocity)) {
-            rb.velocity -= en::normalized(rb.velocity) * std::min(player.drag * dt, en::magnitude(rb.velocity));
+        {
+            if (accelerate) {
+                rb.velocity += en::getForward(tf.getGlobalTransform()) * player.acceleration * dt;
+            } else if (!en::isZero(rb.velocity)) {
+                rb.velocity -= en::normalized(rb.velocity) * std::min(player.drag * dt, en::magnitude(rb.velocity));
+            }
         }
 
-        if (en::magnitude(rb.velocity) > player.maxSpeed) {
-            en::normalize(rb.velocity) *= player.maxSpeed;
+        {
+            if (en::magnitude(rb.velocity) > player.maxSpeed) {
+                en::normalize(rb.velocity) *= player.maxSpeed;
+            }
         }
 
         if (player.exhaustParticleSystem) {

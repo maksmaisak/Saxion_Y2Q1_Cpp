@@ -2,6 +2,7 @@
 #include <memory>
 #include <algorithm>
 #include <optional>
+#include <DestroyByTimerSystem.h>
 #include "Messaging.h"
 #include "Engine.h"
 #include "Actor.h"
@@ -10,10 +11,12 @@
 
 #include "RenderSystem.h"
 #include "PhysicsSystem.h"
+#include "DestroyByTimerSystem.h"
 #include "WrapAroundScreenSystem.h"
 #include "FlickerSystem.h"
 #include "PlayerControlsSystem.h"
 #include "BreakAsteroidSystem.h"
+#include "ShootSystem.h"
 
 #include "Collision.h"
 
@@ -49,8 +52,10 @@ int main() {
         engine.addSystem<RenderSystem>();
         engine.addSystem<PhysicsSystem>();
 
-        engine.addSystem<PlayerControlsSystem>();
+        engine.addSystem<DestroyByTimerSystem>();
 
+        engine.addSystem<PlayerControlsSystem>();
+        engine.addSystem<ShootSystem>();
         engine.addSystem<WrapAroundScreenSystem>();
         engine.addSystem<BreakAsteroidSystem>();
         //engine.addSystem<FlickerSystem>();

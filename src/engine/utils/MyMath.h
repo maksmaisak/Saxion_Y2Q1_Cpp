@@ -29,6 +29,8 @@ namespace en {
 
     float random(float min = 0.f, float max = 1.f);
     sf::Vector2f randomInCircle(float radius = 1.f);
+
+    sf::Vector2f getForward(const sf::Transform& transform);
 }
 
 

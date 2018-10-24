@@ -11,6 +11,7 @@ namespace game {
 
     Entity makePlayer(Engine& engine);
     Entity makeAsteroid(Engine& engine);
+    Entity makeBullet(Engine& engine, const sf::Vector2f& position, const sf::Vector2f& velocity);
 };
 
 

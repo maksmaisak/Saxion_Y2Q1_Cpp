@@ -20,6 +20,7 @@ std::shared_ptr<sf::Shape> makePlayerShape() {
     pShape->setPoint(3, {-70, -50});
 
     pShape->setScale(0.5f, 0.5f);
+    pShape->setRotation(-90.f);
 
     pShape->setFillColor(sf::Color::Black);
     pShape->setOutlineThickness(4.f);
@@ -32,7 +33,6 @@ void addTransformable(Engine& engine, Entity player) {
     sf::Vector2f size = engine.getWindow().getView().getSize();
     auto& tf = engine.getRegistry().add<en::Transformable>(player);
     tf.setPosition(size.x / 2.f, size.y * 3.f / 4.f);
-    tf.setRotation(-90.f);
 }
 
 Entity addExhaust(Engine& engine, Entity player) {
@@ -41,7 +41,7 @@ Entity addExhaust(Engine& engine, Entity player) {
 
     Actor exhaust = engine.makeActor();
     auto& tf = registry.add<en::Transformable>(exhaust, &registry);
-    tf.move(-30.f, 0);
+    tf.move(0, 30.f);
     engine.setParent(exhaust, player);
 
     auto& exhaustParticleSystem = exhaust.add<ParticleSystem>(10000);
@@ -53,7 +53,7 @@ Entity addExhaust(Engine& engine, Entity player) {
         auto s = exhaustParticleSystem.getSettings();
         s.emissionInterval = sf::microseconds(400);
         s.emissionRadius = 10.f;
-        s.startVelocity.x = -1000.f;
+        s.startVelocity = {0, 1000.f};
         s.startVelocityRandomness = 100.f;
         s.particleLifetime = sf::seconds(0.5f);
         exhaustParticleSystem.setSettings(s);

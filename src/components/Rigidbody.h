@@ -10,10 +10,10 @@
 struct Rigidbody {
 
     sf::Vector2f velocity;
-    float radius = 10.f;
     float invMass = 1.f;
     float bounciness = 1.f;
-};
 
+    float radius = 10.f;
+};
 
 #endif //SAXION_Y2Q1_CPP_RIGIDBODY_H
