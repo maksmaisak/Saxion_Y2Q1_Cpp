@@ -79,7 +79,7 @@ namespace game {
         registry.add<Player>(e);
 
         {
-            auto& rb = registry.add<Rigidbody>(e);
+            auto& rb = registry.add<en::Rigidbody>(e);
             rb.radius = 30.f;
             rb.invMass = 1.f / 0.5f;
         }

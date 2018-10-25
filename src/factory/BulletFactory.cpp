@@ -20,7 +20,7 @@ namespace game {
 
         registry.add<en::Transformable>(e).setPosition(position);
 
-        auto& rb = registry.add<Rigidbody>(e);
+        auto& rb = registry.add<en::Rigidbody>(e);
         rb.velocity = velocity;
         rb.invMass = 1.f / 0.01f;
 

@@ -12,10 +12,10 @@
 
 void PhysicsSystem::update(float dt) {
 
-    auto view = m_registry.with<Rigidbody, en::Transformable>();
+    auto view = m_registry.with<en::Rigidbody, en::Transformable>();
     for (Entity entity : view) {
 
-        auto& rb = m_registry.get<Rigidbody>(entity);
+        auto& rb = m_registry.get<en::Rigidbody>(entity);
         auto& tf = m_registry.get<en::Transformable>(entity);
 
         sf::Vector2f movement = rb.velocity * dt;
@@ -25,7 +25,7 @@ void PhysicsSystem::update(float dt) {
 
             if (entity == other) continue;
 
-            auto& otherRb = m_registry.get<Rigidbody>(other);
+            auto& otherRb = m_registry.get<en::Rigidbody>(other);
             auto& otherTf = m_registry.get<en::Transformable>(other);
 
             std::optional<en::Hit> hit = en::circleVsCircleContinuous(

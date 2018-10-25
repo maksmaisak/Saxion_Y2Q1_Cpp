@@ -7,13 +7,16 @@
 
 #include <SFML/Graphics.hpp>
 
-struct Rigidbody {
+namespace en {
 
-    sf::Vector2f velocity;
-    float invMass = 1.f;
-    float bounciness = 1.f;
+    struct Rigidbody {
 
-    float radius = 10.f;
-};
+        sf::Vector2f velocity;
+        float invMass = 1.f;
+        float bounciness = 1.f;
+
+        float radius = 10.f;
+    };
+}
 
 #endif //SAXION_Y2Q1_CPP_RIGIDBODY_H

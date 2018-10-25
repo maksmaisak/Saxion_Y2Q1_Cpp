@@ -10,54 +10,51 @@
 #include "MyMath.h"
 #include "Input.h"
 
-inline bool shouldAccelerate() {
+inline bool accelerateButtonPressed() {
 
     return sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
 }
 
-inline sf::Vector2f getDirection(float angle) {
 
-    return {
-        std::cos(angle * en::DEG2RAD),
-        std::sin(angle * en::DEG2RAD)
-    };
+inline void rotate(en::Transformable& tf, float rotationSpeed, float dt) {
+
+    float currentRotation = tf.getRotation();
+    float input = en::getAxisHorizontal();
+    if (!en::isZero(input)) {
+        currentRotation += input * rotationSpeed * dt;
+        tf.setRotation(currentRotation);
+    }
+}
+
+inline void accelerate(en::Rigidbody& rb, en::Transformable& tf, float acceleration, float dt) {
+    rb.velocity += en::getForward(tf.getGlobalTransform()) * acceleration * dt;
+}
+
+inline void drag(en::Rigidbody& rb, float drag, float dt) {
+
+    if (en::isZero(rb.velocity)) return;
+    rb.velocity -= en::normalized(rb.velocity) * std::min(drag * dt, en::magnitude(rb.velocity));
 }
 
 void PlayerControlsSystem::update(float dt) {
 
-    bool accelerate = shouldAccelerate();
+    bool enginesOn = accelerateButtonPressed();
 
-    for (Entity e : m_registry.with<Player, en::Transformable, Rigidbody>()) {
+    for (Entity e : m_registry.with<Player, en::Transformable, en::Rigidbody>()) {
 
         auto& player = m_registry.get<Player>(e);
         auto& tf = m_registry.get<en::Transformable>(e);
-        auto& rb = m_registry.get<Rigidbody>(e);
+        auto& rb = m_registry.get<en::Rigidbody>(e);
 
-        {
-            float currentRotation = tf.getRotation();
-            float input = en::getAxisHorizontal();
-            if (!en::isZero(input)) {
-                currentRotation += input * player.rotationSpeed * dt;
-                tf.setRotation(currentRotation);
-            }
-        }
+        rotate(tf, player.rotationSpeed, dt);
 
-        {
-            if (accelerate) {
-                rb.velocity += en::getForward(tf.getGlobalTransform()) * player.acceleration * dt;
-            } else if (!en::isZero(rb.velocity)) {
-                rb.velocity -= en::normalized(rb.velocity) * std::min(player.drag * dt, en::magnitude(rb.velocity));
-            }
-        }
+        if (enginesOn) accelerate(rb, tf, player.acceleration, dt);
+        else drag(rb, player.drag, dt);
 
-        {
-            if (en::magnitude(rb.velocity) > player.maxSpeed) {
-                en::normalize(rb.velocity) *= player.maxSpeed;
-            }
-        }
+        en::truncate(rb.velocity, player.maxSpeed);
 
         if (player.exhaustParticleSystem) {
-            player.exhaustParticleSystem->setIsEmissionActive(accelerate);
+            player.exhaustParticleSystem->setIsEmissionActive(enginesOn);
         }
     }
 

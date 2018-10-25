@@ -67,7 +67,7 @@ int main() {
         Entity entity = registry.makeEntity();
         registry.add<en::Transformable>(entity);
         registry.add<std::shared_ptr<sf::Drawable>>(entity, std::make_shared<sf::CircleShape>(10.f, 20));
-        auto& rb = registry.add<Rigidbody>(entity);
+        auto& rb = registry.add<en::Rigidbody>(entity);
         rb.velocity = {100.f, 800.f};
         rb.radius = 10.f;
         //registry.destroy(entity);

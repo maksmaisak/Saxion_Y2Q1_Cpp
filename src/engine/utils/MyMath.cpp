@@ -45,6 +45,21 @@ namespace en {
         return normalize(result);
     }
 
+    sf::Vector2f& truncate(sf::Vector2f& vec, float maxMagnitude) {
+
+        if (en::sqrMagnitude(vec) > maxMagnitude * maxMagnitude) {
+            en::normalize(vec) *= maxMagnitude;
+        }
+
+        return vec;
+    }
+
+    sf::Vector2f truncated(const sf::Vector2f& vec, float maxMagnitude) {
+
+        sf::Vector2f result = vec;
+        return truncate(result, maxMagnitude);
+    }
+
     float magnitude(const sf::Vector2f& vec) {
 
         return hypotf(vec.x, vec.y);

@@ -6,6 +6,8 @@
 #define SAXION_Y2Q1_CPP_PLAYERCONROLSSYSTEM_H
 
 #include "System.h"
+#include "Player.h"
+#include "Transformable.h"
 
 class PlayerControlsSystem : public System {
 

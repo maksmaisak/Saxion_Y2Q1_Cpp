@@ -19,6 +19,8 @@ namespace en {
     float angleDegrees(sf::Vector2f vec);
     sf::Vector2f& normalize(sf::Vector2f& vec);
     sf::Vector2f normalized(const sf::Vector2f& vec);
+    sf::Vector2f& truncate(sf::Vector2f& vec, float maxMagnitude);
+    sf::Vector2f truncated(const sf::Vector2f& vec, float maxMagnitude);
     float magnitude(const sf::Vector2f& vec);
     float sqrMagnitude(const sf::Vector2f& vec);
     bool isZero(float value);
