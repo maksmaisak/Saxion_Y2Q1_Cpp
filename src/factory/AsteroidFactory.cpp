@@ -7,6 +7,7 @@
 #include "Flicker.h"
 #include "MyMath.h"
 #include "Asteroid.h"
+#include "DrawInfo.h"
 
 const std::size_t NUM_VERTICES = 10;
 const float AVERAGE_RADIUS = 50.f;
@@ -43,7 +44,7 @@ namespace game {
         registry.add<Asteroid>(e);
 
         std::shared_ptr<sf::Shape> shape = makeAsteroidShape();
-        registry.add<std::shared_ptr<sf::Drawable>>(e, shape);
+        registry.add<en::DrawInfo>(e, shape);
         registry.add<Flicker>(e, shape);
 
         auto& rb = registry.add<en::Rigidbody>(e);

@@ -5,11 +5,11 @@
 #include "Factory.h"
 #include <SFML/Graphics.hpp>
 #include "Engine.h"
-
+#include "GameTime.h"
 #include "Rigidbody.h"
 #include "Bullet.h"
 #include "DestroyTimer.h"
-#include "GameTime.h"
+#include "DrawInfo.h"
 
 namespace game {
 
@@ -24,7 +24,7 @@ namespace game {
         rb.velocity = velocity;
         rb.invMass = 1.f / 0.01f;
 
-        registry.add<std::shared_ptr<sf::Drawable>>(e, std::make_shared<sf::CircleShape>(10.f, 20));
+        registry.add<en::DrawInfo>(e, std::make_shared<sf::CircleShape>(10.f, 20));
         registry.add<Bullet>(e);
         registry.add<DestroyTimer>(e, GameTime::now() + sf::seconds(2.f));
 

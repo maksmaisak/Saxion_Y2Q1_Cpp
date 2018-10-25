@@ -4,6 +4,7 @@
 
 #include "Factory.h"
 #include "Actor.h"
+#include "DrawInfo.h"
 #include "Rigidbody.h"
 #include "ParticleSystem.h"
 #include "Transformable.h"
@@ -74,7 +75,7 @@ namespace game {
         addTransformable(engine, e);
 
         std::shared_ptr<sf::Shape> shape = makePlayerShape();
-        registry.add<std::shared_ptr<sf::Drawable>>(e, shape);
+        registry.add<en::DrawInfo>(e, shape);
         registry.add<Flicker>(e, shape);
         registry.add<Player>(e);
 

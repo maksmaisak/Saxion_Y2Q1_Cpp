@@ -2,12 +2,12 @@
 #include <memory>
 #include <algorithm>
 #include <optional>
-#include <DestroyByTimerSystem.h>
 #include "Messaging.h"
 #include "Engine.h"
 #include "Actor.h"
 #include "Transformable.h"
 #include "Rigidbody.h"
+#include "DrawInfo.h"
 
 #include "RenderSystem.h"
 #include "PhysicsSystem.h"
@@ -61,19 +61,8 @@ int main() {
         //engine.addSystem<FlickerSystem>();
     }
 
-    EntityRegistry& registry = engine.getRegistry();
-
-    {
-        Entity entity = registry.makeEntity();
-        registry.add<en::Transformable>(entity);
-        registry.add<std::shared_ptr<sf::Drawable>>(entity, std::make_shared<sf::CircleShape>(10.f, 20));
-        auto& rb = registry.add<en::Rigidbody>(entity);
-        rb.velocity = {100.f, 800.f};
-        rb.radius = 10.f;
-        //registry.destroy(entity);
-    }
-
     game::makePlayer(engine);
+
     for (int i = 0; i < NUM_ASTEROIDS; ++i) {
         game::makeAsteroid(engine);
     }

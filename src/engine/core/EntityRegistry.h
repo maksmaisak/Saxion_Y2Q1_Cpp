@@ -46,7 +46,7 @@ private:
     mutable std::map<std::type_index, std::unique_ptr<ComponentPoolBase>> m_componentPools;
 
     template<typename TComponent>
-    inline ComponentPool<TComponent>& getPool() const;
+    inline ComponentPool<TComponent>& getPool(bool mustBePresentAlready = false) const;
 };
 
 template<typename T, typename Base>
@@ -60,7 +60,7 @@ inline std::type_index getTypeIndex() {
 template<class TComponent>
 TComponent& EntityRegistry::get(const Entity entity) const {
 
-    ComponentPool<TComponent>& pool = getPool<TComponent>();
+    ComponentPool<TComponent>& pool = getPool<TComponent>(true);
 
     assert(pool.count(entity) == 1);
     return pool.at(entity);
@@ -118,13 +118,15 @@ EntitiesView<TComponent...> EntityRegistry::with() {
 }
 
 template<typename TComponent>
-inline ComponentPool<TComponent>& EntityRegistry::getPool() const {
+inline ComponentPool<TComponent>& EntityRegistry::getPool(bool mustBePresentAlready) const {
 
     // TODO Do something faster than std::set for this.
     const std::type_index key = getTypeIndex<TComponent>();
 
     auto it = m_componentPools.find(key);
     if (it == m_componentPools.cend()) {
+
+        assert(!mustBePresentAlready);
 
         it = m_componentPools.emplace(key, new ComponentPool<TComponent>()).first;
         std::clog << "Created a component pool for " << typeid(TComponent).name() << std::endl;
