@@ -31,7 +31,7 @@ public:
     TComponent* tryGet(Entity entity) const;
 
     template<class TComponent>
-    TComponent& add(Entity entity, TComponent component);
+    TComponent& add(Entity entity, const TComponent& component);
 
     template<class TComponent, typename... Args>
     inline TComponent& add(Entity entity, Args&&... args);
@@ -78,7 +78,7 @@ TComponent* EntityRegistry::tryGet(Entity entity) const {
 }
 
 template<class TComponent>
-TComponent& EntityRegistry::add(Entity entity, TComponent component) {
+TComponent& EntityRegistry::add(Entity entity, const TComponent& component) {
 
     ComponentPool<TComponent>& pool = getPool<TComponent>();
 
@@ -87,22 +87,13 @@ TComponent& EntityRegistry::add(Entity entity, TComponent component) {
     assert(didAdd);
 
     Receiver<ComponentAdded<TComponent>>::accept({entity, it->second});
-
     return it->second;
 }
 
 template<class TComponent, typename... Args>
 TComponent& EntityRegistry::add(Entity entity, Args&&... args) {
 
-    ComponentPool<TComponent>& pool = getPool<TComponent>();
-
-    assert(pool.count(entity) == 0);
-    auto [it, didAdd] = pool.try_emplace(entity, std::forward<Args>(args)...);
-    assert(didAdd);
-
-    Receiver<ComponentAdded<TComponent>>::accept({entity, it->second});
-
-    return it->second;
+    return add(entity, TComponent{std::forward<Args>(args)...});
 }
 
 /// TEMP m_registry is assigned here until it can be done in an event handler (TODO)

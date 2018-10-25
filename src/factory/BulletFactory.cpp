@@ -26,7 +26,7 @@ namespace game {
 
         registry.add<std::shared_ptr<sf::Drawable>>(e, std::make_shared<sf::CircleShape>(10.f, 20));
         registry.add<Bullet>(e);
-        registry.add<DestroyTimer>(e, {GameTime::now() + sf::seconds(2.f)});
+        registry.add<DestroyTimer>(e, GameTime::now() + sf::seconds(2.f));
 
         return e;
     }

@@ -44,7 +44,7 @@ Entity addExhaust(Engine& engine, Entity player) {
     tf.move(0, 30.f);
     engine.setParent(exhaust, player);
 
-    auto& exhaustParticleSystem = exhaust.add<ParticleSystem>(10000);
+    auto& exhaustParticleSystem = exhaust.add<ParticleSystem>(10000u);
     {
         auto pParticleDrawable = std::make_shared<sf::CircleShape>(4.f, 3);
         pParticleDrawable->setOrigin(0.5f, 0.5f);
@@ -75,7 +75,7 @@ namespace game {
 
         std::shared_ptr<sf::Shape> shape = makePlayerShape();
         registry.add<std::shared_ptr<sf::Drawable>>(e, shape);
-        registry.add<Flicker>(e, {shape});
+        registry.add<Flicker>(e, shape);
         registry.add<Player>(e);
 
         {
