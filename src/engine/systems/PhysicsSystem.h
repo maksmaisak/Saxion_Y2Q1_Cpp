@@ -8,7 +8,7 @@
 #include "System.h"
 #include "Engine.h"
 
-class PhysicsSystem : public System {
+class PhysicsSystem : public en::System {
 
     using System::System;
 public:

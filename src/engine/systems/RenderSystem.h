@@ -8,7 +8,7 @@
 #include "System.h"
 #include "Engine.h"
 
-class RenderSystem : public System {
+class RenderSystem : public en::System {
 
     using System::System;
 

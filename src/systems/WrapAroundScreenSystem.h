@@ -7,7 +7,7 @@
 
 #include "System.h"
 
-class WrapAroundScreenSystem : public System {
+class WrapAroundScreenSystem : public en::System {
 
     using System::System;
 

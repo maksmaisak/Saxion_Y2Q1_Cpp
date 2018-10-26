@@ -10,10 +10,10 @@
 
 namespace game {
 
-    Entity makePlayer(Engine& engine);
-    Entity makeAsteroid(Engine& engine, Asteroid::Size size = Asteroid::Size::Large);
-    Entity makeAsteroid(Engine& engine, Asteroid::Size size, const sf::Vector2f& position, const sf::Vector2f& velocity);
-    Entity makeBullet(Engine& engine, const sf::Vector2f& position, const sf::Vector2f& velocity);
+    en::Entity makePlayer(en::Engine& engine);
+    en::Entity makeAsteroid(en::Engine& engine, Asteroid::Size size = Asteroid::Size::Large);
+    en::Entity makeAsteroid(en::Engine& engine, Asteroid::Size size, const sf::Vector2f& position, const sf::Vector2f& velocity);
+    en::Entity makeBullet(en::Engine& engine, const sf::Vector2f& position, const sf::Vector2f& velocity);
 };
 
 

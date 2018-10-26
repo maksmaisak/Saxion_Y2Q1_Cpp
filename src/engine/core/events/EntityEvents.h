@@ -8,22 +8,22 @@
 #include "Entity.h"
 
 struct EntityCreated {
-    Entity entity;
+    en::Entity entity;
 };
 
 struct EntityWillBeDestroyed {
-    Entity entity;
+    en::Entity entity;
 };
 
 template<typename TComponent>
 struct ComponentAdded {
-    Entity entity;
+    en::Entity entity;
     TComponent& component;
 };
 
 template<typename TComponent>
 struct ComponentWillBeRemoved {
-    Entity entity;
+    en::Entity entity;
     TComponent& component;
 };
 

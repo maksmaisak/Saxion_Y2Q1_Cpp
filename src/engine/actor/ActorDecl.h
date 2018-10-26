@@ -9,47 +9,50 @@
 #include "Entity.h"
 #include "EntityRegistry.h"
 
-class Behavior;
-class Engine;
+namespace en {
 
-template<typename T>
-constexpr inline bool isBehavior = std::is_base_of<Behavior, T>::value;
+    class Behavior;
+    class Engine;
 
-/// A thin wrapper around an entity. Facilitates GameObject-like programming.
-class Actor final {
+    template<typename T>
+    constexpr inline bool isBehavior = std::is_base_of<Behavior, T>::value;
 
-public:
-    Actor(Engine& engine, Entity entity);
+    /// A thin wrapper around an entity. Facilitates GameObject-like programming.
+    class Actor final {
 
-    /// Adds a behavior component.
-    template<typename TBehavior, typename... Args>
-    std::enable_if_t<isBehavior<TBehavior>, TBehavior&>
-    add(Actor& actor, Args&&... args);
+    public:
+        Actor(Engine& engine, en::Entity entity);
 
-    /// Adds a behavior component with the first parameter (actor) being omitted.
-    template<typename TBehavior, typename... Args>
-    inline std::enable_if_t<isBehavior<TBehavior>, TBehavior&>
-    add(Args&&... args);
+        /// Adds a behavior component.
+        template<typename TBehavior, typename... Args>
+        std::enable_if_t<isBehavior<TBehavior>, TBehavior&>
+        add(Actor& actor, Args&&... args);
 
-    /// Adds a non-behavior component
-    template<typename TComponent, typename... Args>
-    std::enable_if_t<!isBehavior<TComponent>, TComponent&>
-    add(Args&&... args);
+        /// Adds a behavior component with the first parameter (actor) being omitted.
+        template<typename TBehavior, typename... Args>
+        inline std::enable_if_t<isBehavior<TBehavior>, TBehavior&>
+        add(Args&&... args);
 
-    template<typename TComponent>
-    inline TComponent& get() {return m_registry.get<TComponent>(m_entity);}
+        /// Adds a non-behavior component
+        template<typename TComponent, typename... Args>
+        std::enable_if_t<!isBehavior<TComponent>, TComponent&>
+        add(Args&&... args);
 
-    template<typename TComponent>
-    inline TComponent* tryGet() {return m_registry.tryGet<TComponent>(m_entity);}
+        template<typename TComponent>
+        inline TComponent& get() {return m_registry.get<TComponent>(m_entity);}
 
-    inline Engine& getEngine() {return m_engine;}
-    inline operator Entity() {return m_entity;}
+        template<typename TComponent>
+        inline TComponent* tryGet() {return m_registry.tryGet<TComponent>(m_entity);}
 
-private:
-    Engine& m_engine;
-    EntityRegistry& m_registry;
-    const Entity m_entity;
-};
+        inline Engine& getEngine() {return m_engine;}
+        inline operator Entity() {return m_entity;}
+
+    private:
+        Engine& m_engine;
+        EntityRegistry& m_registry;
+        const en::Entity m_entity;
+    };
+}
 
 
 #endif //SAXION_Y2Q1_CPP_ACTORDECL_H

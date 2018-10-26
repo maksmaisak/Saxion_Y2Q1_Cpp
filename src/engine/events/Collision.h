@@ -12,8 +12,8 @@ namespace en {
 
     struct Collision {
         en::Hit hit;
-        Entity a = nullEntity;
-        Entity b = nullEntity;
+        en::Entity a = nullEntity;
+        en::Entity b = nullEntity;
     };
 }
 

@@ -14,12 +14,12 @@
 class ComponentPoolBase {};
 
 template<typename TComponent>
-class ComponentPool : public ComponentPoolBase, public std::map<Entity, TComponent>, Receiver<EntityWillBeDestroyed> {
+class ComponentPool : public ComponentPoolBase, public std::map<en::Entity, TComponent>, Receiver<EntityWillBeDestroyed> {
 
     // TEMP Relies on global events, breaks down if there are multiple registries.
     // TODO Have base class have an erase function.
     void receive(const EntityWillBeDestroyed& info) override {
-        std::map<Entity, TComponent>::erase(info.entity);
+        std::map<en::Entity, TComponent>::erase(info.entity);
     }
 };
 

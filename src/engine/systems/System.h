@@ -7,22 +7,28 @@
 
 #include <SFML/Graphics.hpp>
 
-class Engine;
+namespace en {
 
-class System {
+    class Engine;
 
-public:
-    explicit System(Engine& engine);
-    virtual ~System() = default;
+    class System {
 
-    virtual void update(float dt) {}
-    virtual void draw() {}
+    public:
+        explicit System(Engine& engine);
 
-protected:
-    Engine& m_engine;
-    class EntityRegistry& m_registry;
+        virtual ~System() = default;
 
-    sf::RenderWindow& getWindow();
-};
+        virtual void update(float dt) {}
+
+        virtual void draw() {}
+
+    protected:
+        Engine& m_engine;
+
+        class EntityRegistry& m_registry;
+
+        sf::RenderWindow& getWindow();
+    };
+}
 
 #endif //SAXION_Y2Q1_CPP_SYSTEM_H

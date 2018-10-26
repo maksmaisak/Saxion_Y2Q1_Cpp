@@ -5,10 +5,15 @@
 #include "System.h"
 #include "Engine.h"
 
-System::System(Engine& engine) :
-    m_engine(engine),
-    m_registry(engine.getRegistry()) {}
+namespace en {
 
-sf::RenderWindow& System::getWindow() {
-    return m_engine.getWindow();
+    System::System(Engine& engine) :
+        m_engine(engine),
+        m_registry(engine.getRegistry()) {}
+
+    sf::RenderWindow& System::getWindow() {
+
+        return m_engine.getWindow();
+    }
 }
+

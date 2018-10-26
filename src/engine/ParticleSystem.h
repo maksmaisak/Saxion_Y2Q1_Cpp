@@ -8,6 +8,8 @@
 #include "Engine.h"
 #include "Behavior.h"
 
+using namespace en;
+
 class ParticleSystem : public Behavior {
 
     using ParticleIndex = std::size_t;

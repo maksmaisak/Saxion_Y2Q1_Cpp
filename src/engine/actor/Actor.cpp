@@ -5,8 +5,10 @@
 #include "Actor.h"
 #include "Engine.h"
 
-Actor::Actor(Engine& engine, Entity entity) :
-    m_engine(engine),
-    m_registry(engine.getRegistry()),
-    m_entity(entity)
-    {}
+namespace en {
+
+    Actor::Actor(Engine& engine, en::Entity entity) :
+        m_engine(engine),
+        m_registry(engine.getRegistry()),
+        m_entity(entity) {}
+}

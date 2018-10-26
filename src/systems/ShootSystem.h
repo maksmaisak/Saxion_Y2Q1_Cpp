@@ -7,7 +7,7 @@
 
 #include "System.h"
 
-class ShootSystem : public System {
+class ShootSystem : public en::System {
 
     using System::System;
 

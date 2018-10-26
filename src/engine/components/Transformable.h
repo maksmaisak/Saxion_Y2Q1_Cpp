@@ -10,15 +10,15 @@
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
 
-class Engine;
-class EntityRegistry;
-
 namespace en {
+
+    class Engine;
+    class EntityRegistry;
 
     /// An exact copy of SFML's sf::Transformable, but with transform hierarchy support.
     class Transformable final {
 
-        friend class ::Engine;
+        friend class Engine;
 
     public:
 

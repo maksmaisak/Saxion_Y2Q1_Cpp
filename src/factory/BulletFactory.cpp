@@ -13,10 +13,10 @@
 
 namespace game {
 
-    Entity makeBullet(Engine& engine, const sf::Vector2f& position, const sf::Vector2f& velocity) {
+    en::Entity makeBullet(en::Engine& engine, const sf::Vector2f& position, const sf::Vector2f& velocity) {
 
-        EntityRegistry& registry = engine.getRegistry();
-        Entity e = registry.makeEntity();
+        en::EntityRegistry& registry = engine.getRegistry();
+        en::Entity e = registry.makeEntity();
 
         registry.add<en::Transformable>(e).setPosition(position);
 
@@ -24,7 +24,9 @@ namespace game {
         rb.velocity = velocity;
         rb.invMass = 1.f / 0.01f;
 
-        registry.add<en::DrawInfo>(e, std::make_shared<sf::CircleShape>(10.f, 20));
+        auto shapePtr = std::make_shared<sf::CircleShape>(10.f, 20);
+        shapePtr->setOrigin(0.5f, 0.5f);
+        registry.add<en::DrawInfo>(e, std::move(shapePtr));
         registry.add<Bullet>(e);
         registry.add<DestroyTimer>(e, GameTime::now() + sf::seconds(2.f));
 

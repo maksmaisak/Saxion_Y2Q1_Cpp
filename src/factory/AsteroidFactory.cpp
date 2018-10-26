@@ -33,7 +33,7 @@ std::shared_ptr<sf::Shape> makeAsteroidShape(const Asteroid::Config& config) {
 
 namespace game {
 
-    Entity makeAsteroid(Engine& engine, Asteroid::Size size) {
+    en::Entity makeAsteroid(en::Engine& engine, Asteroid::Size size) {
 
         sf::Vector2f position = engine.getWindow().getView().getSize();
         position.x *= en::random();
@@ -44,16 +44,16 @@ namespace game {
         return makeAsteroid(engine, size, position, velocity);
     }
 
-    Entity game::makeAsteroid(
-        Engine& engine,
+    en::Entity game::makeAsteroid(
+        en::Engine& engine,
         Asteroid::Size size,
         const sf::Vector2f& position,
         const sf::Vector2f& velocity
     ) {
 
-        EntityRegistry& registry = engine.getRegistry();
+        en::EntityRegistry& registry = engine.getRegistry();
 
-        Entity e = registry.makeEntity();
+        en::Entity e = registry.makeEntity();
 
         registry.add<Asteroid>(e, size);
 

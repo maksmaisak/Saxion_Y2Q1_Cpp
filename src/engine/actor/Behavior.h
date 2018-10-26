@@ -11,22 +11,27 @@
 #include "EntityRegistry.h"
 #include "ActorDecl.h"
 
+namespace en {
+
 // WARNING. Update functions will only be called if this component was added using Actor::add<TBehavior>()
-class Behavior {
+    class Behavior {
 
-public:
-    explicit Behavior(const Actor& actor);
-    virtual ~Behavior() = default;
+    public:
+        explicit Behavior(const Actor& actor);
 
-    inline Actor& actor() {return m_actor;}
+        virtual ~Behavior() = default;
 
-    virtual void update(float dt) {};
-    virtual void draw(sf::RenderTarget& renderTarget) {};
+        inline Actor& actor() { return m_actor; }
 
-protected:
-    Actor m_actor;
-    Engine& m_engine;
-    EntityRegistry& m_registry;
-};
+        virtual void update(float dt) {};
+
+        virtual void draw(sf::RenderTarget& renderTarget) {};
+
+    protected:
+        Actor m_actor;
+        Engine& m_engine;
+        EntityRegistry& m_registry;
+    };
+}
 
 #endif //SAXION_Y2Q1_CPP_COMPONENT_H

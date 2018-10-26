@@ -10,87 +10,90 @@
 
 #include <SFML/Graphics.hpp>
 
-const sf::Time TIMESTEP = sf::seconds(0.01f);
-const float TIMESTEP_SECONDS = TIMESTEP.asSeconds();
+namespace en {
 
-Engine* Engine::m_instance = nullptr;
+    const sf::Time TIMESTEP = sf::seconds(0.01f);
+    const float TIMESTEP_SECONDS = TIMESTEP.asSeconds();
 
-Engine::Engine(unsigned int width, unsigned int height) {
+    Engine* Engine::m_instance = nullptr;
 
-    assert(!m_instance);
+    Engine::Engine(unsigned int width, unsigned int height) {
 
-    m_instance = this;
+        assert(!m_instance);
 
-    sf::ContextSettings contextSettings;
-    contextSettings.antialiasingLevel = 8;
-    m_window.create(sf::VideoMode(width, height), "Example", sf::Style::Default, contextSettings);
-}
+        m_instance = this;
 
-Engine& Engine::getInstance() {
+        sf::ContextSettings contextSettings;
+        contextSettings.antialiasingLevel = 8;
+        m_window.create(sf::VideoMode(width, height), "Example", sf::Style::Default, contextSettings);
+    }
 
-    assert(m_instance);
-    return *m_instance;
-}
+    Engine& Engine::getInstance() {
 
-void Engine::run() {
+        assert(m_instance);
+        return *m_instance;
+    }
 
-    sf::Clock clock;
-    sf::Time lag = sf::Time::Zero;
+    void Engine::run() {
 
-    while (m_window.isOpen()) {
+        sf::Clock clock;
+        sf::Time lag = sf::Time::Zero;
 
-        lag += clock.restart();
+        while (m_window.isOpen()) {
 
-        sf::Event event {};
-        while (m_window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) m_window.close();
+            lag += clock.restart();
+
+            sf::Event event{};
+            while (m_window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) m_window.close();
+            }
+
+            while (lag >= TIMESTEP) {
+                update(TIMESTEP_SECONDS);
+                lag -= TIMESTEP;
+            }
+
+            draw();
+        }
+    }
+
+    void Engine::update(float dt) {
+
+        for (auto& pSystem : m_systems) pSystem->update(dt);
+    }
+
+    void Engine::draw() {
+
+        m_window.clear();
+
+        for (auto& pSystem : m_systems) pSystem->draw();
+
+        m_window.display();
+    }
+
+    void Engine::setParent(Entity child, std::optional<Entity> newParent) {
+
+        auto& childTransformable = m_registry.get<en::Transformable>(child);
+
+        if (childTransformable.m_parent.has_value()) {
+
+            en::Entity oldParent = *childTransformable.m_parent;
+            if (oldParent == newParent) return;
+            m_registry.get<en::Transformable>(oldParent).removeChild(child);
         }
 
-        while (lag >= TIMESTEP) {
-            update(TIMESTEP_SECONDS);
-            lag -= TIMESTEP;
+        if (newParent.has_value()) {
+
+            auto& parentTransformable = m_registry.get<en::Transformable>(*newParent);
+            parentTransformable.addChild(child);
         }
 
-        draw();
-    }
-}
-
-void Engine::update(float dt) {
-
-    for (auto& pSystem : m_systems) pSystem->update(dt);
-}
-
-void Engine::draw() {
-
-    m_window.clear();
-
-    for (auto& pSystem : m_systems) pSystem->draw();
-
-    m_window.display();
-}
-
-void Engine::setParent(Entity child, std::optional<Entity> newParent) {
-
-    auto& childTransformable = m_registry.get<en::Transformable>(child);
-
-    if (childTransformable.m_parent.has_value()) {
-
-        Entity oldParent = *childTransformable.m_parent;
-        if (oldParent == newParent) return;
-        m_registry.get<en::Transformable>(oldParent).removeChild(child);
+        childTransformable.m_parent = newParent;
+        childTransformable.m_globalTransformNeedUpdate = true;
     }
 
-    if (newParent.has_value()) {
+    Actor Engine::makeActor() {
 
-        auto& parentTransformable = m_registry.get<en::Transformable>(*newParent);
-        parentTransformable.addChild(child);
+        return Actor(*this, m_registry.makeEntity());
     }
-
-    childTransformable.m_parent = newParent;
-    childTransformable.m_globalTransformNeedUpdate = true;
-}
-
-Actor Engine::makeActor() {
-
-    return Actor(*this, m_registry.makeEntity());
 }

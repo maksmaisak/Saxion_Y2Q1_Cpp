@@ -6,23 +6,34 @@
 #include "Messaging.h"
 #include "EntityEvents.h"
 
-Entity EntityRegistry::makeEntity() {
+namespace en {
 
-    auto [iterator, didInsert] = m_entities.insert(m_nextId++);
-    assert(didInsert);
+    Entity EntityRegistry::makeEntity() {
 
-    const Entity entity = *iterator;
-    Receiver<EntityCreated>::accept({entity});
-    return entity;
-}
+        auto [iterator, didInsert] = m_entities.insert(m_nextId++);
+        assert(didInsert);
 
-void EntityRegistry::destroy(Entity entity) {
+        const en::Entity entity = *iterator;
+        Receiver<EntityCreated>::accept({entity});
+        return entity;
+    }
 
-    Receiver<EntityWillBeDestroyed>::accept({entity});
+    void EntityRegistry::destroy(Entity entity) {
 
-    m_entities.erase(entity);
+        Receiver<EntityWillBeDestroyed>::accept({entity});
 
-//    for (auto& kvp : m_componentPools) {
-//        kvp.second->erase(entity);
-//    }
+        m_entities.erase(entity);
+
+        // TODO Make ComponentPoolBase provide this functionality
+    //    for (auto& kvp : m_componentPools) {
+    //        kvp.second->erase(entity);
+    //    }
+    }
+
+    void EntityRegistry::destroyAll() {
+
+        for (Entity e : m_entities) Receiver<EntityWillBeDestroyed>::accept({e});
+        m_entities.clear();
+    }
+
 }

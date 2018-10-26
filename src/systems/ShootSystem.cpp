@@ -37,7 +37,7 @@ void ShootSystem::update(float dt) {
         const sf::Transform& playerTransform = tf.getGlobalTransform();
 
         sf::Vector2f forward  = en::getForward(playerTransform);
-        sf::Vector2f position = playerTransform.transformPoint(0, 0) + forward * 100.f;
+        sf::Vector2f position = playerTransform.transformPoint(0, 0) + forward * 50.f;
 
         game::makeBullet(m_engine, position, forward * 4000.f);
     }

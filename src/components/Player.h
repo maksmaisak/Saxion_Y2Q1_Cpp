@@ -16,7 +16,7 @@ struct Player {
     float drag = 50.f;
     float rotationSpeed = 360.f;
 
-    sf::Time shootInterval = sf::seconds(0.5f);
+    sf::Time shootInterval = sf::seconds(0.25f);
     sf::Time timeWhenCanShootAgain = sf::Time::Zero;
 
     // TEMP Hacky

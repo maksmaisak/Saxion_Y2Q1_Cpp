@@ -10,7 +10,7 @@
 #include "Messaging.h"
 #include "Collision.h"
 
-class BreakAsteroidSystem : public System, Receiver<en::Collision> {
+class BreakAsteroidSystem : public en::System, Receiver<en::Collision> {
 
     using System::System;
 
@@ -18,7 +18,7 @@ public:
     void update(float dt) override;
 
 private:
-    std::vector<Entity> m_entitiesToDestroy;
+    std::vector<en::Entity> m_entitiesToDestroy;
 
     void receive(const en::Collision& info) override;
 };

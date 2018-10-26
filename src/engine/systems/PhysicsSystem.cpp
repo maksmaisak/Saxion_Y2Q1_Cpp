@@ -13,7 +13,7 @@
 void PhysicsSystem::update(float dt) {
 
     auto view = m_registry.with<en::Rigidbody, en::Transformable>();
-    for (Entity entity : view) {
+    for (en::Entity entity : view) {
 
         auto& rb = m_registry.get<en::Rigidbody>(entity);
         auto& tf = m_registry.get<en::Transformable>(entity);
@@ -21,7 +21,7 @@ void PhysicsSystem::update(float dt) {
         sf::Vector2f movement = rb.velocity * dt;
 
         bool didCollide = false;
-        for (Entity other : view) {
+        for (en::Entity other : view) {
 
             if (entity == other) continue;
 

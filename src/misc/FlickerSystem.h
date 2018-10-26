@@ -10,7 +10,7 @@
 #include "EntityRegistry.h"
 #include "Flicker.h"
 
-class FlickerSystem : public System {
+class FlickerSystem : public en::System {
 
     using System::System;
 
@@ -19,7 +19,7 @@ public:
     void update(float dt) override {
 
         auto view = m_registry.with<Flicker>();
-        for (Entity e : m_registry.with<Flicker>()) {
+        for (en::Entity e : m_registry.with<Flicker>()) {
             m_registry.get<Flicker>(e).m_shape->setOutlineThickness(en::random(2.f, 4.f));
         }
     }

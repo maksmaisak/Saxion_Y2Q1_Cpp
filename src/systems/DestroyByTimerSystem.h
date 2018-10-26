@@ -11,7 +11,7 @@
 #include "DestroyTimer.h"
 
 /// Destroys entities with a DestroyTimer when the time runs out
-class DestroyByTimerSystem : public System {
+class DestroyByTimerSystem : public en::System {
 
     using System::System;
 
@@ -19,7 +19,7 @@ public:
     void update(float dt) override;
 
 private:
-    std::vector<Entity> m_entitiesToDestroy;
+    std::vector<en::Entity> m_entitiesToDestroy;
 };
 
 

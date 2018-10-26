@@ -7,7 +7,10 @@
 
 #include <cinttypes>
 
-using Entity = std::uint64_t;
-const Entity nullEntity = 0;
+namespace en {
+
+    using Entity = std::uint64_t;
+    const Entity nullEntity = 0;
+}
 
 #endif //SAXION_Y2Q1_CPP_ENTITY_H

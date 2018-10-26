@@ -11,10 +11,10 @@
 #include "Bullet.h"
 #include "Factory.h"
 
-std::optional<std::tuple<Entity, Entity, Asteroid&>> getAsteroidBulletCollision(const EntityRegistry& registry, const en::Collision& collision){
+std::optional<std::tuple<en::Entity, en::Entity, Asteroid&>> getAsteroidBulletCollision(const en::EntityRegistry& registry, const en::Collision& collision){
 
-    Entity asteroidEntity = collision.a;
-    Entity bulletEntity   = collision.b;
+    en::Entity asteroidEntity = collision.a;
+    en::Entity bulletEntity   = collision.b;
 
     auto* asteroidPtr = registry.tryGet<Asteroid>(asteroidEntity);
     auto* bulletPtr   = registry.tryGet<Bullet>  (bulletEntity);
@@ -30,7 +30,7 @@ std::optional<std::tuple<Entity, Entity, Asteroid&>> getAsteroidBulletCollision(
     return std::make_tuple(asteroidEntity, bulletEntity, std::ref(*asteroidPtr));
 }
 
-void split(Engine& engine, EntityRegistry& registry, Entity asteroidEntity, const Asteroid& asteroid) {
+void split(en::Engine& engine, en::EntityRegistry& registry, en::Entity asteroidEntity, const Asteroid& asteroid) {
 
     assert(asteroid.size > Asteroid::Size::Small);
     const auto piecesSize = (Asteroid::Size)((std::size_t)asteroid.size - 1);
@@ -42,7 +42,6 @@ void split(Engine& engine, EntityRegistry& registry, Entity asteroidEntity, cons
 
     const std::size_t NUM_PIECES = 2;
     const float radius = piecesConfig.averageRadius + piecesConfig.radiusRange;
-
     const float startAngle = en::random(0.f, en::PI2);
     for (std::size_t i = 0; i < NUM_PIECES; ++i) {
 
@@ -71,7 +70,7 @@ void BreakAsteroidSystem::receive(const en::Collision& collision) {
 
 void BreakAsteroidSystem::update(float dt) {
 
-    for (Entity e : m_entitiesToDestroy) m_registry.destroy(e);
+    for (en::Entity e : m_entitiesToDestroy) m_registry.destroy(e);
 
     m_entitiesToDestroy.clear();
 }

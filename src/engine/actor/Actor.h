@@ -14,24 +14,28 @@
 // The declaration is here to make it possible to include only the declaration.
 #include "ActorDecl.h"
 
-template<typename TBehavior, typename... Args>
-std::enable_if_t<isBehavior<TBehavior>, TBehavior&>
-Actor::add(Actor& actor, Args&&... args) {
+namespace en {
 
-    assert(&actor == this);
+    template<typename TBehavior, typename... Args>
+    std::enable_if_t<isBehavior<TBehavior>, TBehavior&>
+    Actor::add(Actor& actor, Args&& ... args) {
 
-    m_engine.ensureBehaviorSystem<TBehavior>();
-    return m_registry.add<TBehavior>(m_entity, actor, std::forward<Args>(args)...);
-}
+        assert(&actor == this);
 
-template<typename TBehavior, typename... Args>
-std::enable_if_t<isBehavior<TBehavior>, TBehavior&>
-Actor::add(Args&&... args) { return add<TBehavior>(*this, std::forward<Args>(args)...); }
+        m_engine.ensureBehaviorSystem<TBehavior>();
+        return m_registry.add<TBehavior>(m_entity, actor, std::forward<Args>(args)...);
+    }
 
-template<typename TComponent, typename... Args>
-std::enable_if_t<!isBehavior<TComponent>, TComponent&>
-Actor::add(Args&&... args) {
-    return m_registry.add<TComponent>(m_entity, std::forward<Args>(args)...);
+    template<typename TBehavior, typename... Args>
+    std::enable_if_t<isBehavior<TBehavior>, TBehavior&>
+    Actor::add(Args&& ... args) { return add<TBehavior>(*this, std::forward<Args>(args)...); }
+
+    template<typename TComponent, typename... Args>
+    std::enable_if_t<!isBehavior<TComponent>, TComponent&>
+    Actor::add(Args&& ... args) {
+
+        return m_registry.add<TComponent>(m_entity, std::forward<Args>(args)...);
+    }
 }
 
 

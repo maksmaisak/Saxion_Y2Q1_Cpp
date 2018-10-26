@@ -12,22 +12,27 @@
 #include "System.h"
 #include "Behavior.h"
 
-template<typename TBehavior>
-class BehaviorSystem : public System {
+namespace en {
 
-    static_assert(std::is_base_of_v<Behavior, TBehavior>);
+    template<typename TBehavior>
+    class BehaviorSystem : public System {
 
-    using System::System;
+        static_assert(std::is_base_of_v<Behavior, TBehavior>);
 
-    void update(float dt) override {
-        for (Entity e : m_registry.with<TBehavior>()) m_registry.get<TBehavior>(e).update(dt);
-    }
+        using System::System;
 
-    void draw() override {
-        sf::RenderTarget& renderTarget = getWindow();
-        for (Entity e : m_registry.with<TBehavior>()) m_registry.get<TBehavior>(e).draw(renderTarget);
-    }
-};
+        void update(float dt) override {
+
+            for (Entity e : m_registry.with<TBehavior>()) m_registry.get<TBehavior>(e).update(dt);
+        }
+
+        void draw() override {
+
+            sf::RenderTarget& renderTarget = getWindow();
+            for (Entity e : m_registry.with<TBehavior>()) m_registry.get<TBehavior>(e).draw(renderTarget);
+        }
+    };
+}
 
 
 #endif //SAXION_Y2Q1_CPP_BEHAVIORSYSTEM_H
