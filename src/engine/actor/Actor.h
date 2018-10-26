@@ -22,8 +22,8 @@ namespace en {
 
         assert(&actor == this);
 
-        m_engine.ensureBehaviorSystem<TBehavior>();
-        return m_registry.add<TBehavior>(m_entity, actor, std::forward<Args>(args)...);
+        m_enginePtr->ensureBehaviorSystem<TBehavior>();
+        return m_registryPtr->add<TBehavior>(m_entity, actor, std::forward<Args>(args)...);
     }
 
     template<typename TBehavior, typename... Args>
@@ -34,7 +34,7 @@ namespace en {
     std::enable_if_t<!isBehavior<TComponent>, TComponent&>
     Actor::add(Args&& ... args) {
 
-        return m_registry.add<TComponent>(m_entity, std::forward<Args>(args)...);
+        return m_registryPtr->add<TComponent>(m_entity, std::forward<Args>(args)...);
     }
 }
 

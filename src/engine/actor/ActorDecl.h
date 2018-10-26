@@ -39,18 +39,18 @@ namespace en {
         add(Args&&... args);
 
         template<typename TComponent>
-        inline TComponent& get() {return m_registry.get<TComponent>(m_entity);}
+        inline TComponent& get() {return m_registryPtr->get<TComponent>(m_entity);}
 
         template<typename TComponent>
-        inline TComponent* tryGet() {return m_registry.tryGet<TComponent>(m_entity);}
+        inline TComponent* tryGet() {return m_registryPtr->tryGet<TComponent>(m_entity);}
 
-        inline Engine& getEngine() {return m_engine;}
+        inline Engine& getEngine() {return *m_enginePtr;}
         inline operator Entity() {return m_entity;}
 
     private:
-        Engine& m_engine;
-        EntityRegistry& m_registry;
-        const en::Entity m_entity;
+        Engine* m_enginePtr;
+        EntityRegistry* m_registryPtr;
+        en::Entity m_entity;
     };
 }
 

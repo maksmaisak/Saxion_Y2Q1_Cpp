@@ -24,7 +24,7 @@ namespace en {
 
         m_entities.erase(entity);
 
-        // TODO Make ComponentPoolBase provide this functionality
+        // TODO Make ComponentPool provide this functionality
     //    for (auto& kvp : m_componentPools) {
     //        kvp.second->erase(entity);
     //    }

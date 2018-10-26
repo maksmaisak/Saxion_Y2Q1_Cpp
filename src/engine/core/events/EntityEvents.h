@@ -7,24 +7,27 @@
 
 #include "Entity.h"
 
-struct EntityCreated {
-    en::Entity entity;
-};
+namespace en {
 
-struct EntityWillBeDestroyed {
-    en::Entity entity;
-};
+    struct EntityCreated {
+        en::Entity entity;
+    };
 
-template<typename TComponent>
-struct ComponentAdded {
-    en::Entity entity;
-    TComponent& component;
-};
+    struct EntityWillBeDestroyed {
+        en::Entity entity;
+    };
 
-template<typename TComponent>
-struct ComponentWillBeRemoved {
-    en::Entity entity;
-    TComponent& component;
-};
+    template<typename TComponent>
+    struct ComponentAdded {
+        en::Entity entity;
+        TComponent& component;
+    };
+
+    template<typename TComponent>
+    struct ComponentWillBeRemoved {
+        en::Entity entity;
+        TComponent& component;
+    };
+}
 
 #endif //SAXION_Y2Q1_CPP_ENTITYEVENTS_H

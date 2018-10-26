@@ -22,7 +22,7 @@ namespace en {
         class iterator {
 
             inline bool shouldSkip() {
-                return !(std::get<ComponentPool<TComponent>&>(m_pools).count(*m_underlyingIterator) && ...);
+                return !(std::get<ComponentPool<TComponent>&>(m_pools).contains(*m_underlyingIterator) && ...);
             }
 
         public:

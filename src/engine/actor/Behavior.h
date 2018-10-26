@@ -13,24 +13,27 @@
 
 namespace en {
 
-// WARNING. Update functions will only be called if this component was added using Actor::add<TBehavior>()
+    // WARNING. Update functions are only guaranteed to be called if this component was added using Actor::add<TBehavior>()
     class Behavior {
 
     public:
         explicit Behavior(const Actor& actor);
 
         virtual ~Behavior() = default;
+        Behavior(Behavior& other) = default;
+        Behavior& operator=(const Behavior& other) = default;
+        Behavior(Behavior&& other) = default;
+        Behavior& operator=(Behavior&& other) = default;
 
         inline Actor& actor() { return m_actor; }
 
         virtual void update(float dt) {};
-
         virtual void draw(sf::RenderTarget& renderTarget) {};
 
     protected:
         Actor m_actor;
-        Engine& m_engine;
-        EntityRegistry& m_registry;
+        Engine* m_enginePtr;
+        EntityRegistry* m_registryPtr;
     };
 }
 

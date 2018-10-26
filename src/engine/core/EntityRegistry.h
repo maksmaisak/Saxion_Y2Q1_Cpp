@@ -14,6 +14,7 @@
 #include "ComponentPool.h"
 #include "EntitiesView.h"
 #include "Messaging.h"
+#include "EntityEvents.h"
 
 #include "Transformable.h"
 
@@ -34,9 +35,6 @@ namespace en {
 
         template<class TComponent>
         TComponent* tryGet(Entity entity) const;
-
-        template<class TComponent>
-        TComponent& add(Entity entity, const TComponent& component);
 
         template<class TComponent, typename... Args>
         inline TComponent& add(Entity entity, Args&& ... args);
@@ -67,39 +65,25 @@ namespace en {
     TComponent& EntityRegistry::get(const en::Entity entity) const {
 
         ComponentPool<TComponent>& pool = getPool<TComponent>(true);
-
-        assert(pool.count(entity) == 1);
-        return pool.at(entity);
+        return pool.get(entity);
     }
 
     template<class TComponent>
     TComponent* EntityRegistry::tryGet(Entity entity) const {
 
         ComponentPool<TComponent>& pool = getPool<TComponent>();
-
-        auto it = pool.find(entity);
-        if (it == pool.end()) return nullptr;
-
-        return &it->second;
-    }
-
-    template<class TComponent>
-    TComponent& EntityRegistry::add(Entity entity, const TComponent& component) {
-
-        ComponentPool<TComponent>& pool = getPool<TComponent>();
-
-        assert(pool.count(entity) == 0);
-        auto[it, didAdd] = pool.emplace(entity, component);
-        assert(didAdd);
-
-        Receiver<ComponentAdded<TComponent>>::accept({entity, it->second});
-        return it->second;
+        return pool.tryGet(entity);
     }
 
     template<class TComponent, typename... Args>
     TComponent& EntityRegistry::add(Entity entity, Args&& ... args) {
 
-        return add(entity, TComponent{std::forward<Args>(args)...});
+        ComponentPool<TComponent>& pool = getPool<TComponent>();
+
+        auto [index, componentReference] = pool.insert(entity, std::forward<Args>(args)...);
+        Receiver<ComponentAdded<TComponent>>::accept({entity, componentReference});
+
+        return componentReference;
     }
 
 /// TEMP m_registry is assigned here until it can be done in an event handler (TODO)
@@ -108,13 +92,10 @@ namespace en {
 
         ComponentPool<en::Transformable>& pool = getPool<en::Transformable>();
 
-        assert(pool.count(entity) == 0);
-        auto[it, didAdd] = pool.try_emplace(entity, this);
-        assert(didAdd);
+        auto [index, transformable] = pool.insert(entity, this);
+        Receiver<ComponentAdded<en::Transformable>>::accept({entity, transformable});
 
-        Receiver<ComponentAdded<en::Transformable>>::accept({entity, it->second});
-
-        return it->second;
+        return transformable;
     }
 
     template<typename... TComponent>

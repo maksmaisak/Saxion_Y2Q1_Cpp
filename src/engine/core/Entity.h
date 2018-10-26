@@ -10,7 +10,7 @@
 namespace en {
 
     using Entity = std::uint64_t;
-    const Entity nullEntity = 0;
+    const Entity nullEntity = {};
 }
 
 #endif //SAXION_Y2Q1_CPP_ENTITY_H
