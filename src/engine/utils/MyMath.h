@@ -32,7 +32,14 @@ namespace en {
     float random(float min = 0.f, float max = 1.f);
     sf::Vector2f randomInCircle(float radius = 1.f);
 
-    sf::Vector2f getForward(const sf::Transform& transform);
+    inline sf::Vector2f getPosition(const sf::Transform& transform) {
+        return transform.transformPoint(0, 0);
+    }
+
+    inline sf::Vector2f getForward(const sf::Transform& transform) {
+        sf::Vector2f forward = transform.transformPoint(0, -1) - transform.transformPoint(0, 0);
+        return normalize(forward);
+    }
 }
 
 

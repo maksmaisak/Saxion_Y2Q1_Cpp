@@ -83,10 +83,4 @@ namespace en {
 
         return min + (max - min) * randomSample();
     }
-
-    sf::Vector2f getForward(const sf::Transform& transform) {
-
-        sf::Vector2f forward = transform.transformPoint(0, -1) - transform.transformPoint(0, 0);
-        return normalize(forward);
-    }
 }

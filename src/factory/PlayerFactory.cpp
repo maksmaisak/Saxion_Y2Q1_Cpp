@@ -34,6 +34,7 @@ void addTransformable(Engine& engine, Entity player) {
     sf::Vector2f size = engine.getWindow().getView().getSize();
     auto& tf = engine.getRegistry().add<en::Transformable>(player);
     tf.setPosition(size.x / 2.f, size.y * 3.f / 4.f);
+    tf.setScale(0.75f, 0.75f);
 }
 
 Entity addExhaust(Engine& engine, Entity player) {
@@ -81,7 +82,7 @@ namespace game {
 
         {
             auto& rb = registry.add<en::Rigidbody>(e);
-            rb.radius = 30.f;
+            rb.radius = 20.f;
             rb.invMass = 1.f / 0.5f;
         }
 

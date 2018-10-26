@@ -10,18 +10,16 @@
 #include "DrawInfo.h"
 
 const std::size_t NUM_VERTICES = 10;
-const float AVERAGE_RADIUS = 50.f;
-const float RADIUS_RANGE = 10.f;
 
-std::shared_ptr<sf::Shape> makeAsteroidShape() {
+std::shared_ptr<sf::Shape> makeAsteroidShape(const Asteroid::Config& config) {
 
     auto pShape = std::make_shared<sf::ConvexShape>(NUM_VERTICES);
 
     for (std::size_t i = 0; i < NUM_VERTICES; ++i) {
 
         sf::Vector2f point = en::polar2Cartesian(
-            (en::PI2 * i) / NUM_VERTICES,
-            AVERAGE_RADIUS + en::random(-RADIUS_RANGE, RADIUS_RANGE)
+            en::PI2 * (float)i / NUM_VERTICES,
+            config.averageRadius + en::random(-config.radiusRange, config.radiusRange)
         );
 
         pShape->setPoint(i, point);
@@ -35,25 +33,40 @@ std::shared_ptr<sf::Shape> makeAsteroidShape() {
 
 namespace game {
 
-    Entity makeAsteroid(Engine& engine) {
+    Entity makeAsteroid(Engine& engine, Asteroid::Size size) {
+
+        sf::Vector2f position = engine.getWindow().getView().getSize();
+        position.x *= en::random();
+        position.y *= en::random();
+
+        sf::Vector2f velocity = en::randomInCircle(400.f);
+
+        return makeAsteroid(engine, size, position, velocity);
+    }
+
+    Entity game::makeAsteroid(
+        Engine& engine,
+        Asteroid::Size size,
+        const sf::Vector2f& position,
+        const sf::Vector2f& velocity
+    ) {
 
         EntityRegistry& registry = engine.getRegistry();
 
         Entity e = registry.makeEntity();
 
-        registry.add<Asteroid>(e);
+        registry.add<Asteroid>(e, size);
 
-        std::shared_ptr<sf::Shape> shape = makeAsteroidShape();
+        const Asteroid::Config& config = Asteroid::getConfig(size);
+
+        std::shared_ptr<sf::Shape> shape = makeAsteroidShape(config);
         registry.add<en::DrawInfo>(e, shape);
         registry.add<Flicker>(e, shape);
 
         auto& rb = registry.add<en::Rigidbody>(e);
-        rb.velocity = en::randomInCircle(400.f);
-        rb.radius = AVERAGE_RADIUS;
+        rb.velocity = velocity;
+        rb.radius = config.averageRadius;
 
-        sf::Vector2f position = engine.getWindow().getView().getSize();
-        position.x *= en::random();
-        position.y *= en::random();
         registry.add<en::Transformable>(e).setPosition(position);
 
         return e;

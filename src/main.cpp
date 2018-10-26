@@ -64,7 +64,7 @@ int main() {
     game::makePlayer(engine);
 
     for (int i = 0; i < NUM_ASTEROIDS; ++i) {
-        game::makeAsteroid(engine);
+        game::makeAsteroid(engine, (Asteroid::Size)lround(en::random(0.f, 2.f)));
     }
 
     engine.run();
