@@ -26,20 +26,20 @@ namespace en {
     using Entity = EntityInfo::entity_type;
     const Entity nullEntity = {};
 
-    inline EntityInfo::id_type getId(Entity entity) noexcept {
+    inline EntityInfo::id_type getId(const Entity entity) noexcept {
         return static_cast<EntityInfo::id_type>(entity);
     }
 
-    inline EntityInfo::version_type getVersion(Entity entity) noexcept {
+    inline EntityInfo::version_type getVersion(const Entity entity) noexcept {
         return static_cast<EntityInfo::version_type>(entity >> EntityInfo::NumIdBits);
     }
 
-    inline Entity setId(Entity entity, EntityInfo::id_type id) noexcept {
+    inline Entity setId(const Entity entity, EntityInfo::id_type id) noexcept {
         return (entity & EntityInfo::VersionMask) | id;
     }
 
-    inline Entity setVersion(Entity entity, EntityInfo::version_type version) noexcept {
-        return (static_cast<Entity>(version) << EntityInfo::NumIdBits) | (entity & EntityInfo::IdMask);
+    inline Entity setVersion(const Entity entity, EntityInfo::version_type version) noexcept {
+        return (static_cast<Entity>(version) << EntityInfo::NumIdBits) | getId(entity);
     }
 }
 

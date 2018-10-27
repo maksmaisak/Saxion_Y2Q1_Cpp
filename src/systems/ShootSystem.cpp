@@ -31,8 +31,6 @@ void ShootSystem::update(float dt) {
 
         player.timeWhenCanShootAgain = now + player.shootInterval;
 
-        Entity bullet = m_registry.makeEntity();
-
         auto& tf = m_registry.get<en::Transformable>(e);
         const sf::Transform& playerTransform = tf.getGlobalTransform();
 

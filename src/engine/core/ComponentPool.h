@@ -24,18 +24,21 @@ namespace en {
 
         virtual ~ComponentPoolBase() = default;
 
-        index_type insert(en::Entity entity);
-        bool contains(en::Entity entity);
-        virtual index_type remove(en::Entity entity);
+        bool contains(en::Entity entity) const;
+        bool remove(en::Entity entity);
+        inline std::size_t size() const {return m_indexToEntity.size();}
 
-        inline iterator begin() {return cbegin();}
-        inline iterator end()   {return cend();  }
-        inline const_iterator cbegin() {return m_indexToEntity.cbegin();}
-        inline const_iterator cend()   {return m_indexToEntity.cend();  }
+        inline const_iterator cbegin() const {return m_indexToEntity.cbegin();}
+        inline const_iterator cend()   const {return m_indexToEntity.cend();  }
+        inline iterator begin()        const {return cbegin();}
+        inline iterator end()          const {return cend();  }
 
     protected:
         std::vector<en::Entity> m_indexToEntity;
-        std::vector<index_type> m_entityToIndex;
+        std::vector<index_type> m_entityIdToIndex;
+
+        index_type insert(en::Entity entity);
+        virtual index_type removeInternal(en::Entity entity);
     };
 
     template<typename TComponent>
@@ -45,10 +48,12 @@ namespace en {
         template<typename... Args>
         std::tuple<index_type, TComponent&> insert(en::Entity entity, Args&& ... args);
         std::tuple<index_type, TComponent&> insert(en::Entity entity, const TComponent& component);
-        index_type remove(en::Entity entity) override;
 
         TComponent& get(en::Entity entity);
         TComponent* tryGet(en::Entity entity);
+
+    protected:
+        index_type removeInternal(en::Entity entity) override;
 
     private:
         std::vector<TComponent> m_indexToComponent;
@@ -75,20 +80,20 @@ namespace en {
     TComponent& ComponentPool<TComponent>::get(en::Entity entity) {
 
         assert(contains(entity));
-        return m_indexToComponent[m_entityToIndex[entity]];
+        return m_indexToComponent[m_entityIdToIndex[getId(entity)]];
     }
 
     template<typename TComponent>
     TComponent* ComponentPool<TComponent>::tryGet(en::Entity entity) {
 
         if (!contains(entity)) return nullptr;
-        return &m_indexToComponent[m_entityToIndex[entity]];
+        return &m_indexToComponent[m_entityIdToIndex[getId(entity)]];
     }
 
     template<typename TComponent>
-    ComponentPoolBase::index_type ComponentPool<TComponent>::remove(en::Entity entity) {
+    ComponentPoolBase::index_type ComponentPool<TComponent>::removeInternal(en::Entity entity) {
 
-        const index_type index = ComponentPoolBase::remove(entity);
+        const index_type index = ComponentPoolBase::removeInternal(entity);
         if (index == nullIndex) return nullIndex;
 
         // Swap and pop to keep the storage contiguous.

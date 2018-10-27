@@ -10,22 +10,30 @@ namespace en {
 
     Entity EntityRegistry::makeEntity() {
 
-        auto [iterator, didInsert] = m_entities.insert(m_nextId++);
-        assert(didInsert);
-
-        const en::Entity entity = *iterator;
+        const en::Entity entity = m_entities.add();
         Receiver<EntityCreated>::accept({entity});
         return entity;
     }
 
     void EntityRegistry::destroy(Entity entity) {
 
+        if (!m_entities.contains(entity)) return;
+
         Receiver<EntityWillBeDestroyed>::accept({entity});
 
-        m_entities.erase(entity);
+        m_entities.remove(entity);
 
         for (auto& kvp : m_componentPools) {
-            kvp.second->remove(entity);
+            bool didContain = kvp.second->contains(entity);
+            bool didRemove = kvp.second->remove(entity);
+            if (didContain) {
+                assert(didRemove);
+                assert(!kvp.second->contains(entity));
+            }
+        }
+
+        for (auto& kvp : m_componentPools) {
+            assert(!kvp.second->contains(entity));
         }
     }
 
@@ -34,5 +42,4 @@ namespace en {
         for (Entity e : m_entities) Receiver<EntityWillBeDestroyed>::accept({e});
         m_entities.clear();
     }
-
 }

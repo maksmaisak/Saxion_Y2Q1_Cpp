@@ -15,7 +15,7 @@
 #include "EntitiesView.h"
 #include "Messaging.h"
 #include "EntityEvents.h"
-
+#include "Entities.h"
 #include "Transformable.h"
 
 namespace en {
@@ -42,8 +42,9 @@ namespace en {
 
     private:
 
-        en::Entity m_nextId = 1;
-        std::set<Entity> m_entities;
+        Entity m_nextId = 1;
+        Entities m_entities;
+
         mutable std::map<std::type_index, std::unique_ptr<ComponentPoolBase>> m_componentPools;
 
         template<typename TComponent>
@@ -99,7 +100,7 @@ namespace en {
     template<typename... TComponent>
     EntitiesView<TComponent...> EntityRegistry::with() {
 
-        return EntitiesView<TComponent...>(m_entities, getPool<TComponent>()...);
+        return EntitiesView<TComponent...>(getPool<TComponent>()...);
     }
 
     template<typename TComponent>

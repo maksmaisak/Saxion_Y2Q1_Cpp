@@ -16,28 +16,29 @@ namespace en {
     template<typename... TComponent>
     class EntitiesView {
 
-        using underlyingCollection_type = std::set<Entity>;
-        using underlyingIterator_type = underlyingCollection_type::iterator;
+        using underlying_collection_type = ComponentPoolBase;
+        using underlying_iterator_type = underlying_collection_type::const_iterator;
 
+        // Iterates over all pools
         class iterator {
 
-            inline bool shouldSkip() {
-                return !(std::get<ComponentPool<TComponent>&>(m_pools).contains(*m_underlyingIterator) && ...);
+            inline bool shouldSkip() const {
+                return !(std::get<ComponentPool<TComponent>*>(m_pools)->contains(*m_underlyingIterator) && ...);
             }
 
         public:
 
             // Typedefs required to qualify as an Iterator.
-            using difference_type   = underlyingIterator_type::difference_type;
-            using value_type        = underlyingIterator_type::value_type;
-            using pointer           = underlyingIterator_type::pointer;
-            using reference         = underlyingIterator_type::reference;
+            using difference_type   = underlying_iterator_type::difference_type;
+            using value_type        = underlying_iterator_type::value_type;
+            using pointer           = underlying_iterator_type::pointer;
+            using reference         = underlying_iterator_type::reference;
             using iterator_category = std::forward_iterator_tag;
 
-            iterator(std::tuple<ComponentPool<TComponent>&...> pools, underlyingIterator_type underlyingIterator, underlyingIterator_type end)
-                : m_pools(pools), m_underlyingIterator(underlyingIterator), m_end(end) {
+            iterator(std::tuple<ComponentPool<TComponent>*...> pools, underlying_iterator_type underlyingIterator, underlying_iterator_type underlyingEnd)
+                : m_pools(pools), m_underlyingIterator(underlyingIterator), m_underlyingEnd(underlyingEnd) {
 
-                if (m_underlyingIterator != m_end && shouldSkip()) {
+                if (m_underlyingIterator != m_underlyingEnd && shouldSkip()) {
                     ++(*this);
                 }
             }
@@ -45,41 +46,50 @@ namespace en {
             inline reference operator  *() const {return m_underlyingIterator.operator *();}
             inline pointer   operator ->() const {return m_underlyingIterator.operator->();}
 
-            inline bool operator ==(const iterator& other) {return m_underlyingIterator == other.m_underlyingIterator;}
-            inline bool operator !=(const iterator& other) {return m_underlyingIterator != other.m_underlyingIterator;}
+            inline bool operator ==(const iterator& other) const {return m_underlyingIterator == other.m_underlyingIterator;}
+            inline bool operator !=(const iterator& other) const {return m_underlyingIterator != other.m_underlyingIterator;}
 
             inline iterator& operator ++() {
 
                 do ++m_underlyingIterator;
-                while (m_underlyingIterator != m_end && shouldSkip());
+                while (m_underlyingIterator != m_underlyingEnd && shouldSkip());
 
                 return *this;
             }
 
         private:
 
-            std::tuple<ComponentPool<TComponent>&...> m_pools;
-            underlyingIterator_type m_underlyingIterator;
-            underlyingIterator_type m_end;
+            std::tuple<ComponentPool<TComponent>*...> m_pools;
+            underlying_iterator_type m_underlyingIterator;
+            underlying_iterator_type m_underlyingEnd;
         };
 
     public:
 
-        EntitiesView(underlyingCollection_type& entities, ComponentPool<TComponent>&... pools) : m_entities(entities), m_pools{pools...} {}
+        EntitiesView(ComponentPool<TComponent>&... pools) :
+            m_pools{&pools...},
+            m_smallestPoolPtr(getSmallestPoolPtr(std::forward<ComponentPool<TComponent>&>(pools)...))
+            {};
 
-        inline iterator begin() {
-            return iterator(m_pools, m_entities.cbegin(), m_entities.cend());
+        inline iterator begin() const {
+            return iterator(m_pools, m_smallestPoolPtr->cbegin(), m_smallestPoolPtr->cend());
         }
 
-        inline iterator end() {
-            return iterator(m_pools, m_entities.cend()  , m_entities.cend());
+        inline iterator end() const {
+            return iterator(m_pools, m_smallestPoolPtr->cend()  , m_smallestPoolPtr->cend());
         }
 
     private:
 
-        std::tuple<ComponentPool<TComponent>&...> m_pools;
+        std::tuple<ComponentPool<TComponent>*...> m_pools;
+        const ComponentPoolBase* m_smallestPoolPtr;
 
-        const underlyingCollection_type& m_entities;
+        inline const ComponentPoolBase* getSmallestPoolPtr(ComponentPool<TComponent>&... pools) const {
+            return std::min(
+                {static_cast<ComponentPoolBase*>(&pools)...},
+                [](const auto* poolA, const auto* poolB) {return poolA->size() < poolA->size();}
+            );
+        }
     };
 
 }

@@ -7,10 +7,11 @@
 
 namespace en {
 
-    bool ComponentPoolBase::contains(en::Entity entity) {
+    bool ComponentPoolBase::contains(en::Entity entity) const {
 
-        if (entity >= m_entityToIndex.size()) return false;
-        const index_type index = m_entityToIndex[entity];
+        const auto id = getId(entity);
+        if (id >= m_entityIdToIndex.size()) return false;
+        const index_type index = m_entityIdToIndex[id];
         if (index >= m_indexToEntity.size()) return false;
         return m_indexToEntity[index] == entity;
     }
@@ -18,30 +19,39 @@ namespace en {
     ComponentPoolBase::index_type ComponentPoolBase::insert(en::Entity entity) {
 
         assert(!contains(entity));
-        if (entity >= m_entityToIndex.size()) {
-            m_entityToIndex.resize(entity + 1);
+
+        const auto id = getId(entity);
+        if (id >= m_entityIdToIndex.size()) {
+            m_entityIdToIndex.resize(id + 1);
         }
 
         const index_type index = m_indexToEntity.size();
-        m_entityToIndex[entity] = index;
+        m_entityIdToIndex[id] = index;
         m_indexToEntity.push_back(entity);
         return index;
     }
 
-    ComponentPoolBase::index_type ComponentPoolBase::remove(en::Entity entity) {
+    bool ComponentPoolBase::remove(en::Entity entity) {
+
+        return removeInternal(entity) != nullIndex;
+    }
+
+    ComponentPoolBase::index_type ComponentPoolBase::removeInternal(en::Entity entity) {
 
         if (!contains(entity)) return nullIndex;
 
-        assert(entity < m_entityToIndex.size());
-        const index_type index = m_entityToIndex[entity];
+        const auto id = getId(entity);
+        assert(id < m_entityIdToIndex.size());
+
+        const index_type index = m_entityIdToIndex[id];
         const en::Entity lastEntity = m_indexToEntity.back();
 
         // Swap and pop.
         // Overwrite the entity with the last entity, adjust the indices,
         // then remove the last entity, which is now duplicate.
         m_indexToEntity[index] = lastEntity;
-        m_entityToIndex[lastEntity] = index;
-        m_entityToIndex[entity] = nullIndex;
+        m_entityIdToIndex[getId(lastEntity)] = index;
+        m_entityIdToIndex[id] = nullIndex;
         m_indexToEntity.pop_back();
 
         return index;
