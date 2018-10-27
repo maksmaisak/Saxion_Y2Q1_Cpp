@@ -17,6 +17,7 @@
 #include "PlayerControlsSystem.h"
 #include "BreakAsteroidSystem.h"
 #include "ShootSystem.h"
+#include "DiagnosticsSystem.h"
 
 #include "Collision.h"
 
@@ -27,7 +28,7 @@ using uint = unsigned int;
 const uint WIDTH  = 1600;
 const uint HEIGHT = 1200;
 
-const uint NUM_ASTEROIDS = 10;
+const uint NUM_ASTEROIDS = 100;
 
 struct Test : Receiver<en::Collision, int, float> {
 
@@ -59,6 +60,8 @@ int main() {
         engine.addSystem<WrapAroundScreenSystem>();
         engine.addSystem<BreakAsteroidSystem>();
         //engine.addSystem<FlickerSystem>();
+
+        engine.addSystem<DiagnosticsSystem>();
     }
 
     game::makePlayer(engine);

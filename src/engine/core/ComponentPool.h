@@ -53,7 +53,7 @@ namespace en {
         TComponent* tryGet(en::Entity entity);
 
     protected:
-        index_type removeInternal(en::Entity entity) override;
+        index_type removeInternal(en::Entity entity) final;
 
     private:
         std::vector<TComponent> m_indexToComponent;
