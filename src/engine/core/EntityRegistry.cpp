@@ -24,10 +24,9 @@ namespace en {
 
         m_entities.erase(entity);
 
-        // TODO Make ComponentPool provide this functionality
-    //    for (auto& kvp : m_componentPools) {
-    //        kvp.second->erase(entity);
-    //    }
+        for (auto& kvp : m_componentPools) {
+            kvp.second->remove(entity);
+        }
     }
 
     void EntityRegistry::destroyAll() {

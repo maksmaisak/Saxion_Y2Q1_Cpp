@@ -44,7 +44,7 @@ namespace game {
         return makeAsteroid(engine, size, position, velocity);
     }
 
-    en::Entity game::makeAsteroid(
+    en::Entity makeAsteroid(
         en::Engine& engine,
         Asteroid::Size size,
         const sf::Vector2f& position,

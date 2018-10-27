@@ -30,10 +30,9 @@ namespace en {
 
     ComponentPoolBase::index_type ComponentPoolBase::remove(en::Entity entity) {
 
-        assert(entity < m_entityToIndex.size());
-
         if (!contains(entity)) return nullIndex;
 
+        assert(entity < m_entityToIndex.size());
         const index_type index = m_entityToIndex[entity];
         const en::Entity lastEntity = m_indexToEntity.back();
 

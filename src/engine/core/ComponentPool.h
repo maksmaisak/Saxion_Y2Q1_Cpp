@@ -89,6 +89,7 @@ namespace en {
     ComponentPoolBase::index_type ComponentPool<TComponent>::remove(en::Entity entity) {
 
         const index_type index = ComponentPoolBase::remove(entity);
+        if (index == nullIndex) return nullIndex;
 
         // Swap and pop to keep the storage contiguous.
         m_indexToComponent[index] = m_indexToComponent.back();

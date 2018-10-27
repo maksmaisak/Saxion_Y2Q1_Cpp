@@ -25,22 +25,20 @@ namespace en {
     public:
 
         en::Entity makeEntity();
-
         void destroy(Entity entity);
-
         void destroyAll();
 
         template<class TComponent>
-        TComponent& get(Entity entity) const;
+        inline TComponent& get(Entity entity) const;
 
         template<class TComponent>
-        TComponent* tryGet(Entity entity) const;
+        inline TComponent* tryGet(Entity entity) const;
 
         template<class TComponent, typename... Args>
         inline TComponent& add(Entity entity, Args&& ... args);
 
         template<typename... TComponent>
-        EntitiesView<TComponent...> with();
+        inline EntitiesView<TComponent...> with();
 
     private:
 
@@ -86,7 +84,7 @@ namespace en {
         return componentReference;
     }
 
-/// TEMP m_registry is assigned here until it can be done in an event handler (TODO)
+    /// TEMP m_registry is assigned here until it can be done in an event handler (TODO)
     template<>
     inline en::Transformable& EntityRegistry::add<en::Transformable>(Entity entity) {
 
