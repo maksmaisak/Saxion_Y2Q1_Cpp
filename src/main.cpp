@@ -2,6 +2,7 @@
 #include <memory>
 #include <algorithm>
 #include <optional>
+#include <vector>
 #include "Messaging.h"
 #include "Engine.h"
 #include "Actor.h"

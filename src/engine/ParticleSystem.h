@@ -66,5 +66,4 @@ private:
     void destroyOldestParticle();
 };
 
-
 #endif //SAXION_Y2Q1_CPP_PARTICLESYSTEM_H

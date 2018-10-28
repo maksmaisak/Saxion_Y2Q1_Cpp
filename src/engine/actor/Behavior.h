@@ -18,12 +18,7 @@ namespace en {
 
     public:
         explicit Behavior(const Actor& actor);
-
         virtual ~Behavior() = default;
-        Behavior(Behavior& other) = default;
-        Behavior& operator=(const Behavior& other) = default;
-        Behavior(Behavior&& other) = default;
-        Behavior& operator=(Behavior&& other) = default;
 
         inline Actor& actor() { return m_actor; }
 

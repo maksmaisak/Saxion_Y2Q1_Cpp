@@ -11,7 +11,8 @@
 #include <SFML/Graphics.hpp>
 #include "Engine.h"
 
-// The declaration is here to make it possible to include only the declaration.
+// The declaration is here to make it possible to include only the declaration,
+// in case you need just the non-templated stuff.
 #include "ActorDecl.h"
 
 namespace en {
@@ -28,7 +29,9 @@ namespace en {
 
     template<typename TBehavior, typename... Args>
     std::enable_if_t<isBehavior<TBehavior>, TBehavior&>
-    Actor::add(Args&& ... args) { return add<TBehavior>(*this, std::forward<Args>(args)...); }
+    Actor::add(Args&& ... args) {
+        return add<TBehavior>(*this, std::forward<Args>(args)...);
+    }
 
     template<typename TComponent, typename... Args>
     std::enable_if_t<!isBehavior<TComponent>, TComponent&>

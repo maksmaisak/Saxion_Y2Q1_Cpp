@@ -17,11 +17,19 @@ namespace en {
     template<typename T>
     constexpr inline bool isBehavior = std::is_base_of<Behavior, T>::value;
 
+    template<typename T>
+    using EnableIfIsBehavior = std::enable_if_t<std::is_base_of_v<Behavior, T>>;
+
     /// A thin wrapper around an entity. Facilitates GameObject-like programming.
     class Actor final {
 
     public:
-        Actor(Engine& engine, en::Entity entity);
+        Actor(Engine& engine, Entity entity);
+
+        /// Adds a non-behavior component
+        template<typename TComponent, typename... Args>
+        std::enable_if_t<!isBehavior<TComponent>, TComponent&>
+        add(Args&&... args);
 
         /// Adds a behavior component.
         template<typename TBehavior, typename... Args>
@@ -31,11 +39,6 @@ namespace en {
         /// Adds a behavior component with the first parameter (actor) being omitted.
         template<typename TBehavior, typename... Args>
         inline std::enable_if_t<isBehavior<TBehavior>, TBehavior&>
-        add(Args&&... args);
-
-        /// Adds a non-behavior component
-        template<typename TComponent, typename... Args>
-        std::enable_if_t<!isBehavior<TComponent>, TComponent&>
         add(Args&&... args);
 
         template<typename TComponent>

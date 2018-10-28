@@ -44,6 +44,9 @@ namespace en {
     template<typename TComponent>
     class ComponentPool : public ComponentPoolBase {
 
+        static_assert(std::is_move_constructible_v<TComponent> || std::is_copy_constructible_v<TComponent>, "Component types must be either move or copy constructible.");
+        static_assert(std::is_move_assignable_v<TComponent> || std::is_copy_assignable_v<TComponent>, "Component types must be either move or copy assignable.");
+
     public:
         template<typename... Args>
         std::tuple<index_type, TComponent&> insert(en::Entity entity, Args&& ... args);
@@ -64,7 +67,12 @@ namespace en {
     std::tuple<ComponentPoolBase::index_type, TComponent&> ComponentPool<TComponent>::insert(en::Entity entity, Args&&... args) {
 
         const index_type index = ComponentPoolBase::insert(entity);
-        m_indexToComponent.push_back(TComponent{std::forward<Args>(args)...});
+
+        if constexpr (std::is_move_constructible_v<TComponent>) {
+            m_indexToComponent.push_back(TComponent{std::forward<Args>(args)...});
+        } else {
+            m_indexToComponent.push_back((const TComponent&)TComponent{std::forward<Args>(args)...});
+        }
         return std::make_tuple(index, std::ref(m_indexToComponent.back()));
     }
 
@@ -97,7 +105,11 @@ namespace en {
         if (index == nullIndex) return nullIndex;
 
         // Swap and pop to keep the storage contiguous.
-        m_indexToComponent[index] = m_indexToComponent.back();
+        if constexpr (std::is_move_assignable_v<TComponent>) {
+            m_indexToComponent[index] = std::move(m_indexToComponent.back());
+        } else {
+            m_indexToComponent[index] = m_indexToComponent.back();
+        }
         m_indexToComponent.pop_back();
 
         return index;
