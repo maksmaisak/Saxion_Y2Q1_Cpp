@@ -19,7 +19,7 @@ void DiagnosticsSystem::draw() {
 
     sf::Time frameTime = m_timer.restart();
 
-    m_fpsCounterPtr->setString("fps: " + std::to_string(1.f / frameTime.asSeconds()));
+    m_fpsCounterPtr->setString("fps: " + std::to_string(1000000.0 / frameTime.asMicroseconds()));
 
     m_engine.getWindow().draw(*m_fpsCounterPtr);
 }

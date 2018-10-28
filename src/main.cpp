@@ -25,10 +25,11 @@
 
 using uint = unsigned int;
 
-const uint WIDTH  = 1600;
-const uint HEIGHT = 1200;
+const uint Width  = 1600;
+const uint Height = 1200;
+const bool EnableVSync = true;
 
-const uint NUM_ASTEROIDS = 100;
+const uint NumAsteroids = 10;
 
 struct Test : Receiver<en::Collision, int, float> {
 
@@ -47,7 +48,7 @@ struct Test : Receiver<en::Collision, int, float> {
 
 int main() {
 
-    Engine engine(WIDTH, HEIGHT);
+    Engine engine(Width, Height, EnableVSync);
 
     {
         engine.addSystem<RenderSystem>();
@@ -66,7 +67,7 @@ int main() {
 
     game::makePlayer(engine);
 
-    for (int i = 0; i < NUM_ASTEROIDS; ++i) {
+    for (int i = 0; i < NumAsteroids; ++i) {
         game::makeAsteroid(engine, (Asteroid::Size)lround(en::random(0.f, 2.f)));
     }
 

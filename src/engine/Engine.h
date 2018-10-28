@@ -25,7 +25,7 @@ namespace en {
     class Engine final {
 
     public:
-        Engine(unsigned int width, unsigned int height);
+        Engine(unsigned int width, unsigned int height, bool enableVsync = false);
 
         void run();
 

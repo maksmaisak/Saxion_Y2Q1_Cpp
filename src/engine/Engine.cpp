@@ -12,12 +12,12 @@
 
 namespace en {
 
-    const sf::Time TIMESTEP = sf::seconds(0.01f);
-    const float TIMESTEP_SECONDS = TIMESTEP.asSeconds();
+    const sf::Time TimestepFixed = sf::seconds(0.01f);
+    const unsigned int FramerateCap = 240;
 
     Engine* Engine::m_instance = nullptr;
 
-    Engine::Engine(unsigned int width, unsigned int height) {
+    Engine::Engine(unsigned int width, unsigned int height, bool enableVSync) {
 
         assert(!m_instance);
 
@@ -26,6 +26,7 @@ namespace en {
         sf::ContextSettings contextSettings;
         contextSettings.antialiasingLevel = 8;
         m_window.create(sf::VideoMode(width, height), "Example", sf::Style::Default, contextSettings);
+        m_window.setVerticalSyncEnabled(enableVSync);
     }
 
     Engine& Engine::getInstance() {
@@ -36,24 +37,35 @@ namespace en {
 
     void Engine::run() {
 
-        sf::Clock clock;
-        sf::Time lag = sf::Time::Zero;
+        sf::Clock fixedUpdateClock;
+        sf::Time fixedUpdateLag = sf::Time::Zero;
+
+        sf::Clock drawClock;
+        sf::Time timeSinceLastDraw = sf::Time::Zero;
+
+        const float timestepFixedSeconds = TimestepFixed.asSeconds();
+        const sf::Time timestepDraw = sf::seconds(1.f / FramerateCap);
 
         while (m_window.isOpen()) {
-
-            lag += clock.restart();
 
             sf::Event event{};
             while (m_window.pollEvent(event)) {
                 if (event.type == sf::Event::Closed) m_window.close();
             }
 
-            while (lag >= TIMESTEP) {
-                update(TIMESTEP_SECONDS);
-                lag -= TIMESTEP;
+            fixedUpdateLag += fixedUpdateClock.restart();
+            while (fixedUpdateLag >= TimestepFixed) {
+                update(timestepFixedSeconds);
+                fixedUpdateLag -= TimestepFixed;
             }
 
-            draw();
+            if (drawClock.getElapsedTime() >= timestepDraw) {
+                draw();
+                drawClock.restart();
+            } else {
+                do sf::sleep(sf::microseconds(10));
+                while (drawClock.getElapsedTime() < timestepDraw && fixedUpdateLag + fixedUpdateClock.getElapsedTime() < TimestepFixed);
+            }
         }
     }
 
