@@ -23,17 +23,17 @@ namespace en {
 
         m_entities.remove(entity);
 
-        for (auto& kvp : m_componentPools) {
-            bool didContain = kvp.second->contains(entity);
-            bool didRemove = kvp.second->remove(entity);
+        for (const auto& poolPtr : m_componentPools) {
+            bool didContain = poolPtr->contains(entity);
+            bool didRemove = poolPtr->remove(entity);
             if (didContain) {
                 assert(didRemove);
-                assert(!kvp.second->contains(entity));
+                assert(!poolPtr->contains(entity));
             }
         }
 
-        for (auto& kvp : m_componentPools) {
-            assert(!kvp.second->contains(entity));
+        for (const auto& poolPtr : m_componentPools) {
+            assert(!poolPtr->contains(entity));
         }
     }
 

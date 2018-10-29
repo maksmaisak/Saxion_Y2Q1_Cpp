@@ -17,6 +17,7 @@
 #include "EntityEvents.h"
 #include "Entities.h"
 #include "Transformable.h"
+#include "CustomTypeIndex.h"
 
 namespace en {
 
@@ -45,7 +46,8 @@ namespace en {
         Entity m_nextId = 1;
         Entities m_entities;
 
-        mutable std::map<std::type_index, std::unique_ptr<ComponentPoolBase>> m_componentPools;
+        using componentTypeIndices = CustomTypeIndex<struct componentIndicesDummy>;
+        mutable std::vector<std::unique_ptr<ComponentPoolBase>> m_componentPools;
 
         template<typename TComponent>
         inline ComponentPool<TComponent>& getPool(bool mustBePresentAlready = false) const;
@@ -106,19 +108,20 @@ namespace en {
     template<typename TComponent>
     inline ComponentPool<TComponent>& EntityRegistry::getPool(bool mustBePresentAlready) const {
 
-        // TODO Do something faster than std::set for this.
-        const std::type_index key = getTypeIndex<TComponent>();
+        const std::size_t index = componentTypeIndices::index<TComponent>;
 
-        auto it = m_componentPools.find(key);
-        if (it == m_componentPools.cend()) {
-
-            assert(!mustBePresentAlready);
-
-            it = m_componentPools.emplace(key, new ComponentPool<TComponent>()).first;
-            std::clog << "Created a component pool for " << typeid(TComponent).name() << std::endl;
+        if (index >= m_componentPools.size()) {
+            m_componentPools.resize(index + 1);
         }
 
-        return *static_cast<ComponentPool<TComponent>*>(it->second.get());
+        if (!m_componentPools[index]) {
+
+            assert(!mustBePresentAlready);
+            m_componentPools[index] = std::make_unique<ComponentPool<TComponent>>();
+            std::clog << "Created a component pool (index " << index << ") for " << typeid(TComponent).name() << std::endl;
+        }
+
+        return *static_cast<ComponentPool<TComponent>*>(m_componentPools[index].get());
     }
 }
 

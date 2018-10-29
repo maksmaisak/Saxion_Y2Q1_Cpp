@@ -34,7 +34,7 @@ template<typename TMessage, typename... Rest>
 class Receiver<TMessage, Rest...> : Receiver<TMessage>, Receiver<Rest...> {};
 
 template<typename TMessage>
-std::set<Receiver<TMessage>*> Receiver<TMessage>::m_receivers;
+inline std::set<Receiver<TMessage>*> Receiver<TMessage>::m_receivers;
 
 
 #endif //SAXION_Y2Q1_CPP_RECEIVER_H

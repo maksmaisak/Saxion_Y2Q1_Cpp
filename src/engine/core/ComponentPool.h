@@ -44,8 +44,14 @@ namespace en {
     template<typename TComponent>
     class ComponentPool : public ComponentPoolBase {
 
-        static_assert(std::is_move_constructible_v<TComponent> || std::is_copy_constructible_v<TComponent>, "Component types must be either move or copy constructible.");
-        static_assert(std::is_move_assignable_v<TComponent> || std::is_copy_assignable_v<TComponent>, "Component types must be either move or copy assignable.");
+        static_assert(
+            !std::is_aggregate_v<TComponent> || (std::is_move_constructible_v<TComponent> || std::is_copy_constructible_v<TComponent>),
+            "Aggregate component types must be either move or copy constructible."
+        );
+        static_assert(
+            std::is_move_assignable_v<TComponent> || std::is_copy_assignable_v<TComponent>,
+            "Component types must be either move or copy assignable."
+        );
 
     public:
         template<typename... Args>
@@ -68,11 +74,16 @@ namespace en {
 
         const index_type index = ComponentPoolBase::insert(entity);
 
-        if constexpr (std::is_move_constructible_v<TComponent>) {
-            m_indexToComponent.push_back(TComponent{std::forward<Args>(args)...});
+        if constexpr (std::is_aggregate_v<TComponent>) {
+            if constexpr (std::is_move_constructible_v<TComponent>) {
+                m_indexToComponent.push_back(TComponent{std::forward<Args>(args)...});
+            } else {
+                m_indexToComponent.push_back((const TComponent&)TComponent{std::forward<Args>(args)...});
+            }
         } else {
-            m_indexToComponent.push_back((const TComponent&)TComponent{std::forward<Args>(args)...});
+            m_indexToComponent.emplace_back(std::forward<Args>(args)...);
         }
+
         return std::make_tuple(index, std::ref(m_indexToComponent.back()));
     }
 

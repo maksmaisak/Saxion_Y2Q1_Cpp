@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <optional>
 #include <vector>
+#include <utils/CustomTypeIndex.h>
 #include "Messaging.h"
 #include "Engine.h"
 #include "Actor.h"
@@ -19,6 +20,8 @@
 #include "BreakAsteroidSystem.h"
 #include "ShootSystem.h"
 #include "DiagnosticsSystem.h"
+
+#include "CustomTypeIndex.h"
 
 #include "Collision.h"
 
@@ -47,7 +50,15 @@ struct Test : Receiver<en::Collision, int, float> {
     }
 };
 
+template<typename T>
+inline std::size_t idx = CustomTypeIndex<struct Dummy>::index<T>;
+
 int main() {
+
+    auto a = idx<en::Transformable>;
+    auto b = idx<en::DrawInfo>;
+    auto c = idx<float>;
+    auto d = idx<en::Transformable>;
 
     Engine engine(Width, Height, EnableVSync);
 
