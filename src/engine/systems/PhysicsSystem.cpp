@@ -43,7 +43,7 @@ void PhysicsSystem::update(float dt) {
                 tf.move(movement * hit->timeOfImpact);
                 didCollide = true;
 
-                Receiver<en::Collision>::accept({*hit, entity, other});
+                en::Receiver<en::Collision>::accept({*hit, entity, other});
 
                 break;
             }

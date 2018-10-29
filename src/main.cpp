@@ -18,6 +18,7 @@
 #include "FlickerSystem.h"
 #include "PlayerControlsSystem.h"
 #include "BreakAsteroidSystem.h"
+#include "PlayerDeathSystem.h"
 #include "ShootSystem.h"
 #include "DiagnosticsSystem.h"
 
@@ -32,8 +33,6 @@ using uint = unsigned int;
 const uint Width  = 1600;
 const uint Height = 1200;
 const bool EnableVSync = true;
-
-const uint NumAsteroids = 10;
 
 struct Test : Receiver<en::Collision, int, float> {
 
@@ -50,15 +49,7 @@ struct Test : Receiver<en::Collision, int, float> {
     }
 };
 
-template<typename T>
-inline std::size_t idx = CustomTypeIndex<struct Dummy>::index<T>;
-
 int main() {
-
-    auto a = idx<en::Transformable>;
-    auto b = idx<en::DrawInfo>;
-    auto c = idx<float>;
-    auto d = idx<en::Transformable>;
 
     Engine engine(Width, Height, EnableVSync);
 
@@ -72,16 +63,13 @@ int main() {
         engine.addSystem<ShootSystem>();
         engine.addSystem<WrapAroundScreenSystem>();
         engine.addSystem<BreakAsteroidSystem>();
+        engine.addSystem<PlayerDeathSystem>();
         //engine.addSystem<FlickerSystem>();
 
         engine.addSystem<DiagnosticsSystem>();
     }
 
-    game::makePlayer(engine);
-
-    for (int i = 0; i < NumAsteroids; ++i) {
-        game::makeAsteroid(engine, (Asteroid::Size)lround(en::random(0.f, 2.f)));
-    }
+    game::makeMainLevel(engine);
 
     engine.run();
 

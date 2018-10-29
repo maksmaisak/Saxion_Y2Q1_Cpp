@@ -10,6 +10,8 @@
 
 namespace game {
 
+    void makeMainLevel(en::Engine& engine);
+
     en::Entity makePlayer(en::Engine& engine);
     en::Entity makeAsteroid(en::Engine& engine, Asteroid::Size size = Asteroid::Size::Large);
     en::Entity makeAsteroid(en::Engine& engine, Asteroid::Size size, const sf::Vector2f& position, const sf::Vector2f& velocity);

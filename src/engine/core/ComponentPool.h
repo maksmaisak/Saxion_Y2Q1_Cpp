@@ -24,9 +24,10 @@ namespace en {
 
         virtual ~ComponentPoolBase() = default;
 
+        inline std::size_t size() const {return m_indexToEntity.size();}
         bool contains(en::Entity entity) const;
         bool remove(en::Entity entity);
-        inline std::size_t size() const {return m_indexToEntity.size();}
+        virtual void clear();
 
         inline const_iterator cbegin() const {return m_indexToEntity.cbegin();}
         inline const_iterator cend()   const {return m_indexToEntity.cend();  }
@@ -60,6 +61,7 @@ namespace en {
 
         TComponent& get(en::Entity entity);
         TComponent* tryGet(en::Entity entity);
+        inline void clear() final;
 
     protected:
         index_type removeInternal(en::Entity entity) final;
@@ -107,6 +109,13 @@ namespace en {
 
         if (!contains(entity)) return nullptr;
         return &m_indexToComponent[m_entityIdToIndex[getId(entity)]];
+    }
+
+    template<typename TComponent>
+    void ComponentPool<TComponent>::clear() {
+
+        ComponentPoolBase::clear();
+        m_indexToComponent.clear();
     }
 
     template<typename TComponent>

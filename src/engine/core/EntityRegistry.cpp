@@ -24,12 +24,7 @@ namespace en {
         m_entities.remove(entity);
 
         for (const auto& poolPtr : m_componentPools) {
-            bool didContain = poolPtr->contains(entity);
-            bool didRemove = poolPtr->remove(entity);
-            if (didContain) {
-                assert(didRemove);
-                assert(!poolPtr->contains(entity));
-            }
+            poolPtr->remove(entity);
         }
 
         for (const auto& poolPtr : m_componentPools) {
@@ -41,5 +36,9 @@ namespace en {
 
         for (Entity e : m_entities) Receiver<EntityWillBeDestroyed>::accept({e});
         m_entities.clear();
+
+        for (const auto& poolPtr : m_componentPools) {
+            poolPtr->clear();
+        }
     }
 }

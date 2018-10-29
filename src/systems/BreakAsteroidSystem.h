@@ -10,7 +10,7 @@
 #include "Messaging.h"
 #include "Collision.h"
 
-class BreakAsteroidSystem : public en::System, Receiver<en::Collision> {
+class BreakAsteroidSystem : public en::System, en::Receiver<en::Collision> {
 
     using System::System;
 

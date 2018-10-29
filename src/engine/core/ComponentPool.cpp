@@ -36,6 +36,12 @@ namespace en {
         return removeInternal(entity) != nullIndex;
     }
 
+    void ComponentPoolBase::clear() {
+
+        m_indexToEntity.clear();
+        m_entityIdToIndex.clear();
+    }
+
     ComponentPoolBase::index_type ComponentPoolBase::removeInternal(en::Entity entity) {
 
         if (!contains(entity)) return nullIndex;
