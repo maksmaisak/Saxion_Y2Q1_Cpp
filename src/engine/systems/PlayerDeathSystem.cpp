@@ -9,6 +9,7 @@
 #include "Asteroid.h"
 #include "Player.h"
 #include "Factory.h"
+#include "Restart.h"
 
 std::optional<std::tuple<en::Entity, en::Entity>> getPlayerAsteroidCollision(const en::EntityRegistry& registry, const en::Collision& collision){
 
@@ -31,11 +32,11 @@ std::optional<std::tuple<en::Entity, en::Entity>> getPlayerAsteroidCollision(con
 
 void PlayerDeathSystem::receive(const en::Collision& collision) {
 
-    auto result = getPlayerAsteroidCollision(m_registry, collision);
+    auto result = getPlayerAsteroidCollision(*m_registry, collision);
     if (!result.has_value()) return;
     auto [player, asteroid] = *result;
 
-    m_registry.destroy(player);
+    m_registry->destroy(player);
     m_shouldRestart = true;
 }
 
@@ -43,8 +44,9 @@ void PlayerDeathSystem::update(float dt) {
 
     if (!m_shouldRestart) return;
 
-    m_registry.destroyAll();
-    game::makeMainLevel(m_engine);
+    m_registry->destroyAll();
+    en::Receiver<Restart>::accept({});
+    game::makeMainLevel(*m_engine);
 
     m_shouldRestart = false;
 }

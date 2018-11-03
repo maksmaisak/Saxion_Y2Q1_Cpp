@@ -8,7 +8,6 @@
 #include <memory>
 #include <utility>
 #include <set>
-#include <typeindex>
 #include <iostream>
 #include "Entity.h"
 #include "ComponentPool.h"
@@ -38,12 +37,14 @@ namespace en {
         template<class TComponent, typename... Args>
         inline TComponent& add(Entity entity, Args&& ... args);
 
+        template<class TComponent>
+        inline TComponent& remove(Entity entity);
+
         template<typename... TComponent>
         inline EntitiesView<TComponent...> with();
 
     private:
 
-        Entity m_nextId = 1;
         Entities m_entities;
 
         using componentTypeIndices = CustomTypeIndex<struct componentIndicesDummy>;
@@ -53,31 +54,22 @@ namespace en {
         inline ComponentPool<TComponent>& getPool(bool mustBePresentAlready = false) const;
     };
 
-    template<typename T, typename Base>
-    inline constexpr bool inherits = std::is_base_of<Base, T>::value;
-
-    template<class T>
-    inline std::type_index getTypeIndex() {
-
-        return std::type_index(typeid(T));
-    }
-
     template<class TComponent>
-    TComponent& EntityRegistry::get(const en::Entity entity) const {
+    inline TComponent& EntityRegistry::get(const en::Entity entity) const {
 
         ComponentPool<TComponent>& pool = getPool<TComponent>(true);
         return pool.get(entity);
     }
 
     template<class TComponent>
-    TComponent* EntityRegistry::tryGet(Entity entity) const {
+    inline TComponent* EntityRegistry::tryGet(Entity entity) const {
 
         ComponentPool<TComponent>& pool = getPool<TComponent>();
         return pool.tryGet(entity);
     }
 
     template<class TComponent, typename... Args>
-    TComponent& EntityRegistry::add(Entity entity, Args&& ... args) {
+    inline TComponent& EntityRegistry::add(Entity entity, Args&& ... args) {
 
         ComponentPool<TComponent>& pool = getPool<TComponent>();
 
@@ -100,9 +92,14 @@ namespace en {
     }
 
     template<typename... TComponent>
-    EntitiesView<TComponent...> EntityRegistry::with() {
+    inline EntitiesView<TComponent...> EntityRegistry::with() {
 
         return EntitiesView<TComponent...>(getPool<TComponent>()...);
+    }
+
+    template<class TComponent>
+    inline TComponent& EntityRegistry::remove(Entity entity) {
+        getPool<TComponent>(true).remove(entity);
     }
 
     template<typename TComponent>

@@ -7,13 +7,13 @@
 
 namespace en {
 
-    System::System(Engine& engine) :
-        m_engine(engine),
-        m_registry(engine.getRegistry()) {}
+    void System::init(Engine& engine) {
+        m_engine = &engine;
+        m_registry = &engine.getRegistry();
+    }
 
     sf::RenderWindow& System::getWindow() {
-
-        return m_engine.getWindow();
+        return m_engine->getWindow();
     }
 }
 

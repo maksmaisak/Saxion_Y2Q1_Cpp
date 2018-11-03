@@ -56,7 +56,7 @@ void split(en::Engine& engine, en::EntityRegistry& registry, en::Entity asteroid
 
 void BreakAsteroidSystem::receive(const en::Collision& collision) {
 
-    auto result = getAsteroidBulletCollision(m_registry, collision);
+    auto result = getAsteroidBulletCollision(*m_registry, collision);
     if (!result.has_value()) return;
     auto [asteroidEntity, bulletEntity, asteroid] = *result;
 
@@ -64,13 +64,13 @@ void BreakAsteroidSystem::receive(const en::Collision& collision) {
     m_entitiesToDestroy.push_back(bulletEntity);
 
     if (asteroid.size > Asteroid::Size::Small) {
-        split(m_engine, m_registry, asteroidEntity, asteroid);
+        split(*m_engine, *m_registry, asteroidEntity, asteroid);
     }
 }
 
 void BreakAsteroidSystem::update(float dt) {
 
-    for (en::Entity e : m_entitiesToDestroy) m_registry.destroy(e);
+    for (en::Entity e : m_entitiesToDestroy) m_registry->destroy(e);
 
     m_entitiesToDestroy.clear();
 }

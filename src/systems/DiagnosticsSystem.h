@@ -12,8 +12,7 @@
 class DiagnosticsSystem : public en::System {
 
 public:
-    explicit DiagnosticsSystem(en::Engine& engine);
-
+    void start() override;
     void draw() override;
 
 private:

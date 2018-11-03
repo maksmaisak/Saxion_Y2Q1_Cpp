@@ -19,17 +19,17 @@ namespace en {
 
         static_assert(std::is_base_of_v<Behavior, TBehavior>);
 
-        using System::System;
+
 
         void update(float dt) override {
 
-            for (Entity e : m_registry.with<TBehavior>()) m_registry.get<TBehavior>(e).update(dt);
+            for (Entity e : m_registry->with<TBehavior>()) m_registry->get<TBehavior>(e).update(dt);
         }
 
         void draw() override {
 
             sf::RenderTarget& renderTarget = getWindow();
-            for (Entity e : m_registry.with<TBehavior>()) m_registry.get<TBehavior>(e).draw(renderTarget);
+            for (Entity e : m_registry->with<TBehavior>()) m_registry->get<TBehavior>(e).draw(renderTarget);
         }
     };
 }

@@ -6,7 +6,6 @@
 #define SAXION_Y2Q1_CPP_CUSTOMTYPEINDEX_H
 
 #include <numeric>
-#include <atomic>
 
 /// Assigns indices to types.
 /// If a specialization's `index` is accessed with 10 different types (index<T1>, index<T2>, ... , index<T10>),
@@ -14,11 +13,11 @@
 template<typename Dummy>
 class CustomTypeIndex {
 
-    inline static std::atomic<std::size_t> m_nextIndex = 0;
+    inline static std::size_t m_nextIndex = 0;
 
 public:
     template<typename T>
-    inline static const std::size_t index = m_nextIndex.fetch_add(1);
+    inline static const std::size_t index = m_nextIndex++;
 };
 
 

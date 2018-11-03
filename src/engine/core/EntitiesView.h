@@ -79,6 +79,10 @@ namespace en {
             return iterator(m_pools, m_smallestPoolPtr->cend()  , m_smallestPoolPtr->cend());
         }
 
+        inline std::size_t count() const {
+            return (std::size_t)std::distance(begin(), end());
+        }
+
     private:
 
         std::tuple<ComponentPool<TComponent>*...> m_pools;

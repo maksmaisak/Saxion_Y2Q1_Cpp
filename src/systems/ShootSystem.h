@@ -9,7 +9,7 @@
 
 class ShootSystem : public en::System {
 
-    using System::System;
+
 
 public:
     void update(float dt) override;

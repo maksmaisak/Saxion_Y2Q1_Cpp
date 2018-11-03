@@ -24,19 +24,19 @@ void ShootSystem::update(float dt) {
 
     sf::Time now = GameTime::now();
 
-    for (Entity e : m_registry.with<Player, en::Transformable>()) {
+    for (Entity e : m_registry->with<Player, en::Transformable>()) {
 
-        auto& player = m_registry.get<Player>(e);
+        auto& player = m_registry->get<Player>(e);
         if (player.timeWhenCanShootAgain > now) continue;
 
         player.timeWhenCanShootAgain = now + player.shootInterval;
 
-        auto& tf = m_registry.get<en::Transformable>(e);
+        auto& tf = m_registry->get<en::Transformable>(e);
         const sf::Transform& playerTransform = tf.getGlobalTransform();
 
         sf::Vector2f forward  = en::getForward(playerTransform);
         sf::Vector2f position = playerTransform.transformPoint(0, 0) + forward * 50.f;
 
-        game::makeBullet(m_engine, position, forward * 4000.f);
+        game::makeBullet(*m_engine, position, forward * 4000.f);
     }
 }

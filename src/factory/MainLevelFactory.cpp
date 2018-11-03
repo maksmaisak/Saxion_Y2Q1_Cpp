@@ -14,7 +14,7 @@ namespace game {
         game::makePlayer(engine);
 
         for (int i = 0; i < NumAsteroids; ++i) {
-            game::makeAsteroid(engine, (Asteroid::Size)lround(en::random(0.f, 2.f)));
+            game::makeAsteroid(engine);
         }
     }
 }

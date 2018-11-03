@@ -40,11 +40,11 @@ void PlayerControlsSystem::update(float dt) {
 
     bool enginesOn = accelerateButtonPressed();
 
-    for (Entity e : m_registry.with<Player, en::Transformable, en::Rigidbody>()) {
+    for (Entity e : m_registry->with<Player, en::Transformable, en::Rigidbody>()) {
 
-        auto& player = m_registry.get<Player>(e);
-        auto& tf = m_registry.get<en::Transformable>(e);
-        auto& rb = m_registry.get<en::Rigidbody>(e);
+        auto& player = m_registry->get<Player>(e);
+        auto& tf = m_registry->get<en::Transformable>(e);
+        auto& rb = m_registry->get<en::Rigidbody>(e);
 
         rotate(tf, player.rotationSpeed, dt);
 

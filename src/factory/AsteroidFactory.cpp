@@ -33,11 +33,21 @@ std::shared_ptr<sf::Shape> makeAsteroidShape(const Asteroid::Config& config) {
 
 namespace game {
 
+    en::Entity makeAsteroid(en::Engine& engine) {
+        return makeAsteroid(engine, (Asteroid::Size)lround(en::random(0.f, 2.f)));
+    }
+
     en::Entity makeAsteroid(en::Engine& engine, Asteroid::Size size) {
 
         sf::Vector2f position = engine.getWindow().getView().getSize();
-        position.x *= en::random();
-        position.y *= en::random();
+
+        if (en::random() < 0.5f) {
+            position.x = 0.f;
+            position.y *= en::random();
+        } else {
+            position.x *= en::random();
+            position.y = 0.f;
+        }
 
         sf::Vector2f velocity = en::randomInCircle(400.f);
 

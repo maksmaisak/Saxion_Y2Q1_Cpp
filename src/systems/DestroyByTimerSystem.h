@@ -13,7 +13,7 @@
 /// Destroys entities with a DestroyTimer when the time runs out
 class DestroyByTimerSystem : public en::System {
 
-    using System::System;
+
 
 public:
     void update(float dt) override;

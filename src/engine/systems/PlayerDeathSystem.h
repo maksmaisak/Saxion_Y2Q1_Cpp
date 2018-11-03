@@ -11,7 +11,7 @@
 
 class PlayerDeathSystem : public en::System, en::Receiver<en::Collision> {
 
-    using System::System;
+
 
 public:
     void update(float dt) override;

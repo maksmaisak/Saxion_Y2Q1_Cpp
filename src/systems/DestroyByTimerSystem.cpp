@@ -10,12 +10,12 @@ void DestroyByTimerSystem::update(float dt) {
 
     sf::Time now = GameTime::now();
 
-    for (auto e : m_registry.with<DestroyTimer>()) {
-        if (m_registry.get<DestroyTimer>(e).timeToDestroy <= now) {
+    for (auto e : m_registry->with<DestroyTimer>()) {
+        if (m_registry->get<DestroyTimer>(e).timeToDestroy <= now) {
             m_entitiesToDestroy.push_back(e);
         }
     }
 
-    for (auto e : m_entitiesToDestroy) m_registry.destroy(e);
+    for (auto e : m_entitiesToDestroy) m_registry->destroy(e);
     m_entitiesToDestroy.clear();
 }

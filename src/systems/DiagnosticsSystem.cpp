@@ -6,7 +6,7 @@
 #include "GameTime.h"
 #include "Engine.h"
 
-DiagnosticsSystem::DiagnosticsSystem(en::Engine& engine) : System(engine) {
+void DiagnosticsSystem::start() {
 
     m_fontPtr = std::make_unique<sf::Font>();
     m_fontPtr->loadFromFile("assets/Menlo.ttc");
@@ -21,5 +21,5 @@ void DiagnosticsSystem::draw() {
 
     m_fpsCounterPtr->setString("fps: " + std::to_string(1000000.0 / frameTime.asMicroseconds()));
 
-    m_engine.getWindow().draw(*m_fpsCounterPtr);
+    m_engine->getWindow().draw(*m_fpsCounterPtr);
 }

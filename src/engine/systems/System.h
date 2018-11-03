@@ -9,25 +9,23 @@
 
 namespace en {
 
-    class Engine;
-
     class System {
 
     public:
-        explicit System(Engine& engine);
-
         virtual ~System() = default;
-
+        virtual void start() {}
         virtual void update(float dt) {}
-
         virtual void draw() {}
 
     protected:
-        Engine& m_engine;
-
-        class EntityRegistry& m_registry;
+        class Engine* m_engine = {};
+        class EntityRegistry* m_registry = {};
 
         sf::RenderWindow& getWindow();
+
+    private:
+        void init(Engine& engine);
+        friend class Engine;
     };
 }
 

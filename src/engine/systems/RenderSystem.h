@@ -10,7 +10,7 @@
 
 class RenderSystem : public en::System {
 
-    using System::System;
+
 
 public:
     void draw() override;

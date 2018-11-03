@@ -11,7 +11,7 @@
 
 class PlayerControlsSystem : public System {
 
-    using System::System;
+
 public:
     void update(float dt) override;
 };

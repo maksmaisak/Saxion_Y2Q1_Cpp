@@ -10,11 +10,11 @@
 
 namespace en {
 
-    const float PI = 3.14159265359f;
-    const float PI2 = PI * 2.0f;
-    const float RAD2DEG = 360.0f / PI2;
-    const float DEG2RAD = PI2 / 360.0f;
-    const float EPSILON = 0.001f;
+    inline constexpr float PI = 3.14159265359f;
+    inline constexpr float PI2 = PI * 2.0f;
+    inline constexpr float RAD2DEG = 360.0f / PI2;
+    inline constexpr float DEG2RAD = PI2 / 360.0f;
+    inline constexpr float EPSILON = 0.001f;
 
     float angleDegrees(sf::Vector2f vec);
     sf::Vector2f& normalize(sf::Vector2f& vec);
@@ -27,7 +27,9 @@ namespace en {
     bool isZero(const sf::Vector2f& vec);
     sf::Vector2f polar2Cartesian(float angle, float radius);
 
-    inline float dot(const sf::Vector2f& a, const sf::Vector2f& b) {return a.x * b.x + a.y * b.y;}
+    inline float dot(const sf::Vector2f& a, const sf::Vector2f& b) {
+        return a.x * b.x + a.y * b.y;
+    }
 
     float random(float min = 0.f, float max = 1.f);
     sf::Vector2f randomInCircle(float radius = 1.f);

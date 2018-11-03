@@ -22,7 +22,7 @@ namespace en {
     class Behavior;
     class Actor;
 
-    class Engine final {
+    class Engine {
 
     public:
         Engine(unsigned int width, unsigned int height, bool enableVsync = false);
@@ -37,10 +37,6 @@ namespace en {
 
         Actor makeActor();
 
-        template<typename TSystem, typename... Args>
-        TSystem& addSystem(Engine& engine, Args&& ... args);
-
-        /// A convenience function which lets you omit passing Engine& to the constructor
         template<typename TSystem, typename... Args>
         TSystem& addSystem(Args&& ... args);
 
@@ -58,6 +54,7 @@ namespace en {
         sf::RenderWindow m_window;
 
         std::vector<std::unique_ptr<System>> m_systems;
+
         std::set<std::type_index> m_behaviorSystems;
 
         void draw();
@@ -66,20 +63,15 @@ namespace en {
     };
 
     template<typename TSystem, typename... Args>
-    TSystem& Engine::addSystem(Engine& engine, Args&& ... args) {
-
-        assert(&engine == this);
-
-        std::unique_ptr<TSystem> ptr = std::make_unique<TSystem>(engine, std::forward<Args>(args)...);
-        TSystem& system = *ptr;
-        m_systems.push_back(std::move(ptr));
-        return system;
-    }
-
-    template<typename TSystem, typename... Args>
     TSystem& Engine::addSystem(Args&& ... args) {
 
-        return addSystem<TSystem>(*this, std::forward(args)...);
+        auto ptr = std::make_unique<TSystem>(std::forward<Args>(args)...);
+        TSystem& system = *ptr;
+        m_systems.push_back(std::move(ptr));
+
+        system.init(*this);
+        system.start();
+        return system;
     }
 
     template<typename TBehavior>

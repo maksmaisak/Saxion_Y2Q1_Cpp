@@ -22,7 +22,7 @@ struct Asteroid {
 
     Size size = Size::Large;
 
-    static const Config& getConfig(Asteroid::Size size) {
+    static const Config& getConfig(Size size) {
 
         static const Config configsBySize[] {
             {20.f, 4.f }, // Small

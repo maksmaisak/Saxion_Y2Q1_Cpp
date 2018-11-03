@@ -13,7 +13,7 @@
 namespace en {
 
     const sf::Time TimestepFixed = sf::seconds(0.01f);
-    const unsigned int FramerateCap = 240;
+    const unsigned int FramerateCap = 240 ;
 
     Engine* Engine::m_instance = nullptr;
 
@@ -63,7 +63,7 @@ namespace en {
                 draw();
                 drawClock.restart();
             } else {
-                do sf::sleep(sf::microseconds(10));
+                do sf::sleep(sf::microseconds(1));
                 while (drawClock.getElapsedTime() < timestepDraw && fixedUpdateLag + fixedUpdateClock.getElapsedTime() < TimestepFixed);
             }
         }

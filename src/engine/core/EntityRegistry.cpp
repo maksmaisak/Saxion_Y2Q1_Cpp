@@ -24,11 +24,10 @@ namespace en {
         m_entities.remove(entity);
 
         for (const auto& poolPtr : m_componentPools) {
-            poolPtr->remove(entity);
-        }
-
-        for (const auto& poolPtr : m_componentPools) {
-            assert(!poolPtr->contains(entity));
+            if (poolPtr) {
+                poolPtr->remove(entity);
+                assert(!poolPtr->contains(entity));
+            }
         }
     }
 
@@ -38,7 +37,9 @@ namespace en {
         m_entities.clear();
 
         for (const auto& poolPtr : m_componentPools) {
-            poolPtr->clear();
+            if (poolPtr) {
+                poolPtr->clear();
+            }
         }
     }
 }

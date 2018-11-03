@@ -4,6 +4,7 @@
 #include <optional>
 #include <vector>
 #include <utils/CustomTypeIndex.h>
+#include <GenerateAsteroidsSystem.h>
 #include "Messaging.h"
 #include "Engine.h"
 #include "Actor.h"
@@ -21,6 +22,8 @@
 #include "PlayerDeathSystem.h"
 #include "ShootSystem.h"
 #include "DiagnosticsSystem.h"
+#include "GenerateAsteroidsSystem.h"
+#include "ScoreSystem.h"
 
 #include "CustomTypeIndex.h"
 
@@ -34,21 +37,6 @@ const uint Width  = 1600;
 const uint Height = 1200;
 const bool EnableVSync = true;
 
-struct Test : Receiver<en::Collision, int, float> {
-
-    void receive(const int& num) override {
-        std::cout << "received " << num << std::endl;
-    }
-
-    void receive(const float& num) override {
-        std::cout << "received " << num << std::endl;
-    }
-
-    void receive(const en::Collision& info) override {
-        std::cout << "received Collision" << std::endl;
-    }
-};
-
 int main() {
 
     Engine engine(Width, Height, EnableVSync);
@@ -56,7 +44,6 @@ int main() {
     {
         engine.addSystem<RenderSystem>();
         engine.addSystem<PhysicsSystem>();
-
         engine.addSystem<DestroyByTimerSystem>();
 
         engine.addSystem<PlayerControlsSystem>();
@@ -64,6 +51,9 @@ int main() {
         engine.addSystem<WrapAroundScreenSystem>();
         engine.addSystem<BreakAsteroidSystem>();
         engine.addSystem<PlayerDeathSystem>();
+        engine.addSystem<GenerateAsteroidsSystem>();
+
+        engine.addSystem<ScoreSystem>();
         //engine.addSystem<FlickerSystem>();
 
         engine.addSystem<DiagnosticsSystem>();
