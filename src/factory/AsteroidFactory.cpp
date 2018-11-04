@@ -8,6 +8,7 @@
 #include "MyMath.h"
 #include "Asteroid.h"
 #include "DrawInfo.h"
+#include "WrapAroundScreen.h"
 
 const std::size_t NUM_VERTICES = 10;
 
@@ -60,24 +61,24 @@ namespace game {
         const sf::Vector2f& position,
         const sf::Vector2f& velocity
     ) {
-
         en::EntityRegistry& registry = engine.getRegistry();
-
         en::Entity e = registry.makeEntity();
 
-        registry.add<Asteroid>(e, size);
-
         const Asteroid::Config& config = Asteroid::getConfig(size);
-
         std::shared_ptr<sf::Shape> shape = makeAsteroidShape(config);
+
+        registry.add<Asteroid>(e, size);
         registry.add<en::DrawInfo>(e, shape);
         registry.add<Flicker>(e, shape);
 
-        auto& rb = registry.add<en::Rigidbody>(e);
-        rb.velocity = velocity;
-        rb.radius = config.averageRadius;
+        {
+            auto& rb = registry.add<en::Rigidbody>(e);
+            rb.velocity = velocity;
+            rb.radius = config.averageRadius;
+        }
 
         registry.add<en::Transformable>(e).setPosition(position);
+        registry.add<WrapAroundScreen>(e);
 
         return e;
     }

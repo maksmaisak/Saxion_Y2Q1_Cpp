@@ -10,6 +10,7 @@
 #include "Transformable.h"
 #include "Player.h"
 #include "Flicker.h"
+#include "WrapAroundScreen.h"
 
 std::shared_ptr<sf::Shape> makePlayerShape() {
 
@@ -79,6 +80,7 @@ namespace game {
         registry.add<en::DrawInfo>(e, shape);
         registry.add<Flicker>(e, shape);
         registry.add<Player>(e);
+        registry.add<WrapAroundScreen>(e);
 
         {
             auto& rb = registry.add<en::Rigidbody>(e);
