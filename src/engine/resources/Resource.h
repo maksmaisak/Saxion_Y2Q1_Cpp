@@ -9,7 +9,6 @@
 #include <type_traits>
 #include <string>
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include "HashedString.h"
 
 namespace en {
@@ -27,8 +26,6 @@ namespace en {
                 static_assert(!std::is_void_v<TLoader>, "Unspecified resource loader!");
 
                 if (m_resource) return m_resource;
-
-                std::cout << "(Re)loading" << std::endl;
                 return m_resource = TLoader::load(std::forward<Args>(args)...);
             }
 
