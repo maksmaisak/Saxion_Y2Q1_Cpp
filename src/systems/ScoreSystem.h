@@ -17,8 +17,6 @@ public:
     void draw() override;
 
 private:
-    std::uint64_t m_score = 0;
-
     std::unique_ptr<sf::Font> m_fontPtr;
     std::unique_ptr<sf::Text> m_scoreTextPtr;
 

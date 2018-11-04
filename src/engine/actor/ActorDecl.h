@@ -38,7 +38,7 @@ namespace en {
 
         /// Adds a behavior component with the first parameter (actor) being omitted.
         template<typename TBehavior, typename... Args>
-        inline std::enable_if_t<isBehavior<TBehavior>, TBehavior&>
+        std::enable_if_t<isBehavior<TBehavior>, TBehavior&>
         add(Args&&... args);
 
         template<typename TComponent>

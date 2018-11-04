@@ -5,6 +5,7 @@
 #ifndef SAXION_Y2Q1_CPP_PLAYERDEATHSYSTEM_H
 #define SAXION_Y2Q1_CPP_PLAYERDEATHSYSTEM_H
 
+#include "Engine.h"
 #include "System.h"
 #include "Messaging.h"
 #include "Collision.h"

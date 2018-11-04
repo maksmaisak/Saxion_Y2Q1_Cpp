@@ -129,11 +129,11 @@ namespace en {
     ComponentPoolBase::index_type ComponentPool<TComponent>::removeInternal(en::Entity entity) {
 
         const index_type index = ComponentPoolBase::removeInternal(entity);
-        Receiver<ComponentWillBeRemoved<TComponent>>::accept({entity, m_indexToComponent[index]});
-
         if (index == nullIndex) return nullIndex;
 
-        // Swap and pop to keep the storage contiguous.
+        Receiver<ComponentWillBeRemoved<TComponent>>::accept({entity, m_indexToComponent[index]});
+
+        // Move and pop to keep the storage contiguous.
         if constexpr (std::is_move_assignable_v<TComponent>) {
             m_indexToComponent[index] = std::move(m_indexToComponent.back());
         } else {

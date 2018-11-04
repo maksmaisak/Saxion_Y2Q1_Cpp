@@ -5,12 +5,14 @@
 #include "PlayerDeathSystem.h"
 #include <optional>
 #include <tuple>
-#include "Engine.h"
+#include <components/GameOverScreen.h>
+#include "Actor.h"
 #include "Asteroid.h"
 #include "Player.h"
 #include "Factory.h"
 #include "Restart.h"
 #include "Destroy.h"
+#include "GameOverScreen.h"
 
 void destroyPlayer(en::Engine& engine, Entity player) {
 
@@ -20,6 +22,11 @@ void destroyPlayer(en::Engine& engine, Entity player) {
     for (Entity child : registry.get<en::Transformable>(player).getChildren()) {
         engine.setParent(child, std::nullopt);
     }
+}
+
+void makeGameOverScreen(en::Engine& engine) {
+
+    engine.makeActor().add<GameOverScreen>();
 }
 
 std::optional<std::tuple<en::Entity, en::Entity>> getPlayerAsteroidCollision(const en::EntityRegistry& registry, const en::Collision& collision){
@@ -50,6 +57,7 @@ void PlayerDeathSystem::receive(const en::Collision& collision) {
     auto [player, asteroid] = *result;
 
     destroyPlayer(*m_engine, player);
+    makeGameOverScreen(*m_engine);
 
     m_engine->getScheduler().delay(sf::seconds(4.f), [this](){
         m_registry->destroyAll();

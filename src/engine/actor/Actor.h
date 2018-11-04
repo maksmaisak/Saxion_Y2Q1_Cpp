@@ -24,7 +24,10 @@ namespace en {
         assert(&actor == this);
 
         m_enginePtr->ensureBehaviorSystem<TBehavior>();
-        return m_registryPtr->add<TBehavior>(m_entity, actor, std::forward<Args>(args)...);
+        auto& behavior = m_registryPtr->add<TBehavior>(m_entity, actor, std::forward<Args>(args)...);
+        behavior.start();
+
+        return behavior;
     }
 
     template<typename TBehavior, typename... Args>

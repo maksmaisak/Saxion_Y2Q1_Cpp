@@ -30,7 +30,7 @@ public:
         m_maxNumParticles(maxNumParticles),
         m_particles(maxNumParticles) {}
 
-    void draw(sf::RenderTarget& renderTarget) override;
+    void draw() override;
     void update(float dt) override;
 
     const Settings& getSettings() const;

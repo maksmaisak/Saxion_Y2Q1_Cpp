@@ -11,13 +11,14 @@
 #include "EntityRegistry.h"
 #include "Actor.h"
 
-void ParticleSystem::draw(sf::RenderTarget& renderTarget) {
+void ParticleSystem::draw() {
 
     if (!m_pDrawable) return;
 
+    auto& target = m_engine->getWindow();
     for (std::size_t i = 0; i < m_numActiveParticles; ++i) {
 
-        renderTarget.draw(
+        target.draw(
             *m_pDrawable,
             sf::RenderStates(sf::BlendAlpha, m_particles.at(i).transform, nullptr, nullptr)
         );
@@ -82,7 +83,7 @@ ParticleSystem::ParticleIndex ParticleSystem::emitParticle() {
 
     Particle& particle = m_particles.at(m_numActiveParticles);
 
-    particle.transform = m_registryPtr->get<en::Transformable>(m_actor).getGlobalTransform();
+    particle.transform = m_registry->get<en::Transformable>(m_actor).getGlobalTransform();
     particle.transform.translate(en::randomInCircle(m_settings.emissionRadius));
     particle.timeToDestroy = GameTime::now() + m_settings.particleLifetime;
 

@@ -4,6 +4,8 @@
 
 #include "ScoreSystem.h"
 #include <string>
+#include <cstdint>
+#include "State.h"
 
 void setOriginNormalized(sf::Text& text, sf::Vector2f coords = {0.5f, 0.5f}) {
 
@@ -30,17 +32,17 @@ void ScoreSystem::start() {
 
 void ScoreSystem::draw() {
 
-    m_scoreTextPtr->setString("Score " + std::to_string(m_score));
+    m_scoreTextPtr->setString("Score " + std::to_string(en::State::value<std::uint64_t, "score"_hs>()));
     setOriginNormalized(*m_scoreTextPtr, {1, 0});
     m_engine->getWindow().draw(*m_scoreTextPtr);
 }
 
 void ScoreSystem::receive(const en::ComponentWillBeRemoved<Asteroid>& info) {
 
-    m_score += 100;
+    en::State::value<std::uint64_t, "score"_hs>() += 100;
 }
 
 void ScoreSystem::receive(const Restart& info) {
 
-    m_score = 0;
+    en::State::value<std::uint64_t, "score"_hs>() = 0;
 }

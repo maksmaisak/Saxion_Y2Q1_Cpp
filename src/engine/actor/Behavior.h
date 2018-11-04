@@ -22,13 +22,14 @@ namespace en {
 
         inline Actor& actor() { return m_actor; }
 
+        virtual void start() {};
         virtual void update(float dt) {};
-        virtual void draw(sf::RenderTarget& renderTarget) {};
+        virtual void draw() {};
 
     protected:
         Actor m_actor;
-        Engine* m_enginePtr;
-        EntityRegistry* m_registryPtr;
+        Engine* m_engine;
+        EntityRegistry* m_registry;
     };
 }
 

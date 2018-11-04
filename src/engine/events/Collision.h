@@ -6,6 +6,8 @@
 #define SAXION_Y2Q1_CPP_COLLISION_H
 
 #include "Entity.h"
+#include <optional>
+#include <tuple>
 #include "PhysicsUtils.h"
 
 namespace en {
@@ -15,6 +17,11 @@ namespace en {
         en::Entity a = nullEntity;
         en::Entity b = nullEntity;
     };
+
+    template<typename TComponentA, typename TComponentB>
+    std::tuple<bool, Entity, Entity> getCollision(const en::Collision& collision) {
+        throw "not implemented";
+    }
 }
 
 #endif //SAXION_Y2Q1_CPP_COLLISION_H

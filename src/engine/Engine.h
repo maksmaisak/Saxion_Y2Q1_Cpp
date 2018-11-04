@@ -52,7 +52,6 @@ namespace en {
         sf::RenderWindow m_window;
 
         std::vector<std::unique_ptr<System>> m_systems;
-
         std::set<std::type_index> m_behaviorSystemPresense;
 
         void update(float dt);
