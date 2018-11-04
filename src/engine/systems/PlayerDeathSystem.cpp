@@ -50,12 +50,6 @@ void PlayerDeathSystem::receive(const en::Collision& collision) {
     auto [player, asteroid] = *result;
 
     destroyPlayer(*m_engine, player);
-    m_shouldRestart = true;
-}
-
-void PlayerDeathSystem::update(float dt) {
-
-    if (!m_shouldRestart) return;
 
     m_engine->getScheduler().delay(sf::seconds(4.f), [this](){
         m_registry->destroyAll();
@@ -63,11 +57,5 @@ void PlayerDeathSystem::update(float dt) {
         game::makeMainLevel(*m_engine);
         m_isAtGameOverScreen = false;
     });
-
-//    m_registry->destroyAll();
-//    en::Receiver<Restart>::accept({});
-//    game::makeMainLevel(*m_engine);
-
-    m_shouldRestart = false;
     m_isAtGameOverScreen = true;
 }
