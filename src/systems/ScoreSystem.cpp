@@ -6,6 +6,8 @@
 #include <string>
 #include <cstdint>
 #include "State.h"
+#include "Resource.h"
+#include "Resources.h"
 
 void setOriginNormalized(sf::Text& text, sf::Vector2f coords = {0.5f, 0.5f}) {
 
@@ -13,28 +15,26 @@ void setOriginNormalized(sf::Text& text, sf::Vector2f coords = {0.5f, 0.5f}) {
     text.setOrigin({bounds.width * coords.x, bounds.height * coords.y});
 }
 
+const unsigned int CharacterSize = 72;
+
 void ScoreSystem::start() {
 
-    m_fontPtr = std::make_unique<sf::Font>();
-    bool didLoadFont = m_fontPtr->loadFromFile("assets/hyperspace/Hyperspace.otf");
-    assert(didLoadFont);
+    sf::Font& font = *fonts::Main::get(fonts::paths::Main);
 
-    m_scoreTextPtr = std::make_unique<sf::Text>();
-    m_scoreTextPtr->setFont(*m_fontPtr);
-
-    m_scoreTextPtr->setCharacterSize(72);
+    m_scoreText.setFont(font);
+    m_scoreText.setCharacterSize(CharacterSize);
 
     const sf::View& view = m_engine->getWindow().getView();
     const sf::Vector2f size = view.getSize();
     const sf::Vector2f position = view.getCenter() + sf::Vector2f(size.x * 0.5f, -size.y * 0.5f);
-    m_scoreTextPtr->setPosition(position);
+    m_scoreText.setPosition(position);
 }
 
 void ScoreSystem::draw() {
 
-    m_scoreTextPtr->setString("Score " + std::to_string(en::State::value<std::uint64_t, "score"_hs>()));
-    setOriginNormalized(*m_scoreTextPtr, {1, 0});
-    m_engine->getWindow().draw(*m_scoreTextPtr);
+    m_scoreText.setString("Score " + std::to_string(en::State::value<std::uint64_t, "score"_hs>()));
+    setOriginNormalized(m_scoreText, {1, 0});
+    m_engine->getWindow().draw(m_scoreText);
 }
 
 void ScoreSystem::receive(const en::ComponentWillBeRemoved<Asteroid>& info) {

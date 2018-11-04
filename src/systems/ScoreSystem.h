@@ -17,8 +17,7 @@ public:
     void draw() override;
 
 private:
-    std::unique_ptr<sf::Font> m_fontPtr;
-    std::unique_ptr<sf::Text> m_scoreTextPtr;
+    sf::Text m_scoreText;
 
     void receive(const en::ComponentWillBeRemoved<Asteroid>& info) override;
     void receive(const Restart& info) override;

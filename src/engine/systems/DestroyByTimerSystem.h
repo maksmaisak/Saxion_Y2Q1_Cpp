@@ -10,17 +10,17 @@
 #include "Entity.h"
 #include "DestroyTimer.h"
 
-/// Destroys entities with a DestroyTimer when the time runs out
-class DestroyByTimerSystem : public en::System {
+namespace en {
 
+    /// Destroys entities with a DestroyTimer when the time runs out
+    class DestroyByTimerSystem : public System {
 
+    public:
+        void update(float dt) override;
 
-public:
-    void update(float dt) override;
-
-private:
-    std::vector<en::Entity> m_entitiesToDestroy;
-};
-
+    private:
+        std::vector<en::Entity> m_entitiesToDestroy;
+    };
+}
 
 #endif //SAXION_Y2Q1_CPP_DESTROYBYTIMERSYSTEM_H

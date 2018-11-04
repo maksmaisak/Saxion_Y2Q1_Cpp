@@ -6,14 +6,14 @@
 #include <string>
 #include <cstdint>
 #include "State.h"
+#include "Resource.h"
+#include "Resources.h"
 
 constexpr unsigned int CharacterSize = 100;
 
 void GameOverScreen::start() {
 
-    m_fontPtr = std::make_unique<sf::Font>();
-    bool didLoadFont = m_fontPtr->loadFromFile("assets/hyperspace/Hyperspace.otf");
-    assert(didLoadFont);
+    m_fontPtr = fonts::Main::get(fonts::paths::Main);
 
     addLine("GAME OVER");
     addLine("SCORE " + std::to_string(en::State::value<std::uint64_t, "score"_hs>()));

@@ -6,6 +6,7 @@
 #define SAXION_Y2Q1_CPP_GAMEOVERSCREEN_H
 
 #include "Engine.h"
+#include <memory>
 #include <string>
 #include "Behavior.h"
 
@@ -19,7 +20,7 @@ public:
     void draw() override;
 
 private:
-    std::unique_ptr<sf::Font> m_fontPtr;
+    std::shared_ptr<sf::Font> m_fontPtr;
     std::vector<sf::Text> m_texts;
 
     sf::Text& addLine(sf::String textString);

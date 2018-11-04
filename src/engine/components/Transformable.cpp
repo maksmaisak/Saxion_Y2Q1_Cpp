@@ -13,7 +13,7 @@ using sf::Transform;
 
 namespace en {
 
-    Transformable::Transformable(EntityRegistry* registry) :
+    Transformable::Transformable() :
         m_origin(0, 0),
         m_position(0, 0),
         m_rotation(0),
@@ -26,9 +26,7 @@ namespace en {
         m_localInverseTransformNeedUpdate(true),
 
         m_globalTransform(),
-        m_globalTransformNeedUpdate(true),
-
-        m_registry(registry)
+        m_globalTransformNeedUpdate(true)
         {}
 
     void Transformable::setPosition(float x, float y) {

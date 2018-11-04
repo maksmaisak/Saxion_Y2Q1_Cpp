@@ -79,18 +79,6 @@ namespace en {
         return componentReference;
     }
 
-    /// TEMP m_registry is assigned here until it can be done in an event handler (TODO)
-    template<>
-    inline en::Transformable& EntityRegistry::add<en::Transformable>(Entity entity) {
-
-        ComponentPool<en::Transformable>& pool = getPool<en::Transformable>();
-
-        auto [index, transformable] = pool.insert(entity, this);
-        Receiver<ComponentAdded<en::Transformable>>::accept({entity, transformable});
-
-        return transformable;
-    }
-
     template<typename... TComponent>
     inline EntitiesView<TComponent...> EntityRegistry::with() {
 

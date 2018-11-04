@@ -8,12 +8,13 @@
 #include "System.h"
 #include "Engine.h"
 
-class PhysicsSystem : public en::System {
+namespace en {
 
+    class PhysicsSystem : public en::System {
 
-public:
-    void update(float dt) override;
-};
-
+    public:
+        void update(float dt) override;
+    };
+}
 
 #endif //SAXION_Y2Q1_CPP_PHYSICSSYSTEM_H

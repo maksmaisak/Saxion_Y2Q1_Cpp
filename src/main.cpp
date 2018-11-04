@@ -3,14 +3,7 @@
 #include <algorithm>
 #include <optional>
 #include <vector>
-#include <utils/CustomTypeIndex.h>
-#include <GenerateAsteroidsSystem.h>
-#include "Messaging.h"
 #include "Engine.h"
-#include "Actor.h"
-#include "Transformable.h"
-#include "Rigidbody.h"
-#include "DrawInfo.h"
 
 #include "RenderSystem.h"
 #include "PhysicsSystem.h"
@@ -28,10 +21,6 @@
 #include "GenerateAsteroidsSystem.h"
 #include "ScoreSystem.h"
 
-#include "CustomTypeIndex.h"
-
-#include "Collision.h"
-
 #include "Factory.h"
 
 using uint = unsigned int;
@@ -45,10 +34,9 @@ int main() {
     Engine engine(Width, Height, EnableVSync);
 
     {
-        engine.addSystem<RenderSystem>();
-        engine.addSystem<PhysicsSystem>();
-        engine.addSystem<DestroyByTimerSystem>();
-        engine.addSystem<TransformableHierarchySystem>();
+        engine.addSystem<en::RenderSystem>();
+        engine.addSystem<en::PhysicsSystem>();
+        engine.addSystem<en::TransformableHierarchySystem>();
 
         engine.addSystem<PlayerControlsSystem>();
         engine.addSystem<ShootSystem>();
@@ -56,12 +44,13 @@ int main() {
         engine.addSystem<BreakAsteroidSystem>();
         engine.addSystem<PlayerDeathSystem>();
         engine.addSystem<GenerateAsteroidsSystem>();
-
         engine.addSystem<ScoreSystem>();
         //engine.addSystem<FlickerSystem>();
 
         engine.addSystem<DiagnosticsSystem>();
-        engine.addSystem<DestroySystem>();
+
+        engine.addSystem<en::DestroySystem>();
+        engine.addSystem<en::DestroyByTimerSystem>();
     }
 
     game::makeMainLevel(engine);

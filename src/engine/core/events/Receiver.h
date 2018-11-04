@@ -18,7 +18,6 @@ namespace en {
     public:
 
         Receiver() { m_receivers.insert(this); }
-
         ~Receiver() { m_receivers.erase(this); }
 
         static void accept(const TMessage& info) {

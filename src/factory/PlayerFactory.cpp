@@ -43,7 +43,7 @@ Entity addExhaust(Engine& engine, Entity player) {
     EntityRegistry& registry = engine.getRegistry();
 
     Actor exhaust = engine.makeActor();
-    auto& tf = registry.add<en::Transformable>(exhaust, &registry);
+    auto& tf = registry.add<en::Transformable>(exhaust);
     tf.move(0, 30.f);
     engine.setParent(exhaust, player);
 

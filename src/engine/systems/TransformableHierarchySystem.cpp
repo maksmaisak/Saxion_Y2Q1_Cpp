@@ -6,8 +6,11 @@
 
 namespace en {
 
-    void TransformableHierarchySystem::receive(const ComponentWillBeRemoved<Transformable>& info) {
+    void TransformableHierarchySystem::receive(const ComponentAdded<Transformable>& info) {
+        info.component.m_registry = m_registry;
+    }
 
+    void TransformableHierarchySystem::receive(const ComponentWillBeRemoved<Transformable>& info) {
         for (Entity child : info.component.m_children) {
             m_registry->destroy(child);
         }

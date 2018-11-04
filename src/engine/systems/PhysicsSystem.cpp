@@ -10,47 +10,50 @@
 #include "Messaging.h"
 #include "Collision.h"
 
-void PhysicsSystem::update(float dt) {
+namespace en {
 
-    auto view = m_registry->with<en::Rigidbody, en::Transformable>();
-    for (en::Entity entity : view) {
+    void PhysicsSystem::update(float dt) {
 
-        auto& rb = m_registry->get<en::Rigidbody>(entity);
-        auto& tf = m_registry->get<en::Transformable>(entity);
+        auto view = m_registry->with<en::Rigidbody, en::Transformable>();
+        for (en::Entity entity : view) {
 
-        sf::Vector2f movement = rb.velocity * dt;
+            auto& rb = m_registry->get<en::Rigidbody>(entity);
+            auto& tf = m_registry->get<en::Transformable>(entity);
 
-        bool didCollide = false;
-        for (en::Entity other : view) {
+            sf::Vector2f movement = rb.velocity * dt;
 
-            if (entity == other) continue;
+            bool didCollide = false;
+            for (en::Entity other : view) {
 
-            auto& otherRb = m_registry->get<en::Rigidbody>(other);
-            auto& otherTf = m_registry->get<en::Transformable>(other);
+                if (entity == other) continue;
 
-            std::optional<en::Hit> hit = en::circleVsCircleContinuous(
-                tf.getPosition(), rb.radius, movement,
-                otherTf.getPosition(), otherRb.radius
-            );
+                auto& otherRb = m_registry->get<en::Rigidbody>(other);
+                auto& otherTf = m_registry->get<en::Transformable>(other);
 
-            if (hit.has_value()) {
-
-                en::resolve(
-                    rb.velocity, rb.invMass,
-                    otherRb.velocity, otherRb.invMass,
-                    hit->normal, std::min(rb.bounciness, otherRb.bounciness)
+                std::optional<en::Hit> hit = en::circleVsCircleContinuous(
+                    tf.getPosition(), rb.radius, movement,
+                    otherTf.getPosition(), otherRb.radius
                 );
-                tf.move(movement * hit->timeOfImpact);
-                didCollide = true;
 
-                en::Receiver<en::Collision>::accept({*hit, entity, other});
+                if (hit.has_value()) {
 
-                break;
+                    en::resolve(
+                        rb.velocity, rb.invMass,
+                        otherRb.velocity, otherRb.invMass,
+                        hit->normal, std::min(rb.bounciness, otherRb.bounciness)
+                    );
+                    tf.move(movement * hit->timeOfImpact);
+                    didCollide = true;
+
+                    en::Receiver<en::Collision>::accept({*hit, entity, other});
+
+                    break;
+                }
             }
-        }
 
-        if (!didCollide) {
-            tf.move(movement);
+            if (!didCollide) {
+                tf.move(movement);
+            }
         }
     }
 }

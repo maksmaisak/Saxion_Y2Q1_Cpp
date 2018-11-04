@@ -8,13 +8,11 @@
 #include "System.h"
 #include "Engine.h"
 
-class RenderSystem : public en::System {
-
-
-
-public:
-    void draw() override;
-};
-
+namespace en {
+    class RenderSystem : public System {
+    public:
+        void draw() override;
+    };
+}
 
 #endif //SAXION_Y2Q1_CPP_RENDERSYSTEM_H

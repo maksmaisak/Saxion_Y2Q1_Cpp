@@ -5,14 +5,13 @@
 #include "DiagnosticsSystem.h"
 #include "GameTime.h"
 #include "Engine.h"
+#include "Resource.h"
+#include "Resources.h"
 
 void DiagnosticsSystem::start() {
 
-    m_fontPtr = std::make_unique<sf::Font>();
-    m_fontPtr->loadFromFile("assets/Menlo.ttc");
-
     m_fpsCounterPtr = std::make_unique<sf::Text>();
-    m_fpsCounterPtr->setFont(*m_fontPtr);
+    m_fpsCounterPtr->setFont(*fonts::Diagnostics::get(fonts::paths::Diagnostics));
 }
 
 void DiagnosticsSystem::draw() {

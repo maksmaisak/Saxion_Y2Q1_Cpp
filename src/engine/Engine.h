@@ -43,6 +43,7 @@ namespace en {
         template<typename TBehavior>
         bool ensureBehaviorSystem();
 
+        // TODO Move this to en::Transformable
         void setParent(Entity child, std::optional<Entity> newParent);
 
     private:
@@ -52,7 +53,7 @@ namespace en {
         sf::RenderWindow m_window;
 
         std::vector<std::unique_ptr<System>> m_systems;
-        std::set<std::type_index> m_behaviorSystemPresense;
+        std::set<std::type_index> m_behaviorSystemPresence;
 
         void update(float dt);
         void draw();
@@ -76,10 +77,10 @@ namespace en {
         static_assert(std::is_base_of_v<Behavior, TBehavior>);
 
         auto typeIndex = std::type_index(typeid(TBehavior));
-        if (m_behaviorSystemPresense.find(typeIndex) == m_behaviorSystemPresense.end()) {
+        if (m_behaviorSystemPresence.find(typeIndex) == m_behaviorSystemPresence.end()) {
 
             addSystem<BehaviorSystem<TBehavior>>();
-            m_behaviorSystemPresense.insert(typeIndex);
+            m_behaviorSystemPresence.insert(typeIndex);
             return true;
         }
 

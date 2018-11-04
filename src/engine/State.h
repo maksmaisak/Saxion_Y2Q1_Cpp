@@ -13,11 +13,11 @@ namespace en {
     class State {
 
     public:
-        template<typename T, HashedString::hash_type id>
-        inline static T& value() { return m_value<T, id>; }
+        template<typename T, HashedString::hash_type Id>
+        inline static T& value() { return m_value<T, Id>; }
 
     private:
-        template<typename T, HashedString::hash_type id>
+        template<typename T, HashedString::hash_type Id>
         inline static T m_value = {};
     };
 }

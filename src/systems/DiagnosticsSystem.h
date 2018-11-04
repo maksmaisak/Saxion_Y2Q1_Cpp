@@ -16,7 +16,6 @@ public:
     void draw() override;
 
 private:
-    std::unique_ptr<sf::Font> m_fontPtr;
     std::unique_ptr<sf::Text> m_fpsCounterPtr;
     sf::Clock m_timer;
 };

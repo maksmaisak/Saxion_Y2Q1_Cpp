@@ -23,8 +23,7 @@ namespace en {
 
     public:
 
-        explicit Transformable(EntityRegistry* registry);
-        Transformable() : Transformable(nullptr) {}
+        Transformable();
 
         void setPosition(float x, float y);
         void setPosition(const sf::Vector2f& position);

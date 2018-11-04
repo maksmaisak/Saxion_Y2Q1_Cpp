@@ -34,7 +34,7 @@ namespace game {
 
         registry.add<en::DrawInfo>(e, bulletShapePtr);
         registry.add<Bullet>(e);
-        registry.add<DestroyTimer>(e, GameTime::now() + sf::seconds(2.f));
+        registry.add<en::DestroyTimer>(e, GameTime::now() + sf::seconds(2.f));
 
         return e;
     }
