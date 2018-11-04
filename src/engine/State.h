@@ -9,6 +9,7 @@
 
 namespace en {
 
+    /// Pretty much global state. Intended for configuration only.
     class State {
 
     public:

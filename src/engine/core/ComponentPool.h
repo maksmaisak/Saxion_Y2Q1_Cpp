@@ -15,7 +15,7 @@ namespace en {
 
     class ComponentPoolBase {
 
-        static_assert(std::is_unsigned_v<en::Entity>, "A sparse set can't store signed integers.");
+        static_assert(std::is_unsigned_v<en::Entity>, "Entity must be and unsigned integer type.");
 
     public:
         using const_iterator = std::vector<en::Entity>::const_iterator;

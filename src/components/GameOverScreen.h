@@ -6,6 +6,7 @@
 #define SAXION_Y2Q1_CPP_GAMEOVERSCREEN_H
 
 #include "Engine.h"
+#include <string>
 #include "Behavior.h"
 
 class GameOverScreen : public en::Behavior {
@@ -19,7 +20,9 @@ public:
 
 private:
     std::unique_ptr<sf::Font> m_fontPtr;
-    std::unique_ptr<sf::Text> m_text;
+    std::vector<sf::Text> m_texts;
+
+    sf::Text& addLine(sf::String textString);
 };
 
 #endif //SAXION_Y2Q1_CPP_GAMEOVERSCREEN_H

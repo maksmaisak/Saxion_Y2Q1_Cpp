@@ -14,6 +14,7 @@ namespace en {
 
     /// Keeps the hierarchy of en::Transformable|s in order.
     class TransformableHierarchySystem : public System, Receiver<ComponentWillBeRemoved<Transformable>> {
+
         void receive(const ComponentWillBeRemoved<Transformable>& info) override;
     };
 }
