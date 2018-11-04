@@ -7,9 +7,12 @@
 
 #include <SFML/System.hpp>
 
-struct DestroyTimer {
+namespace en {
 
-    sf::Time timeToDestroy;
-};
+    struct DestroyTimer {
+
+        sf::Time timeToDestroy;
+    };
+}
 
 #endif //SAXION_Y2Q1_CPP_DESTROYONTIME_H
