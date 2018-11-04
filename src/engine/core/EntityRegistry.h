@@ -20,6 +20,10 @@
 
 namespace en {
 
+    /// Manages entities and components
+    /// Create, destroy entities.
+    /// Add, modify and remove components.
+    /// Iterate through entities with a given component set.
     class EntityRegistry {
 
     public:
@@ -103,7 +107,7 @@ namespace en {
 
             assert(!mustBePresentAlready);
             m_componentPools[index] = std::make_unique<ComponentPool<TComponent>>();
-            std::clog << "Created a component pool (index " << index << ") for " << typeid(TComponent).name() << std::endl;
+            //std::clog << "Created a component pool (index " << index << ") for " << typeid(TComponent).name() << std::endl;
         }
 
         return *static_cast<ComponentPool<TComponent>*>(m_componentPools[index].get());
