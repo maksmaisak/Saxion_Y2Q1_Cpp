@@ -15,24 +15,12 @@ namespace en {
     const sf::Time TimestepFixed = sf::seconds(0.01f);
     const unsigned int FramerateCap = 240 ;
 
-    Engine* Engine::m_instance = nullptr;
-
     Engine::Engine(unsigned int width, unsigned int height, bool enableVSync) {
-
-        assert(!m_instance);
-
-        m_instance = this;
 
         sf::ContextSettings contextSettings;
         contextSettings.antialiasingLevel = 8;
         m_window.create(sf::VideoMode(width, height), "Example", sf::Style::Default, contextSettings);
         m_window.setVerticalSyncEnabled(enableVSync);
-    }
-
-    Engine& Engine::getInstance() {
-
-        assert(m_instance);
-        return *m_instance;
     }
 
     void Engine::run() {
@@ -72,6 +60,7 @@ namespace en {
     void Engine::update(float dt) {
 
         for (auto& pSystem : m_systems) pSystem->update(dt);
+        m_scheduler.update(dt);
     }
 
     void Engine::draw() {
@@ -87,11 +76,12 @@ namespace en {
 
         auto& childTransformable = m_registry.get<en::Transformable>(child);
 
-        if (childTransformable.m_parent.has_value()) {
+        std::optional<en::Entity> oldParent = childTransformable.m_parent;
 
-            en::Entity oldParent = *childTransformable.m_parent;
-            if (oldParent == newParent) return;
-            m_registry.get<en::Transformable>(oldParent).removeChild(child);
+        if (oldParent.has_value()) {
+
+            if (*oldParent == newParent) return;
+            m_registry.get<en::Transformable>(*oldParent).removeChild(child);
         }
 
         if (newParent.has_value()) {

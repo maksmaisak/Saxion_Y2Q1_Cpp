@@ -6,6 +6,7 @@
 #include "PlayerControlsSystem.h"
 #include "Entity.h"
 #include "Player.h"
+#include "Destroy.h"
 #include "Engine.h"
 #include "MyMath.h"
 #include "Input.h"
@@ -14,7 +15,6 @@ inline bool accelerateButtonPressed() {
 
     return sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
 }
-
 
 inline void rotate(en::Transformable& tf, float rotationSpeed, float dt) {
 
@@ -54,7 +54,7 @@ void PlayerControlsSystem::update(float dt) {
         en::truncate(rb.velocity, player.maxSpeed);
 
         if (player.exhaustParticleSystem) {
-            player.exhaustParticleSystem->setIsEmissionActive(enginesOn);
+            player.exhaustParticleSystem->setIsEmissionActive(enginesOn && !m_registry->tryGet<Destroy>(e));
         }
     }
 

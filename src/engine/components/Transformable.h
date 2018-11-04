@@ -19,6 +19,7 @@ namespace en {
     class Transformable final {
 
         friend class Engine;
+        friend class TransformableHierarchySystem;
 
     public:
 
@@ -49,6 +50,7 @@ namespace en {
         const sf::Transform& getGlobalTransform()  const;
 
         inline const std::optional<Entity>& getParent() const {return m_parent;}
+        inline const std::vector<Entity>& getChildren() const {return m_children;}
 
     private:
 
@@ -67,8 +69,8 @@ namespace en {
         mutable bool m_globalTransformNeedUpdate = false;
 
         EntityRegistry* m_registry;
-        std::optional<Entity> m_parent;
-        std::vector<Entity> m_children;
+        mutable std::optional<Entity> m_parent;
+        mutable std::vector<Entity> m_children;
 
         void addChild(Entity child);
         void removeChild(Entity child);

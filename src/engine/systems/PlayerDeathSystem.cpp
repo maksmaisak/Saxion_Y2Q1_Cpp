@@ -10,6 +10,17 @@
 #include "Player.h"
 #include "Factory.h"
 #include "Restart.h"
+#include "Destroy.h"
+
+void destroyPlayer(en::Engine& engine, Entity player) {
+
+    auto& registry = engine.getRegistry();
+    registry.add<en::Destroy>(player);
+    registry.get<Player>(player).exhaustParticleSystem->setIsEmissionActive(false);
+    for (Entity child : registry.get<en::Transformable>(player).getChildren()) {
+        engine.setParent(child, std::nullopt);
+    }
+}
 
 std::optional<std::tuple<en::Entity, en::Entity>> getPlayerAsteroidCollision(const en::EntityRegistry& registry, const en::Collision& collision){
 
@@ -27,16 +38,18 @@ std::optional<std::tuple<en::Entity, en::Entity>> getPlayerAsteroidCollision(con
         if (!asteroidPtr || !playerPtr) return std::nullopt;
     }
 
-    return std::make_tuple(asteroidEntity, playerEntity);
+    return std::make_tuple(playerEntity, asteroidEntity);
 }
 
 void PlayerDeathSystem::receive(const en::Collision& collision) {
+
+    if (m_isAtGameOverScreen) return;
 
     auto result = getPlayerAsteroidCollision(*m_registry, collision);
     if (!result.has_value()) return;
     auto [player, asteroid] = *result;
 
-    m_registry->destroy(player);
+    destroyPlayer(*m_engine, player);
     m_shouldRestart = true;
 }
 
@@ -44,9 +57,17 @@ void PlayerDeathSystem::update(float dt) {
 
     if (!m_shouldRestart) return;
 
-    m_registry->destroyAll();
-    en::Receiver<Restart>::accept({});
-    game::makeMainLevel(*m_engine);
+    m_engine->getScheduler().delay(sf::seconds(4.f), [this](){
+        m_registry->destroyAll();
+        en::Receiver<Restart>::accept({});
+        game::makeMainLevel(*m_engine);
+        m_isAtGameOverScreen = false;
+    });
+
+//    m_registry->destroyAll();
+//    en::Receiver<Restart>::accept({});
+//    game::makeMainLevel(*m_engine);
 
     m_shouldRestart = false;
+    m_isAtGameOverScreen = true;
 }

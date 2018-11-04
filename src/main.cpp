@@ -14,7 +14,10 @@
 
 #include "RenderSystem.h"
 #include "PhysicsSystem.h"
+#include "DestroySystem.h"
 #include "DestroyByTimerSystem.h"
+#include "TransformableHierarchySystem.h"
+
 #include "WrapAroundScreenSystem.h"
 #include "FlickerSystem.h"
 #include "PlayerControlsSystem.h"
@@ -45,6 +48,7 @@ int main() {
         engine.addSystem<RenderSystem>();
         engine.addSystem<PhysicsSystem>();
         engine.addSystem<DestroyByTimerSystem>();
+        engine.addSystem<TransformableHierarchySystem>();
 
         engine.addSystem<PlayerControlsSystem>();
         engine.addSystem<ShootSystem>();
@@ -57,6 +61,7 @@ int main() {
         //engine.addSystem<FlickerSystem>();
 
         engine.addSystem<DiagnosticsSystem>();
+        engine.addSystem<DestroySystem>();
     }
 
     game::makeMainLevel(engine);

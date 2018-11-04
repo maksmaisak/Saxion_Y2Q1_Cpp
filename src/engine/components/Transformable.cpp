@@ -134,8 +134,9 @@ namespace en {
                 m_globalTransform = getLocalTransform();
             } else {
                 assert(m_registry);
-                const sf::Transform& parentTransform = m_registry->get<Transformable>(*m_parent).getGlobalTransform();
-                m_globalTransform = parentTransform * getLocalTransform();
+                const auto* parentTransformPtr = m_registry->tryGet<Transformable>(*m_parent);
+                assert(parentTransformPtr);
+                m_globalTransform = parentTransformPtr->getGlobalTransform() * getLocalTransform();
             }
         }
 
@@ -164,7 +165,10 @@ namespace en {
 
         assert(m_registry);
         for (Entity e : m_children) {
-            m_registry->get<Transformable>(e).m_globalTransformNeedUpdate = true;
+            auto* childTransformPtr = m_registry->tryGet<Transformable>(e);
+            if (childTransformPtr) { // TODO remove invalid entities from child list.
+                childTransformPtr->m_globalTransformNeedUpdate = true;
+            }
         }
     }
 }

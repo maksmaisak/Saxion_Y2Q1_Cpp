@@ -11,7 +11,6 @@
 
 class PlayerControlsSystem : public System {
 
-
 public:
     void update(float dt) override;
 };

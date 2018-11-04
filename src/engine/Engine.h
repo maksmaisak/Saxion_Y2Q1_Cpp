@@ -16,6 +16,7 @@
 #include "Entity.h"
 #include "System.h"
 #include "BehaviorSystem.h"
+#include "Scheduler.h"
 
 namespace en {
 
@@ -30,10 +31,8 @@ namespace en {
         void run();
 
         inline EntityRegistry& getRegistry() { return m_registry; }
-
+        inline Scheduler& getScheduler() { return m_scheduler; }
         inline sf::RenderWindow& getWindow() { return m_window; }
-
-        static Engine& getInstance();
 
         Actor makeActor();
 
@@ -48,18 +47,16 @@ namespace en {
 
     private:
 
-        static Engine* m_instance;
-
         EntityRegistry m_registry;
+        Scheduler m_scheduler;
         sf::RenderWindow m_window;
 
         std::vector<std::unique_ptr<System>> m_systems;
 
-        std::set<std::type_index> m_behaviorSystems;
-
-        void draw();
+        std::set<std::type_index> m_behaviorSystemPresense;
 
         void update(float dt);
+        void draw();
     };
 
     template<typename TSystem, typename... Args>
@@ -80,10 +77,10 @@ namespace en {
         static_assert(std::is_base_of_v<Behavior, TBehavior>);
 
         auto typeIndex = std::type_index(typeid(TBehavior));
-        if (m_behaviorSystems.find(typeIndex) == m_behaviorSystems.end()) {
+        if (m_behaviorSystemPresense.find(typeIndex) == m_behaviorSystemPresense.end()) {
 
             addSystem<BehaviorSystem<TBehavior>>();
-            m_behaviorSystems.insert(typeIndex);
+            m_behaviorSystemPresense.insert(typeIndex);
             return true;
         }
 

@@ -11,14 +11,13 @@
 
 class PlayerDeathSystem : public en::System, en::Receiver<en::Collision> {
 
-
-
 public:
     void update(float dt) override;
     void receive(const en::Collision& info) override;
 
 private:
     bool m_shouldRestart = false;
+    bool m_isAtGameOverScreen = false;
 };
 
 
