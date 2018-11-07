@@ -19,7 +19,7 @@ namespace en {
 
         sf::ContextSettings contextSettings;
         contextSettings.antialiasingLevel = 8;
-        m_window.create(sf::VideoMode(width, height), "Example", sf::Style::Default, contextSettings);
+        m_window.create(sf::VideoMode(width, height), "Game", sf::Style::Default, contextSettings);
         m_window.setVerticalSyncEnabled(enableVSync);
     }
 

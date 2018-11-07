@@ -8,6 +8,17 @@
 #include "HashedString.h"
 #include "Resource.h"
 
+template<>
+struct en::Loader<sf::Font> {
+
+    static std::shared_ptr<sf::Font> load(const std::string& filename) {
+        auto fontPtr = std::make_shared<sf::Font>();
+        bool didLoadFont = fontPtr->loadFromFile(filename);
+        assert(didLoadFont);
+        return fontPtr;
+    }
+};
+
 /// Some definitions of in one place.
 namespace fonts {
 

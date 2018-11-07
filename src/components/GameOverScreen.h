@@ -16,7 +16,6 @@ class GameOverScreen : public en::Behavior {
 
 public:
     void start() override;
-    void update(float dt) override;
     void draw() override;
 
 private:

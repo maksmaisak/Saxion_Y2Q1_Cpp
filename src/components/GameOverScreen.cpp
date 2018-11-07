@@ -19,11 +19,6 @@ void GameOverScreen::start() {
     addLine("SCORE " + std::to_string(en::State::value<std::uint64_t, "score"_hs>()));
 }
 
-void GameOverScreen::update(float dt) {
-
-    Behavior::update(dt);
-}
-
 void GameOverScreen::draw() {
 
     auto& window = m_engine->getWindow();
