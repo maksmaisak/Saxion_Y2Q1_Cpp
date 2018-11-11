@@ -94,8 +94,11 @@ namespace en {
         childTransformable.m_globalTransformNeedUpdate = true;
     }
 
-    Actor Engine::makeActor() {
+    Actor Engine::actor(Entity entity) {
+        return Actor(*this, entity);
+    }
 
+    Actor Engine::makeActor() {
         return Actor(*this, m_registry.makeEntity());
     }
 }

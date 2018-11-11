@@ -29,32 +29,12 @@ void makeGameOverScreen(en::Engine& engine) {
     engine.makeActor().add<GameOverScreen>();
 }
 
-std::optional<std::tuple<en::Entity, en::Entity>> getPlayerAsteroidCollision(const en::EntityRegistry& registry, const en::Collision& collision){
-
-    en::Entity asteroidEntity = collision.a;
-    en::Entity playerEntity   = collision.b;
-
-    auto* asteroidPtr = registry.tryGet<Asteroid>(asteroidEntity);
-    auto* playerPtr   = registry.tryGet<Player>  (playerEntity);
-
-    if (!asteroidPtr || !playerPtr) {
-        std::swap(asteroidEntity, playerEntity);
-        asteroidPtr = registry.tryGet<Asteroid>(asteroidEntity);
-        playerPtr   = registry.tryGet<Player>  (playerEntity);
-
-        if (!asteroidPtr || !playerPtr) return std::nullopt;
-    }
-
-    return std::make_tuple(playerEntity, asteroidEntity);
-}
-
 void PlayerDeathSystem::receive(const en::Collision& collision) {
 
     if (m_isAtGameOverScreen) return;
 
-    auto result = getPlayerAsteroidCollision(*m_registry, collision);
-    if (!result.has_value()) return;
-    auto [player, asteroid] = *result;
+    auto [success, player, asteroid] = en::getCollision<Player, Asteroid>(*m_registry, collision);
+    if (!success) return;
 
     destroyPlayer(*m_engine, player);
     makeGameOverScreen(*m_engine);

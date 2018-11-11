@@ -16,7 +16,7 @@ namespace en {
     struct InvalidLoader {};
 
     template<typename TResource>
-    struct Loader : InvalidLoader{};
+    struct Loader : InvalidLoader {};
 
     template<typename TResource, HashedString::hash_type Id, typename TDefaultLoader = Loader<TResource>>
     class Resource {
@@ -31,6 +31,7 @@ namespace en {
             if (m_resource) return m_resource;
             return m_resource = TLoader::load(std::forward<Args>(args)...);
         }
+
     private:
         inline static std::shared_ptr<TResource> m_resource = {};
     };

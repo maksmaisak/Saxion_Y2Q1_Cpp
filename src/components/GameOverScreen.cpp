@@ -14,6 +14,7 @@ constexpr unsigned int CharacterSize = 100;
 void GameOverScreen::start() {
 
     m_fontPtr = fonts::Main::get(fonts::paths::Main);
+    m_fontPtr = en::Resource<sf::Font, "mainFont"_hs>::get(fonts::paths::Main);
 
     addLine("GAME OVER");
     addLine("SCORE " + std::to_string(en::State::value<std::uint64_t, "score"_hs>()));

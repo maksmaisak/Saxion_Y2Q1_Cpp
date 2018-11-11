@@ -21,6 +21,8 @@ namespace en {
         virtual ~Behavior() = default;
 
         inline Actor& actor() { return m_actor; }
+        inline Engine& engine() { return *m_engine; }
+        inline EntityRegistry& registry() { return *m_registry; }
 
         virtual void start() {};
         virtual void update(float dt) {};

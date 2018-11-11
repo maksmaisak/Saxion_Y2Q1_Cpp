@@ -10,6 +10,7 @@
 #include "Asteroid.h"
 #include "Bullet.h"
 #include "Factory.h"
+#include "Destroy.h"
 
 std::optional<std::tuple<en::Entity, en::Entity, Asteroid&>> getAsteroidBulletCollision(const en::EntityRegistry& registry, const en::Collision& collision){
 
@@ -56,21 +57,14 @@ void split(en::Engine& engine, en::EntityRegistry& registry, en::Entity asteroid
 
 void BreakAsteroidSystem::receive(const en::Collision& collision) {
 
-    auto result = getAsteroidBulletCollision(*m_registry, collision);
-    if (!result.has_value()) return;
-    auto [asteroidEntity, bulletEntity, asteroid] = *result;
+    auto [success, asteroidEntity, bulletEntity] = en::getCollision<Asteroid, Bullet>(*m_registry, collision);
+    if (!success) return;
 
-    m_entitiesToDestroy.push_back(asteroidEntity);
-    m_entitiesToDestroy.push_back(bulletEntity);
+    m_registry->add<en::Destroy>(asteroidEntity);
+    m_registry->add<en::Destroy>(bulletEntity);
 
+    auto& asteroid = m_registry->get<Asteroid>(asteroidEntity);
     if (asteroid.size > Asteroid::Size::Small) {
         split(*m_engine, *m_registry, asteroidEntity, asteroid);
     }
-}
-
-void BreakAsteroidSystem::update(float dt) {
-
-    for (en::Entity e : m_entitiesToDestroy) m_registry->destroy(e);
-
-    m_entitiesToDestroy.clear();
 }

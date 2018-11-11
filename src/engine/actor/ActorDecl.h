@@ -17,9 +17,6 @@ namespace en {
     template<typename T>
     constexpr inline bool isBehavior = std::is_base_of<Behavior, T>::value;
 
-    template<typename T>
-    using EnableIfIsBehavior = std::enable_if_t<std::is_base_of_v<Behavior, T>>;
-
     /// A thin wrapper around an entity. Facilitates GameObject-like programming.
     class Actor final {
 
@@ -36,24 +33,27 @@ namespace en {
         std::enable_if_t<isBehavior<TBehavior>, TBehavior&>
         add(Actor& actor, Args&&... args);
 
-        /// Adds a behavior component with the first parameter (actor) being omitted.
+        /// Adds a behavior component with the first parameter (actor) omitted.
         template<typename TBehavior, typename... Args>
         std::enable_if_t<isBehavior<TBehavior>, TBehavior&>
         add(Args&&... args);
 
         template<typename TComponent>
-        inline TComponent& get() {return m_registryPtr->get<TComponent>(m_entity);}
+        inline TComponent& get() {return m_registry->get<TComponent>(m_entity);}
 
         template<typename TComponent>
-        inline TComponent* tryGet() {return m_registryPtr->tryGet<TComponent>(m_entity);}
+        inline TComponent* tryGet() {return m_registry->tryGet<TComponent>(m_entity);}
 
-        inline Engine& getEngine() {return *m_enginePtr;}
+        template<typename TComponent>
+        inline TComponent& remove() {return m_registry->remove<TComponent>(m_entity);}
+
+        inline Engine& getEngine() {return *m_engine;}
         inline operator Entity() {return m_entity;}
 
     private:
-        Engine* m_enginePtr;
-        EntityRegistry* m_registryPtr;
-        en::Entity m_entity;
+        Engine* m_engine;
+        EntityRegistry* m_registry;
+        Entity m_entity;
     };
 }
 

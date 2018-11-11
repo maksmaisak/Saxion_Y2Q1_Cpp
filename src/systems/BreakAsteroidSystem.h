@@ -12,12 +12,7 @@
 
 class BreakAsteroidSystem : public en::System, en::Receiver<en::Collision> {
 
-public:
-    void update(float dt) override;
-
 private:
-    std::vector<en::Entity> m_entitiesToDestroy;
-
     void receive(const en::Collision& info) override;
 };
 

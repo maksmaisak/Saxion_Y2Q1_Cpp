@@ -8,7 +8,7 @@
 namespace en {
 
     Actor::Actor(Engine& engine, Entity entity) :
-        m_enginePtr(&engine),
-        m_registryPtr(&engine.getRegistry()),
+        m_engine(&engine),
+        m_registry(&engine.getRegistry()),
         m_entity(entity) {}
 }

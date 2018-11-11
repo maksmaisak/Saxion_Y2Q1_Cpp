@@ -34,6 +34,7 @@ namespace en {
         inline Scheduler& getScheduler() { return m_scheduler; }
         inline sf::RenderWindow& getWindow() { return m_window; }
 
+        Actor actor(Entity entity);
         Actor makeActor();
 
         template<typename TSystem, typename... Args>
