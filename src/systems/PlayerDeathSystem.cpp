@@ -5,7 +5,6 @@
 #include "PlayerDeathSystem.h"
 #include <optional>
 #include <tuple>
-#include <components/GameOverScreen.h>
 #include "Actor.h"
 #include "Asteroid.h"
 #include "Player.h"

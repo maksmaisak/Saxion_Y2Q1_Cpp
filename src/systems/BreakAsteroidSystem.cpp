@@ -12,25 +12,6 @@
 #include "Factory.h"
 #include "Destroy.h"
 
-std::optional<std::tuple<en::Entity, en::Entity, Asteroid&>> getAsteroidBulletCollision(const en::EntityRegistry& registry, const en::Collision& collision){
-
-    en::Entity asteroidEntity = collision.a;
-    en::Entity bulletEntity   = collision.b;
-
-    auto* asteroidPtr = registry.tryGet<Asteroid>(asteroidEntity);
-    auto* bulletPtr   = registry.tryGet<Bullet>  (bulletEntity);
-
-    if (!asteroidPtr || !bulletPtr) {
-        std::swap(asteroidEntity, bulletEntity);
-        asteroidPtr = registry.tryGet<Asteroid>(asteroidEntity);
-        bulletPtr   = registry.tryGet<Bullet>  (bulletEntity);
-
-        if (!asteroidPtr || !bulletPtr) return std::nullopt;
-    }
-
-    return std::make_tuple(asteroidEntity, bulletEntity, std::ref(*asteroidPtr));
-}
-
 void split(en::Engine& engine, en::EntityRegistry& registry, en::Entity asteroidEntity, const Asteroid& asteroid) {
 
     assert(asteroid.size > Asteroid::Size::Small);
